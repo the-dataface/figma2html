@@ -1,5 +1,7 @@
 <script lang="ts" type="module">
   import { onMount } from "svelte";
+  import JSZip from "../node_modules/jszip/dist/jszip.min.js";
+  import { Asset, HTMLFile, Config, Extension, Size, FileType } from "./types";
   import {
     Button,
     Section,
@@ -13,15 +15,8 @@
     IconSpinner,
     IconLibrary,
   } from "figma-plugin-ds-svelte";
-  import JSZip from "../node_modules/jszip/dist/jszip.min.js";
-  import { Asset, HTMLFile, Config, Extension, Size, FileType } from "./types";
 
-  interface ExtensionOption {
-    value: Extension;
-    label: string;
-    group: string | null;
-    selected: boolean;
-  }
+  let loading = false;
 
   interface FileTypeOption {
     value: FileType;
@@ -30,9 +25,24 @@
     selected: boolean;
   }
 
-  let syntax: string | undefined = undefined;
+  let fileType: FileType | undefined = undefined;
+  let fileTypeOptions: FileTypeOption[] = [
+    // { value: "SVELTE", label: "SVELTE", group: null, selected: false }, // TO DO
+    { value: "HTML", label: "HTML", group: null, selected: false },
+  ];
 
-  let sizeConstraint: string | undefined = undefined;
+  $: {
+    fileTypeOptions.forEach((o, i) => {
+      fileTypeOptions[i].selected = o.value === fileType;
+    });
+  }
+
+  interface ExtensionOption {
+    value: Extension;
+    label: string;
+    group: string | null;
+    selected: boolean;
+  }
 
   let extension: Extension | undefined = undefined;
   let extensionOptions: ExtensionOption[] = [
@@ -46,18 +56,8 @@
     });
   }
 
-  let fileType: FileType | undefined = undefined;
-  let fileTypeOptions: FileTypeOption[] = [
-    // { value: "SVELTE", label: "SVELTE", group: null, selected: false },
-    { value: "HTML", label: "HTML", group: null, selected: false },
-  ];
-
-  $: {
-    fileTypeOptions.forEach((o, i) => {
-      fileTypeOptions[i].selected = o.value === fileType;
-    });
-  }
-
+  let syntax: string | undefined = undefined;
+  let sizeConstraint: string | undefined = undefined;
   let includeResizer = true;
   let centerHtmlOutput = false;
   let applyStyleNames = false;
@@ -71,8 +71,6 @@
   let nodeCount = 0;
   let exampleAssets: Asset[] = [];
   let exampleFile: HTMLFile;
-
-  let loading = false;
 
   const displaySize = (size: Size): string => {
     const rounded: Size = {
@@ -232,6 +230,7 @@
 
     const blob = await zip.generateAsync({ type: "blob" });
     const url = window.URL.createObjectURL(blob);
+
     return url;
   };
 </script>
@@ -416,26 +415,26 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.9);
-    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 999;
   }
-  .spinner {
+
+  .overlay .spinner {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
-  .header {
-    display: flex;
-    align-items: center;
-  }
+
   h3 {
     margin: 0;
   }
+
   p.link {
     text-decoration: underline;
     margin: 0;
   }
+
   .wrap {
     display: flex;
     flex: 1;
@@ -444,31 +443,42 @@
     padding: 8px;
     font-size: small;
   }
+
+  .header {
+    display: flex;
+    align-items: center;
+  }
+
   .row {
     display: flex;
     flex: 1;
     flex-direction: row;
     gap: 8px;
   }
+
   .group {
     border-bottom: 1px solid lightgray;
     margin-bottom: 16px;
     padding-bottom: 24px;
   }
+
   .section {
     display: flex;
     flex: 1;
     flex-direction: column;
   }
+
   .button-holder {
     margin-top: 8px;
     display: flex;
     gap: 8px;
     align-items: center;
   }
+
   .button {
     margin-right: 8px !important;
   }
+
   .example {
     display: flex;
     flex-direction: column;
@@ -481,6 +491,7 @@
     border-style: solid;
     border-radius: 4px;
   }
+
   .example-row {
     display: flex;
     flex-direction: row;
@@ -488,22 +499,27 @@
     align-items: center;
     gap: 4px;
   }
+
   .example-row-thumb {
     width: 24px;
     height: 24px;
   }
+
   .example-row-filename {
     display: flex;
     flex: 1;
     white-space: nowrap;
     overflow-x: scroll;
   }
+
   .example-row-filename::-webkit-scrollbar {
     display: none;
   }
+
   .example-text-placeholder {
     color: rgb(138, 138, 138);
   }
+
   input {
     font-size: smaller;
     height: 32px;
@@ -513,9 +529,11 @@
     border-style: solid;
     border-radius: 4px;
   }
+
   input:hover {
     border-color: rgb(219, 219, 219);
   }
+
   input:disabled {
     color: rgb(173, 173, 173);
   }
@@ -523,6 +541,7 @@
     width: 0px;
     background: transparent;
   }
+
   hr {
     width: 100%;
     margin-top: 2px;
