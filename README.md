@@ -11,9 +11,11 @@ Pull down this repo. Run `npm install`, `npm run dev`, and then `npm run build`.
 ## Instructions
 
 - Lay your artwork out on frames with widths based on your breakpoints.
-- Name your frames like `#[width]px` (ie. `#640px`).
+- Name your frames like `#[width]px` (ie. `#640px`). You can have other frames -- the plugin will only grab frames with that naming convention.
 - Run the plugin.
-- CHeck your settings and click export. Your files will be saved as a zipped folder.
+- Check your settings.
+- Hit `Save settings` to save as a text layer in you document or `Load settings` to load from a text layer in your document.
+- Click export. Your files will be saved as a zipped folder.
 
 ## Features
 - Grabs all correctly named frames on the active page (ie. `#[width]px`)
