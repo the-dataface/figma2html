@@ -2,7 +2,7 @@
 
 WORK IN PROGRESS
 
-Export Figma frames as images with text elements rendered as HTML. A Figma version of (ai2html)[http://ai2html.org], using (Figma Plugin DS Svelte)[https://github.com/thomas-lowry/figma-plugin-ds-svelte].
+Export Figma frames as images with text elements rendered as HTML. A Figma version of [ai2html](http://ai2html.org), using [Figma Plugin DS Svelte](https://github.com/thomas-lowry/figma-plugin-ds-svelte).
 
 ## Installation
 
