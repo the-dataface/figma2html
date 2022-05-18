@@ -15,6 +15,7 @@ export interface Config {
   altText: string;
   applyStyleNames: boolean;
   applyHtags: boolean;
+  styleTextSegments: boolean;
 }
 
 export interface Size {

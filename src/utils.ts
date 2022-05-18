@@ -166,11 +166,24 @@ export const forEachFrame = (asset, widthRange, config) => {
   let imgName = asset.filename;
   let textFrames, textData;
   let altText = config.altText;
-
+  let frameWidth = frame.width;
+  let frameHeight = frame.height;
   let frameContent = { html: '', css: '', js: '' };
 
-  textFrames = frame.children.filter(child => child.type === 'TEXT');
-  textData = convertTextFrames(textFrames, frame);
+  // set layout mode to none
+  frame.layoutMode = "NONE";
+  frame.clipsContent = true;
+
+  // find all frame nodes within the frame
+  let allNodes = frame.findAll(node => node.type === "FRAME");
+
+  // convert all frames to groups for positioning
+  const groups: GroupNode[] = createGroupsFromFrames(allNodes);
+
+  let textNodes = frame.findAll(child => child.type === 'TEXT');
+
+  textFrames = frame.findAll(child => child.type === 'TEXT');
+  textData = convertTextFrames(textFrames, frameWidth, frameHeight);
 
   frameContent.html += `
   \r\t <!-- Frame: ${imgName.replace(`${config.imagePath}/`, "")} --> \r
@@ -185,25 +198,55 @@ export const forEachFrame = (asset, widthRange, config) => {
   \r`;
 }
 
-export const convertTextFrames = (textFrames, frame) => {
+export const createGroupsFromFrames = (items: ReadonlyArray<SceneNode> | PageNode[]): GroupNode[] => {
+  const groups: GroupNode[] = [];
+  if (!items.length) return groups;
+
+  for (const node of items) {
+    if (typeof (node as any).findAll !== 'function') continue
+
+    const group = createGroupFromFrame(node as FrameNode)
+    if (group) {
+      groups.push(group);
+      if (!node.children.length) node.remove()
+    }
+  }
+
+  return groups;
+}
+
+export const createGroupFromFrame = (frameNode: FrameNode): GroupNode | null => {
+  if (!frameNode || !frameNode.parent) return null;
+  if (!Array.isArray(frameNode.children) || !frameNode.children.length) return null;
+
+  const parent: any = frameNode.parent;
+  if (parent.type === "INSTANCE") return null;
+
+  const group: GroupNode = figma.group(frameNode.children, parent);
+  if (frameNode.name) group.name = frameNode.name;
+
+  return group;
+}
+
+export const convertTextFrames = (textFrames, frameWidth, frameHeight) => {
   let textData = [];
 
   let styleProps = ["fontName", "fontSize", "textDecoration", "textCase", "lineHeight", "letterSpacing", "fills", "textStyleId", "fillStyleId", "listOptions", "indentation", "hyperlink"];
 
   textFrames.forEach(textFrame => {
-    let textSegments, textStyleId, textStyleObject, textClass;
+    let textSegments, textStyleId, textStyleObject, textClass = "";
     let x, y, width, opacity, rotation;
 
     textSegments = textFrame.getStyledTextSegments(styleProps);
     textStyleId = textFrame.textStyleId;
 
-    if (textStyleId) {
+    if (textStyleId && typeof textStyleId !== 'symbol') {
       textStyleObject = figma.getStyleById(textStyleId);
       textClass = textStyleObject ? dashify(textStyleObject.name.split('/').pop()) : null;
     }
 
-    x = `${textFrame.x}px`;
-    y = `${textFrame.y}px`;
+    x = `${(textFrame.x / frameWidth) * 100}%`;
+    y = `${(textFrame.y / frameHeight) * 100}%`;
     width = `${textFrame.width}px`;
     opacity = textFrame.opacity;
     rotation = textFrame.rotation * -1;
@@ -265,15 +308,14 @@ export const generatePageCss = (containerId, config) => {
   css += `${t3} margin:0;`;
   css += blockEnd;
 
-  css += `${blockStart} .f2hAbs {`;
+  css += `${blockStart} .frame {`;
   css += `${t3} position:absolute;`;
   css += blockEnd;
 
   css += `${blockStart} .f2hImg {`;
-  css += `${t3} position:absolute;`;
+  // css += `${t3} position:absolute;`;
   css += `${t3} width:100% !important;`;
   css += `${t3} display: block;`;
-  css += `${t3} position: absolute;`;
   css += `${t3} top: 0;`;
   css += blockEnd;
 
@@ -282,7 +324,7 @@ export const generatePageCss = (containerId, config) => {
   css += `${t3} box-sizing: border-box;`;
   css += blockEnd;
 
-  css += `${blockStart} .f2hText {\rwhite-space: nowrap;\rposition: absolute;\r}\r`;
+  css += `${blockStart} .f2hText {\rposition: absolute;\r}\r`;
   css += `${blockStart} body {\margin: 0;\r}\r`;
   return css;
 }
@@ -360,13 +402,13 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
       if (config.applyHtags && (text.class === "h1" || text.class === "h2" || text.class === "h3" || text.class === "h4" || text.class === "h5" || text.class === "h6")) {
         el += `\t\t<${text.class} class="f2hText" ${style}>\r`;
         text.segments.forEach(segment => {
-          el += createSpan(segment, false);
+          el += createSpan(segment, config.styleTextSegments);
         });
         el += `\t\t</${text.class}>\r`;
       } else {
         el += `\t\t<p class="f2hText ${config.applyStyleNames ? text.class : ''}" ${style}>\r`;
         text.segments.forEach(segment => {
-          el += createSpan(segment, config.applyStyleNames);
+          el += createSpan(segment, config.styleTextSegments);
         });
         el += `\t\t</p>\r`;
       }
@@ -403,7 +445,7 @@ export const convertStyleProp = (prop, value) => {
   if (prop === "fontSize") return ` font-size: ${value}px;`;
   if (prop === "textDecoration") return ` text-decoration: ${value.toLowerCase()};`;
   if (prop === "textCase") return ` text-transform: ${value === "ORIGINAL" ? "none" : value.toLowerCase()};`;
-  if (prop === "lineHeight") return ` line-height: ${value.unit === "AUTO" ? "normal" : value.unit === "PERCENT" && value.value > 0 ? value.unit / 100 : value.value + "px"};`;
+  if (prop === "lineHeight") return ` line-height: ${value.unit === "AUTO" ? "normal" : value.unit === "PERCENT" && value.value > 0 ? value.value / 100 : value.value + "px"};`;
   if (prop === "letterSpacing") return ` letter-spacing: ${value.unit === "PERCENT" && value.value > 0 ? value.unit / 100 : value.value + "px"};`;
   if (prop === "fills") return ` color: rgba(${value[0].color.r}, ${value[0].color.g}, ${value[0].color.b}, ${value[0].opacity}); mix-blend-mode: ${value[0].blendMode.toLowerCase()};`;
   else return "";
@@ -547,5 +589,27 @@ export const getResizerScript = (containerId) => {
 export const trim = (s) => {
   return s.replace(/^[\s\uFEFF\xA0\x03]+|[\s\uFEFF\xA0\x03]+$/g, '');
 }
+
+class TempFrame {
+  frame: FrameNode | undefined;
+
+  create = () => {
+    if (this.frame) {
+      this.frame.remove();
+      this.frame = undefined;
+    }
+
+    this.frame = figma.createFrame();
+    this.frame.name = "[figma2html]";
+    this.frame.clipsContent = false;
+    this.frame = this.frame;
+  };
+
+  remove = () => {
+    this.frame?.remove();
+    this.frame = undefined;
+  };
+}
+const tempFrame = new TempFrame();
 
 export default {};

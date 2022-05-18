@@ -19,7 +19,8 @@ class StoredConfig {
         imagePath: "img",
         altText: '',
         applyStyleNames: true,
-        applyHtags: true
+        applyHtags: true,
+        styleTextSegments: true
       }
     } else {
       return _config;

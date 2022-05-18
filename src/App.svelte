@@ -1,6 +1,18 @@
 <script lang="ts" type="module">
   import { onMount } from "svelte";
-  import { Button, Section, SelectMenu, Switch, Icon, IconDraft, IconImage, IconAdjust, IconVisible, IconSpinner, IconLibrary } from "figma-plugin-ds-svelte";
+  import {
+    Button,
+    Section,
+    SelectMenu,
+    Switch,
+    Icon,
+    IconDraft,
+    IconImage,
+    IconAdjust,
+    IconVisible,
+    IconSpinner,
+    IconLibrary,
+  } from "figma-plugin-ds-svelte";
   import JSZip from "../node_modules/jszip/dist/jszip.min.js";
   import { Asset, HTMLFile, Config, Extension, Size, FileType } from "./types";
 
@@ -36,7 +48,7 @@
 
   let fileType: FileType | undefined = undefined;
   let fileTypeOptions: FileTypeOption[] = [
-    { value: "SVELTE", label: "SVELTE", group: null, selected: false },
+    // { value: "SVELTE", label: "SVELTE", group: null, selected: false },
     { value: "HTML", label: "HTML", group: null, selected: false },
   ];
 
@@ -50,6 +62,7 @@
   let centerHtmlOutput = false;
   let applyStyleNames = false;
   let applyHtags = false;
+  let styleTextSegments = true;
   let clickableLink: string | undefined = undefined;
   let maxWidth: number | undefined = undefined;
   let imagePath: string | undefined = undefined;
@@ -82,7 +95,8 @@
       imagePath,
       altText,
       applyStyleNames,
-      applyHtags
+      applyHtags,
+      styleTextSegments,
     };
   };
 
@@ -92,7 +106,7 @@
 
     if (type === "load") {
       const config = message.config as Config;
-      
+
       syntax = config.syntax;
       sizeConstraint = config.sizeConstraint;
       extension = config.extension;
@@ -105,6 +119,7 @@
       altText = config.altText;
       applyStyleNames = config.applyStyleNames;
       applyHtags = config.applyHtags;
+      styleTextSegments = config.styleTextSegments;
     } else if (type === "preview") {
       const preview = message.preview;
       nodeCount = preview.nodeCount;
@@ -181,7 +196,7 @@
       "*"
     );
   };
-  
+
   const onLoadSettings = () => {
     parent.postMessage(
       {
@@ -224,7 +239,7 @@
 {#if loading}
   <div class="overlay">
     <div class="spinner">
-      <Icon iconName={IconSpinner} color="black" spin/>
+      <Icon iconName={IconSpinner} color="black" spin />
     </div>
   </div>
 {/if}
@@ -232,7 +247,7 @@
 <div class="wrap">
   <div class="group">
     <div class="header">
-      <Icon iconName={IconDraft} color="black"/>
+      <Icon iconName={IconDraft} color="black" />
       <h3>File Output</h3>
     </div>
     <div class="row">
@@ -255,7 +270,7 @@
 
   <div class="group">
     <div class="header">
-      <Icon iconName={IconImage} color="black"/>
+      <Icon iconName={IconImage} color="black" />
       <h3>Image Settings</h3>
     </div>
 
@@ -295,7 +310,7 @@
 
   <div class="group">
     <div class="header">
-      <Icon iconName={IconAdjust} color="black"/>
+      <Icon iconName={IconAdjust} color="black" />
       <h3>Page Settings</h3>
     </div>
     <div class="row">
@@ -308,15 +323,10 @@
         <Switch value={centerHtmlOutput} bind:checked={centerHtmlOutput} on:change={onChangeConfig} />
       </div>
     </div>
-    <div class="row">    
+    <div class="row">
       <div class="section">
         <Section>Max Width (px)</Section>
-        <input
-        type="number"
-        placeholder="1920"
-        bind:value={maxWidth}
-        on:input={onChangeConfig}
-        />
+        <input type="number" placeholder="1920" bind:value={maxWidth} on:input={onChangeConfig} />
       </div>
       <div class="section">
         <Section>Clickable Link</Section>
@@ -327,10 +337,14 @@
 
   <div class="group">
     <div class="header">
-      <Icon iconName={IconLibrary} color="black"/>
+      <Icon iconName={IconLibrary} color="black" />
       <h3>Text Settings</h3>
     </div>
     <div class="row">
+      <div class="section">
+        <Section>Style Text Segments</Section>
+        <Switch value={styleTextSegments} bind:checked={styleTextSegments} on:change={onChangeConfig} />
+      </div>
       <div class="section">
         <Section>Include Figma Styles as Classes</Section>
         <Switch value={applyStyleNames} bind:checked={applyStyleNames} on:change={onChangeConfig} />
@@ -344,7 +358,7 @@
 
   <div>
     <div class="header">
-      <Icon iconName={IconVisible} color="black"/>
+      <Icon iconName={IconVisible} color="black" />
       <h3>Output</h3>
     </div>
 
