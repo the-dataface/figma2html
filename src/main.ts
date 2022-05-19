@@ -1,7 +1,7 @@
 import { Exportable, Config, Asset, HTMLFile, PreviewSettings } from "./types";
 import { camelize, buildExportSettings, generateOutputHtml, log, generateOutputSvelte } from "./utils";
 
-figma.showUI(__html__, { width: 560, height: 900 });
+figma.showUI(__html__, { width: 560, height: 560 });
 
 class StoredConfig {
   static get = async (): Promise<Config> => {
