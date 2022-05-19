@@ -38,5 +38,5 @@ Pull down this repo. Run `npm install`, `npm run dev`, and then `npm run build`.
 - [ ] Export to Svelte file
 - [ ] Allow lists within text nodes
 - [ ] Use variables within text nodes
-- [ ] Allow hyperlinks within text nodes
+- [x] Allow hyperlinks within text nodes
 - [ ] Tailwind classes?
