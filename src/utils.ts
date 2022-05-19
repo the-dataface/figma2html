@@ -425,8 +425,9 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
 }
 
 export const createSpan = (segment, applyStyles) => {
+  let el = ``;
   let styleProps = ["fontName", "fontSize", "textDecoration", "textCase", "lineHeight", "letterSpacing", "fills", "textStyleId", "fillStyleId", "listOptions", "indentation", "hyperlink"];
-
+  console.log(segment)
   let styleTag = `style="`;
 
   if (applyStyles) {
@@ -437,7 +438,13 @@ export const createSpan = (segment, applyStyles) => {
 
   styleTag += `"`;
 
-  return `\t\t<span class="f2hSegment" ${styleTag}>${segment.characters}</span>\r`;
+  if (segment.hyperlink) el += `\t\t<a href="${segment.hyperlink.value}" target="_blank">`;
+
+  el += `\t\t<span class="f2hsegment" ${styleTag}>${segment.characters}</span>`;
+
+  if (segment.hyperlink) el += `\t\t</a>`;
+
+  return el;
 }
 
 export const convertStyleProp = (prop, value) => {
@@ -447,7 +454,7 @@ export const convertStyleProp = (prop, value) => {
   if (prop === "textCase") return ` text-transform: ${value === "ORIGINAL" ? "none" : value.toLowerCase()};`;
   if (prop === "lineHeight") return ` line-height: ${value.unit === "AUTO" ? "normal" : value.unit === "PERCENT" && value.value > 0 ? value.value / 100 : value.value + "px"};`;
   if (prop === "letterSpacing") return ` letter-spacing: ${value.unit === "PERCENT" && value.value > 0 ? value.unit / 100 : value.value + "px"};`;
-  if (prop === "fills") return ` color: rgba(${value[0].color.r}, ${value[0].color.g}, ${value[0].color.b}, ${value[0].opacity}); mix-blend-mode: ${value[0].blendMode.toLowerCase()};`;
+  if (prop === "fills") return ` color: rgba(${value[0].color.r * 255}, ${value[0].color.g * 255}, ${value[0].color.b * 255}, ${value[0].opacity}); mix-blend-mode: ${value[0].blendMode.toLowerCase()};`;
   else return "";
 }
 
