@@ -1,10 +1,10 @@
 {
   "name": "figma2html",
-  "id": "1074101625913782131",
   "api": "1.0.0",
+  "id": "1109185297790825980",
   "main": "build/main.js",
+  "ui": "build/index.html",
   "editorType": [
     "figma"
-  ],
-  "ui": "build/index.html"
+  ]
 }
