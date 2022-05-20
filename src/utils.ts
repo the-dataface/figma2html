@@ -427,7 +427,7 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
 export const createSpan = (segment, applyStyles) => {
   let el = ``;
   let styleProps = ["fontName", "fontSize", "textDecoration", "textCase", "lineHeight", "letterSpacing", "fills", "textStyleId", "fillStyleId", "listOptions", "indentation", "hyperlink"];
-  console.log(segment)
+
   let styleTag = `style="`;
 
   if (applyStyles) {
