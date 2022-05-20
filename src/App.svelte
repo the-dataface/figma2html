@@ -243,18 +243,19 @@
   </div>
 {/if}
 
-<div class="wrap">
+<div class="content">
   <div class="group">
     <div class="header">
       <Icon iconName={IconDraft} color="black" />
       <h3>File Output</h3>
     </div>
+
     <div class="row">
-      <div class="section">
+      <div class="setting">
         <Section>Filename</Section>
         <input type="text" placeholder={syntax} bind:value={syntax} on:input={onChangeConfig} />
       </div>
-      <div class="section">
+      <div class="setting">
         <Section>Filetype</Section>
         <SelectMenu
           bind:menuItems={fileTypeOptions}
@@ -274,7 +275,7 @@
     </div>
 
     <div class="row">
-      <div class="section">
+      <div class="setting">
         <Section>Image Size</Section>
         <input
           type="text"
@@ -296,11 +297,11 @@
       </div>
     </div>
     <div class="row">
-      <div class="section">
+      <div class="setting">
         <Section>Path</Section>
         <input type="text" placeholder="Image path" bind:value={imagePath} on:change={onChangeConfig} />
       </div>
-      <div class="section">
+      <div class="setting">
         <Section>Alt Text</Section>
         <input type="text" placeholder="Alt text" bind:value={altText} on:change={onChangeConfig} />
       </div>
@@ -312,22 +313,23 @@
       <Icon iconName={IconAdjust} color="black" />
       <h3>Page Settings</h3>
     </div>
+
     <div class="row">
-      <div class="section">
+      <div class="setting">
         <Section>Include Resize Script</Section>
         <Switch value={includeResizer} bind:checked={includeResizer} on:change={onChangeConfig} />
       </div>
-      <div class="section">
+      <div class="setting">
         <Section>Center HTML Output</Section>
         <Switch value={centerHtmlOutput} bind:checked={centerHtmlOutput} on:change={onChangeConfig} />
       </div>
     </div>
     <div class="row">
-      <div class="section">
+      <div class="setting">
         <Section>Max Width (px)</Section>
         <input type="number" placeholder="1920" bind:value={maxWidth} on:input={onChangeConfig} />
       </div>
-      <div class="section">
+      <div class="setting">
         <Section>Clickable Link</Section>
         <input type="text" placeholder="Link image?" bind:value={clickableLink} on:change={onChangeConfig} />
       </div>
@@ -339,16 +341,17 @@
       <Icon iconName={IconLibrary} color="black" />
       <h3>Text Settings</h3>
     </div>
+
     <div class="row">
-      <div class="section">
+      <div class="setting">
         <Section>Style Text Segments</Section>
         <Switch value={styleTextSegments} bind:checked={styleTextSegments} on:change={onChangeConfig} />
       </div>
-      <div class="section">
+      <div class="setting">
         <Section>Include Figma Styles as Classes</Section>
         <Switch value={applyStyleNames} bind:checked={applyStyleNames} on:change={onChangeConfig} />
       </div>
-      <div class="section">
+      <div class="setting">
         <Section>Convert Header Styles to H Tags</Section>
         <Switch value={applyHtags} bind:checked={applyHtags} on:change={onChangeConfig} />
       </div>
@@ -361,15 +364,15 @@
       <h3>Output Preview</h3>
     </div>
 
-    <div class="example">
+    <div class="output-preview">
       {#if exampleAssets.length > 0}
         {#each exampleAssets as exampleAsset, index}
           {#if index > 0}
             <hr />
           {/if}
-          <div class="example-row">
-            <img class="example-row-thumb" src={exampleAsset.url} alt="asset thumbnail" />
-            <span class="example-row-filename">
+          <div class="output-row">
+            <img class="output-thumb" src={exampleAsset.url} alt="asset thumbnail" />
+            <span class="output-filename">
               {exampleAsset.filename}.{exampleAsset.extension.toLowerCase()}
             </span>
             {#if exampleAsset.size}
@@ -381,26 +384,26 @@
         {/each}
         {#if exampleFile}
           <hr />
-          <div class="example-row">
+          <div class="output-row">
             <img
-              class="example-row-thumb"
+              class="output-thumb"
               src={exampleFile.extension === "SVELTE"
                 ? "https://img.icons8.com/doodle/344/svetle.png"
                 : "https://img.icons8.com/ios/344/html.png"}
               alt="asset icon"
             />
-            <span class="example-row-filename">
+            <span class="output-filename">
               {exampleFile.filename}.{exampleFile.extension.toLowerCase()}
             </span>
           </div>
         {/if}
       {:else}
-        <div class="example-text-placeholder">Add a frame named #[size]px.</div>
+        <div class="output-placeholder">Add a frame named #[size]px.</div>
       {/if}
     </div>
   </div>
 
-  <div class="button-holder">
+  <div class="button-row">
     <Button on:click={onSelectExport} disabled={nodeCount === 0}>Export {nodeCount} images</Button>
     <Button variant="secondary" on:click={onReset}>Reset to Defaults</Button>
     <p class="link" on:click={onSaveSettings}>Save Settings</p>
@@ -435,7 +438,7 @@
     margin: 0;
   }
 
-  .wrap {
+  .content {
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -457,42 +460,36 @@
   }
 
   .group {
-    border-bottom: 1px solid lightgray;
+    /* border-bottom: 1px solid lightgray; */
     margin-bottom: 16px;
     padding-bottom: 24px;
   }
 
-  .section {
+  .setting {
     display: flex;
     flex: 1;
     flex-direction: column;
   }
 
-  .button-holder {
+  .button-row {
     margin-top: 8px;
     display: flex;
     gap: 8px;
     align-items: center;
   }
 
-  .button {
-    margin-right: 8px !important;
-  }
-
-  .example {
+  .output-preview {
+    font-size: 12px;
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
     height: 166px;
     padding: 8px;
-    font-size: smaller;
-    border-color: rgb(235, 235, 235);
-    border-width: 1px;
-    border-style: solid;
+    border: 1px solid lightgray;
     border-radius: 4px;
   }
 
-  .example-row {
+  .output-row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -500,54 +497,31 @@
     gap: 4px;
   }
 
-  .example-row-thumb {
+  .output-thumb {
     width: 24px;
     height: 24px;
   }
 
-  .example-row-filename {
+  .output-filename {
     display: flex;
     flex: 1;
     white-space: nowrap;
     overflow-x: scroll;
   }
 
-  .example-row-filename::-webkit-scrollbar {
-    display: none;
-  }
-
-  .example-text-placeholder {
-    color: rgb(138, 138, 138);
+  .output-placeholder {
+    color: #999;
   }
 
   input {
-    font-size: smaller;
+    font-size: 12px;
     height: 32px;
-    padding-left: 8px;
-    border-color: rgb(235, 235, 235);
-    border-width: 1px;
-    border-style: solid;
+    padding: 8px;
+    border: 1px solid lightgray;
     border-radius: 4px;
   }
 
   input:hover {
-    border-color: rgb(219, 219, 219);
-  }
-
-  input:disabled {
-    color: rgb(173, 173, 173);
-  }
-  ::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
-  }
-
-  hr {
-    width: 100%;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    border-top: 1px rgb(235, 235, 235);
-    border-left: 0px;
-    border-right: 0px;
+    border-color: #000;
   }
 </style>

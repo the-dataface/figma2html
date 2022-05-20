@@ -166,7 +166,8 @@ export const forEachFrame = (asset, widthRange, config) => {
   let imgName = asset.filename;
   let textFrames, textData;
   let altText = config.altText;
-  let frameWidth = frame.width;
+  // let frameWidth = frame.width;
+  let frameWidth = +frame.name.replace("#", "").replace("px", "");
   let frameHeight = frame.height;
   let frameContent = { html: '', css: '', js: '' };
 
@@ -333,7 +334,8 @@ export const getWidthRange = (assets) => {
   let widthRange = { min: 0, max: 0, widths: [], ranges: [] }
 
   assets.forEach(asset => {
-    let width = asset.node.width;
+    // let width = asset.node.width;
+    let width = +asset.node.name.replace("#", "").replace("px", "");
     widthRange.widths.push(width);
   });
 
@@ -360,8 +362,9 @@ export const getWidthRange = (assets) => {
 export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange, textData, altText, config) => {
   let id = `frame-${frameId.replace(":", "-")}`;
   let className = `${frameClass.replace(":", "-")} frame artboard`;
-  let range = widthRange.ranges[widthRange.widths.indexOf(frame.width)];
-  let width = frame.width;
+  // let width = frame.width;
+  let width = +frame.name.replace("#", "").replace("px", "");
+  let range = widthRange.ranges[widthRange.widths.indexOf(width)];
   let height = frame.height;
   let aspectRatio = width / height;
   let inlineStyle = '';

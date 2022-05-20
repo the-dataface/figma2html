@@ -1,11 +1,14 @@
 import { Exportable, Config, Asset, HTMLFile, PreviewSettings } from "./types";
-import { camelize, buildExportSettings, generateOutputHtml, log, generateOutputSvelte } from "./utils";
+import { camelize, buildExportSettings, generateOutputHtml, generateOutputSvelte, log } from "./utils";
 
-figma.showUI(__html__, { width: 560, height: 560 });
+figma.showUI(__html__, { width: 560, height: 900 });
 
 class StoredConfig {
   static get = async (): Promise<Config> => {
+    // get the stored config
     let _config = await figma.clientStorage.getAsync('config');
+
+    // set up config defaults if none found
     if (!_config) {
       return {
         syntax: camelize(figma.currentPage.name),
@@ -28,21 +31,27 @@ class StoredConfig {
   };
 
   static set = async (_config: Config): Promise<Config> => {
+    // set the stored config
     await figma.clientStorage.setAsync('config', _config);
     return _config;
   };
 
   static clear = async (): Promise<void> => {
+    // clear the stored config
     await figma.clientStorage.deleteAsync('config');
   }
 
   static writeSettings = async (config): Promise<void> => {
-    // remove text nodes named "settings"
+    // write the config to a text node on the existing page
+
+    // remove existing settings text node if found
     const settings = figma.currentPage.findOne(node => node.name === "settings");
     if (settings) settings.remove();
 
+    // load Inter for settings text node
     figma.loadFontAsync({ family: "Inter", style: "Regular" })
       .then(() => {
+
         // get all frames with names including "#"
         const nodes = figma.currentPage.findAll(node => node.name.includes("#"));
 
@@ -56,6 +65,7 @@ class StoredConfig {
           return Math.min(min, node.y);
         }, 0);
 
+        // create the node
         let textNode = figma.createText();
         textNode.characters = JSON.stringify(config, null, 2).replace(/,/g, ",\r");
         textNode.x = maxRight + 100;
@@ -65,7 +75,7 @@ class StoredConfig {
   }
 
   static loadSettings = async (): Promise<void> => {
-    // find text node named "settings"
+    // find text node named "settings" and load
     const textNode = figma.currentPage.findOne(node => node.name === "settings" && node.type === "TEXT");
     if (textNode) {
       const config = JSON.parse(textNode.characters.replace(/\r/g, ""));
