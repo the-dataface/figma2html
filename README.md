@@ -40,3 +40,4 @@ Pull down this repo. Run `npm install`, `npm run dev`, and then `npm run build`.
 - [ ] Use variables within text nodes
 - [x] Allow hyperlinks within text nodes
 - [ ] Tailwind classes?
+- [ ] CSS vs inline
