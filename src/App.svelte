@@ -358,7 +358,7 @@
   <div>
     <div class="header">
       <Icon iconName={IconVisible} color="black" />
-      <h3>Output</h3>
+      <h3>Output Preview</h3>
     </div>
 
     <div class="example">
