@@ -16,6 +16,7 @@ export interface Config {
   applyStyleNames: boolean;
   applyHtags: boolean;
   styleTextSegments: boolean;
+  includeGoogleFonts: boolean;
 }
 
 export interface Size {

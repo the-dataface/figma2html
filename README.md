@@ -25,6 +25,7 @@ Pull down this repo. Run `npm install`, `npm run dev`, and then `npm run build`.
     - Text is rendered as `<p>` elements, with styles added as css.
     - Option to add Figma style name as a class (ie. `Desktop/Utility Sans` is added as `class="utility-sans"`). When this is turned on, only positioning styles are applied (ie. no `font-family`, `line-height`, `color`, `opacity`, etc.).
     - Option to render text nodes with `<h1>`, `<h2>`, etc. style names as `<h>` elements
+    - Option to include Google Fonts tag for included font families
 - Option to include the resizer script
 - Specify image paths
 - Option to apply a max width to the page container
@@ -41,3 +42,5 @@ Pull down this repo. Run `npm install`, `npm run dev`, and then `npm run build`.
 - [x] Allow hyperlinks within text nodes
 - [ ] Tailwind classes?
 - [ ] CSS vs inline
+- [ ] Account for linebreaks within text frames
+- [x] Option to include Google Fonts tags

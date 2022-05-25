@@ -63,6 +63,7 @@
   let applyStyleNames = false;
   let applyHtags = false;
   let styleTextSegments = true;
+  let includeGoogleFonts = true;
   let clickableLink: string | undefined = undefined;
   let maxWidth: number | undefined = undefined;
   let imagePath: string | undefined = undefined;
@@ -95,6 +96,7 @@
       applyStyleNames,
       applyHtags,
       styleTextSegments,
+      includeGoogleFonts,
     };
   };
 
@@ -118,6 +120,7 @@
       applyStyleNames = config.applyStyleNames;
       applyHtags = config.applyHtags;
       styleTextSegments = config.styleTextSegments;
+      includeGoogleFonts = config.includeGoogleFonts;
     } else if (type === "preview") {
       const preview = message.preview;
       nodeCount = preview.nodeCount;
@@ -351,9 +354,15 @@
         <Section>Include Figma Styles as Classes</Section>
         <Switch value={applyStyleNames} bind:checked={applyStyleNames} on:change={onChangeConfig} />
       </div>
+    </div>
+    <div class="row">
       <div class="setting">
         <Section>Convert Header Styles to H Tags</Section>
         <Switch value={applyHtags} bind:checked={applyHtags} on:change={onChangeConfig} />
+      </div>
+      <div class="setting">
+        <Section>Include Google Fonts</Section>
+        <Switch value={includeGoogleFonts} bind:checked={includeGoogleFonts} on:change={onChangeConfig} />
       </div>
     </div>
   </div>

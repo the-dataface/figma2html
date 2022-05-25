@@ -23,7 +23,8 @@ class StoredConfig {
         altText: '',
         applyStyleNames: true,
         applyHtags: true,
-        styleTextSegments: true
+        styleTextSegments: true,
+        includeGoogleFonts: true
       }
     } else {
       return _config;
