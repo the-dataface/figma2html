@@ -316,7 +316,7 @@ export const generatePageCss = (containerId, config) => {
     css += blockEnd;
   }
   if (config.centerHtmlOutput) {
-    css += `${blockStart} .artboard {`;
+    css += `${blockStart} .figma2html {`;
     css += `${t3}margin: 0 auto;`;
     css += blockEnd;
   }
