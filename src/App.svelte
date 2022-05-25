@@ -365,6 +365,7 @@
     </div>
 
     <div class="output-preview">
+      <!-- Inspired by Naftali Beder https://github.com/naftalibeder/figma-frame-exporter -->
       {#if exampleAssets.length > 0}
         {#each exampleAssets as exampleAsset, index}
           {#if index > 0}
@@ -483,7 +484,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    height: 166px;
+    height: 150px;
     padding: 8px;
     border: 1px solid lightgray;
     border-radius: 4px;
@@ -494,19 +495,21 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap: 4px;
+    gap: 16px;
   }
 
   .output-thumb {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
   }
 
   .output-filename {
     display: flex;
     flex: 1;
     white-space: nowrap;
-    overflow-x: scroll;
+    overflow-x: hidden;
   }
 
   .output-placeholder {

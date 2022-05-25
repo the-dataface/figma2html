@@ -184,7 +184,7 @@ export const forEachFrame = (asset, widthRange, config) => {
   let textNodes = frame.findAll(child => child.type === 'TEXT');
 
   textFrames = frame.findAll(child => child.type === 'TEXT');
-  textData = convertTextFrames(textFrames, frameWidth, frameHeight);
+  textData = convertTextFrames(textFrames, frame.width, frameHeight);
 
   frameContent.html += `
   \r\t <!-- Frame: ${imgName.replace(`${config.imagePath}/`, "")} --> \r
@@ -393,6 +393,7 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
   \r`;
 
   if (textData) {
+    console.log("textData", textData);
     textData.forEach(text => {
       let el = ``;
 
@@ -402,19 +403,62 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
       if (text.rotation !== 0) style += ` transform: rotate(${text.rotation}deg); transform-origin: left top;`;
       style += `"`;
 
-      if (config.applyHtags && (text.class === "h1" || text.class === "h2" || text.class === "h3" || text.class === "h4" || text.class === "h5" || text.class === "h6")) {
-        el += `\t\t<${text.class} class="f2hText" ${style}>\r`;
-        text.segments.forEach(segment => {
-          el += createSpan(segment, config.styleTextSegments);
+      let els = [];
+      text.segments.forEach((segment, i) => {
+        let iNotZero = i !== 0,
+          prevEndsNewLine = iNotZero ? text.segments[i - 1].characters.slice(-1) === "\n" : false,
+          thisEndsNewLine = segment.characters.slice(-1) === '\n',
+          thisIncludesNewLine = segment.characters.includes('\n'),
+          notNewElement = iNotZero && !prevEndsNewLine && !(thisIncludesNewLine && !thisEndsNewLine);
+
+        if (notNewElement) {
+          els[els.length - 1].segments.push(segment)
+        } else {
+          els.push({
+            tag: segment.listOptions.type !== "NONE" ? "li" : config.applyHtags && (text.class === "h1" || text.class === "h2" || text.class === "h3" || text.class === "h4" || text.class === "h5" || text.class === "h6") ? text.class : "p",
+            listType: segment.listOptions.type === "ORDERED" ? "ol" : segment.listOptions.type === "UNORDERED" ? "ul" : false,
+            segments: [segment],
+            newElement: iNotZero && (!prevEndsNewLine || (thisIncludesNewLine && !thisEndsNewLine))
+          });
+        }
+      })
+
+      console.log("els", els);
+      el += `<div class="f2hText" ${style}>`;
+
+      els.forEach((element, i) => {
+        // lists don't work because figma doesn't segment them by line
+        // let isListItem = element.tag === "li",
+        //   listType = isListItem ? element.listType : null,
+        //   prevElementIsListItem = i !== 0 && els[i - 1].tag === "li",
+        //   nextElementIsListItem = i !== els.length - 1 && els[i + 1].tag === "li";
+
+        // if (isListItem) console.log("isListItem", isListItem, "listType", listType, "prevElementIsListItem", prevElementIsListItem, "nextElementIsListItem", nextElementIsListItem);
+
+        // if (isListItem && !prevElementIsListItem) el += `<${element.listType}>\r`;
+        el += `<${element.tag}>`;
+        element.segments.forEach(segment => {
+          el += createSpan(segment, config.styleTextSegments, config.applyStyleNames);
         });
-        el += `\t\t</${text.class}>\r`;
-      } else {
-        el += `\t\t<p class="f2hText ${config.applyStyleNames ? text.class : ''}" ${style}>\r`;
-        text.segments.forEach(segment => {
-          el += createSpan(segment, config.styleTextSegments);
-        });
-        el += `\t\t</p>\r`;
-      }
+        el += `</${element.tag}>\r`;
+        // if (isListItem && !nextElementIsListItem) el += `</${element.listType}>\r`;
+      })
+
+      el += `</div>\r`;
+
+      // if (config.applyHtags && (text.class === "h1" || text.class === "h2" || text.class === "h3" || text.class === "h4" || text.class === "h5" || text.class === "h6")) {
+      //   el += `\t\t<${text.class} class="f2hText" ${style}>\r`;
+      //   text.segments.forEach(segment => {
+      //     el += createSpan(segment, config.styleTextSegments, config.applyStyleNames);
+      //   });
+      //   el += `\t\t</${text.class}>\r`;
+      // } else {
+      //   el += `\t\t<p class="f2hText ${config.applyStyleNames ? text.class : ''}" ${style}>\r`;
+      //   text.segments.forEach(segment => {
+      //     el += createSpan(segment, config.styleTextSegments, config.applyStyleNames);
+      //   });
+      //   el += `\t\t</p>\r`;
+      // }
 
       html += el;
 
@@ -427,8 +471,9 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
   return html;
 }
 
-export const createSpan = (segment, applyStyles) => {
+export const createSpan = (segment, applyStyles, applyStyleNames) => {
   let el = ``;
+  let textStyleObject, textClass = "";
   let styleProps = ["fontName", "fontSize", "textDecoration", "textCase", "lineHeight", "letterSpacing", "fills", "textStyleId", "fillStyleId", "listOptions", "indentation", "hyperlink"];
 
   let styleTag = `style="`;
@@ -443,7 +488,13 @@ export const createSpan = (segment, applyStyles) => {
 
   if (segment.hyperlink) el += `\t\t<a href="${segment.hyperlink.value}" target="_blank">`;
 
-  el += `\t\t<span class="f2hsegment" ${styleTag}>${segment.characters}</span>`;
+  if (segment.textStyleId && typeof segment.textStyleId !== 'symbol') {
+    textStyleObject = figma.getStyleById(segment.textStyleId);
+    textClass = textStyleObject ? dashify(textStyleObject.name.split('/').pop()) : null;
+  }
+
+  // el += `\t\t<span class="f2hsegment" ${styleTag}>${segment.characters.replace(/\n/g, "<br>")}</span>`;
+  el += `\t\t<span class="f2hsegment ${applyStyleNames ? textClass : ''}" ${styleTag}>${segment.characters}</span>`;
 
   if (segment.hyperlink) el += `\t\t</a>`;
 

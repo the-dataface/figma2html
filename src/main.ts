@@ -214,6 +214,7 @@ const withModificationsForExport = (node: FrameNode): FrameNode => {
   return node;
 }
 
+// Inspired by Naftali Beder https://github.com/naftalibeder/figma-frame-exporter
 const refreshPreview = async (config: Config | undefined) => {
   const exportables = getExportables();
 
