@@ -130,10 +130,47 @@ export const generateOutputHtml = (config, assets) => {
 }
 
 export const generateGoogleFontScript = (fontList) => {
-  let families = "";
+  let weightLookup = {
+    "Thin": 100,
+    "ExtraLight": 200,
+    "Light": 300,
+    "Regular": 400,
+    "Medium": 500,
+    "SemiBold": 600,
+    "Bold": 700,
+    "ExtraBold": 800,
+    "Black": 900,
+  };
+
+  // group fontList array by family
+  let fontFamilies = [];
   fontList.forEach(font => {
-    // replace spaces in font name with "+"
-    families += `family=${font.replace(/\s/g, "+")}&`;
+    // console.log(font);
+    let family = font.family,
+      weight = font.style === "Italic" ? weightLookup["Regular"] : weightLookup[font.style.replace(" Italic", "")],
+      style = font.style.includes("Italic") ? "1," : "0,",
+      styleWeight = `${style}${weight}`;
+
+    // if fontFamilies does not include an object with the family name equal to the font family, push an object with the family name equal to the font family and an array of all the unique font values
+    if (!fontFamilies.some(f => f.family === family)) {
+      fontFamilies.push({ family, weights: [styleWeight] });
+    } else {
+      // if fontFamilies does include an object with the family name equal to the font family, push the font value to the array of values
+      fontFamilies.forEach(f => {
+        if (f.family === family) {
+          if (!f.weights.includes(styleWeight)) f.weights.push(styleWeight);
+        }
+      });
+    }
+  });
+
+
+
+  let families = "";
+  fontFamilies.forEach(f => {
+    let name = `${f.family.replace(/\s/g, "+")}:ital,wght@`;
+
+    families += `family=${name}${f.weights.sort().join(";")}&`
   });
 
   let fontScript = `
@@ -473,7 +510,7 @@ export const createSpan = (segment, applyStyles, applyStyleNames) => {
 
 export const convertStyleProp = (prop, value) => {
   if (prop === "fontName") {
-    if (!fontList.includes(value.family)) fontList.push(value.family);
+    if (fontList.indexOf(value) < 0) fontList.push(value);
 
     return ` font-family: ${value.family}; font-weight: ${value.style === "Bold" || value.style === "Bold Italic" ? "bold" : "normal"}; font-style: ${value.style === "Italic" || value.style === "Bold Italic" ? "italic" : "normal"};`;
   }
