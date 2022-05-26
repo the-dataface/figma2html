@@ -1,50 +1,68 @@
 ## figma2html
 
-WORK IN PROGRESS
+Export Figma frames as responsive images with text elements rendered as HTML. A Figma version of [ai2html](http://ai2html.org), with some extra features. Uses [Figma Plugin DS Svelte](https://github.com/thomas-lowry/figma-plugin-ds-svelte).
 
-Export Figma frames as images with text elements rendered as HTML. A Figma version of [ai2html](http://ai2html.org), using [Figma Plugin DS Svelte](https://github.com/thomas-lowry/figma-plugin-ds-svelte).
+### Instructions
 
-## Installation
+1. Create your artwork
+    - Size your frames based on the breakpoints you need for your website.
+    - Name the frames your want to export in this format: `#[width]px`.
+    - If you're using a Google Font that's built in to Figma, you'll have the option to automatically include the appropriate Google Fonts tag in your exported HTML. Otherwise, make sure you have any necessary webfonts set up in your project and they're named the same as they appear in Figma.
+2. Run the plugin and configure your settings
+    - In the plugin dialog, you can you load your preconfigured settings from a JSON text node named `settings` on the current page in your Figma doc, or you can write your current settings to a JSON text node.
+3. Click Export and voila, you can save your exported images and HTML file as a zipped folder.
 
-Pull down this repo. Run `npm install`, `npm run dev`, and then `npm run build`. In Figma, go to `Plugins -> Development -> Import plugin from manifest`, navigate to this directory and hit `manifest.json`. Done.
 
-## Instructions
+### How it Works
+- The plugin grabs all frames named `#[width]px` on your current page, unframes all children (turns frames into groups to get positions relative to the parent frame), hides all text layers, and exports as a `PNG`, `JPG`, or `SVG`, at a specified scale.
+- All text elements are added via absolutely positioned divs.
+- Text is rendered as `<p>` elements, with inline styles to match what you see in Figma.
+- If `Include Resizer Script` is turned on, the outputted HTML will include JS to show and hide the correct image at the appropriate size, based on the named width of the frame.
 
-- Lay your artwork out on frames with widths based on your breakpoints.
-- Name your frames like `#[width]px` (ie. `#640px`). You can have other frames -- the plugin will only grab frames with that naming convention.
-- Run the plugin.
-- Check your settings.
-- Hit `Save settings` to save as a text layer in you document or `Load settings` to load from a text layer in your document.
-- Click export. Your files will be saved as a zipped folder.
+### Options + Features
+*File Output*
+- The inputted Filename will be the name of the outputted zipped folder and HTML file. You can customize this, but will default to the current page name in Figma.
+- Filetype options include `HTML` and `SVELTE`, but note that the SVELTE option hasn't been fully tested.
 
-## Features
-- Grabs all correctly named frames on the active page (ie. `#[width]px`)
-- Hides text and exports as JPG or PNG images at specified scale
-- Lazy loads images in HTML file
-- Adds text elements via HTML and CSS
-    - Text is rendered as `<p>` elements, with styles added as css.
-    - Option to add Figma style name as a class (ie. `Desktop/Utility Sans` is added as `class="utility-sans"`). When this is turned on, only positioning styles are applied (ie. no `font-family`, `line-height`, `color`, `opacity`, etc.).
-    - Option to render text nodes with `<h1>`, `<h2>`, etc. style names as `<h>` elements
-    - Option to include Google Fonts tag for included font families
-- Option to include the resizer script
-- Specify image paths
-- Option to apply a max width to the page container
-- Option to wrap content in an `<a>` tag
-- Option to centre the HTML output
-- Save current settings as a JSON text frame or load settings from an existing JSON text frame if present
-- Variable text
-    - To use, make a text node named `variables` on your current page, or click the button to generate an example.
-    - The text node should contain an array of json objects like
-    ```
-    [
-      {
-        "key": "hed",
-        "value": "This is a headline"
-      }
-    ]
-    ```
-    - Based on the above example, figma2html will look for any strings in your exportable frames that match the `key`, wrapped in curly brackets (i.e. `{{hed}}`) and replace with the `value`.
-    - Note that it does not replace the text in your artwork, just in the exported html.
+*Image Settings*
+- Input an `Image Scale` to export images at a specified scale.
+- `Image Format` options include `PNG`, `JPG`, and `SVG`.
+- The `Path` field allows you to specify an image path, which will be referenced in the image paths in the outputted HTML. Useful if you will be dropping your outputted files into a larger codebase.
+- `Alt Text` allows you to add an alt text tag to images in your outputted HTML.
+
+*Page Settings*
+- Turn on `Include Resizer Script` to include JS in your outputted file which will show and hide the appropriate image at the appropriate size.
+- Turn on `Center HTML Output` to center your page content in the outputted HTML.
+- Input a `Max Width` in pixels to apply a max width to your page content.
+- Include a `Clickable Link` to wrap your output in an `<a>` tag.
+
+*Text Styles*
+- Turn on `Style Text Elements` to include inline styles to match the text styles you see in Figma.
+- Turn on `Include Figma Styles` as Classes to include any named styles in Figma as classes on your text elements. Ex. `Desktop/Utility Sans` will be included as `class="utility-sans"`.
+- Turn on `Convert Header Styles to H tags` to render text elements containing a header class in Figma (`h1`, `h2`, `h3`, etc.) with the appropriate H tag in the outputted HTML, instead of as a `<p>` element.
+- Turn on `Include Google Fonts` to include a Google Fonts tag for included Google Fonts in the outputted HTML.
+
+*Variable Text*
+You can include variable text within your exportable frames. To do so, you need a text node on the current page named variables. Click the button in the plugin dialog to generate an example node. The text node should contain an array of JSON objects like: 
+```
+[
+  {
+    "key": "hed",
+    "value": "This is a headline"
+  }
+]
+```
+Based on the above example, the plugin will ok for any strings in your exportable frames that match the key, wrapped in curly brackets (i.e. `{{hed}}`), and replace with the `value`.
+
+Note that it does not replace the text in your artwork, just in the exported html.
+
+
+### Support + Feedback
+We really hope you find this plugin as useful as we do and we're always open to feedback, bug reports, and feature suggestions. Feel free to comment on the Figma plugin community page, add an issue to this repo, or shoot us an email at sam@thedataface.com.
+
+### Thanks
+Many thanks to the [ai2html](http://ai2html.org) team at the New York Times, both for inspiration and the code on which this plugin is based. Contributors from the DataFace team include Sam Vickars and Sawyer Click.
+
 
 
 ## To do
