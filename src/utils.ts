@@ -210,11 +210,11 @@ export const forEachFrame = (asset, widthRange, config, variables) => {
 
   // find all text nodes within the frame
   textFrames = frame.findAll(child => child.type === 'TEXT');
-  textData = convertTextFrames(textFrames, frame.width, frameHeight, variables);
+  textData = convertTextFrames(textFrames, frame.width, frameHeight);
 
   frameContent.html += `
   \r\t <!-- Frame: ${imgName.replace(`${config.imagePath}/`, "")} --> \r
-  ${generateFrameDiv(frame, frameId, frameClass, imgName, widthRange, textData, altText, config)}
+  ${generateFrameDiv(frame, frameId, frameClass, imgName, widthRange, textData, altText, config, variables)}
   `
 
   frameContent.css += `
@@ -255,25 +255,17 @@ export const createGroupFromFrame = (frameNode: FrameNode): GroupNode | null => 
   return group;
 }
 
-export const convertTextFrames = (textFrames, frameWidth, frameHeight, variables) => {
+export const convertTextFrames = (textFrames, frameWidth, frameHeight) => {
   let textData = [];
 
   let styleProps = ["fontName", "fontSize", "textDecoration", "textCase", "lineHeight", "letterSpacing", "fills", "textStyleId", "fillStyleId", "listOptions", "indentation", "hyperlink"];
 
   textFrames.forEach(textFrame => {
-    // check if textFrame.name is in variables
-    let variableValue = variables.filter(v => `{{${v.key}}}` === textFrame.name).length > 0 ? variables.filter(v => `{{${v.key}}}` === textFrame.name)[0].value : null;
-
     let textSegments, textStyleId, textStyleObject, textClass = "";
     let x, y, width, opacity, rotation;
 
     textSegments = textFrame.getStyledTextSegments(styleProps);
     textStyleId = textFrame.textStyleId;
-
-    // if (variableValue) {
-    //   textSegments[0].characters = variableValue;
-    //   console.log(textSegments);
-    // }
 
     if (textStyleId && typeof textStyleId !== 'symbol') {
       textStyleObject = figma.getStyleById(textStyleId);
@@ -289,7 +281,6 @@ export const convertTextFrames = (textFrames, frameWidth, frameHeight, variables
     textData.push({
       class: textClass,
       segments: textSegments,
-      variableValue: variableValue,
       x: x,
       y: y,
       width: width,
@@ -402,7 +393,7 @@ export const getWidthRange = (assets) => {
   return widthRange;
 }
 
-export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange, textData, altText, config) => {
+export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange, textData, altText, config, variables) => {
   let id = `frame-${frameId.replace(":", "-")} `;
   let className = `${frameClass.replace(":", "-")} frame artboard`;
   let width = +frame.name.replace("#", "").replace("px", "");
@@ -460,7 +451,6 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
             listType: segment.listOptions.type === "ORDERED" ? "ol" : segment.listOptions.type === "UNORDERED" ? "ul" : false,
             segments: [segment],
             newElement: iNotZero && (!prevEndsNewLine || (thisIncludesNewLine && !thisEndsNewLine)),
-            variableValue: text.variableValue
           });
         }
       });
@@ -479,7 +469,7 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
         // if (isListItem && !prevElementIsListItem) el += `<${element.listType}>\r`;
         el += `<${element.tag}>`;
         element.segments.forEach(segment => {
-          el += createSpan(segment, config.styleTextSegments, config.applyStyleNames, element.variableValue);
+          el += createSpan(segment, config.styleTextSegments, config.applyStyleNames, variables);
         });
         el += `</${element.tag}>\r`;
         // if (isListItem && !nextElementIsListItem) el += `</${element.listType}>\r`;
@@ -498,10 +488,18 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
   return html;
 }
 
-export const createSpan = (segment, applyStyles, applyStyleNames, variableValue) => {
+export const createSpan = (segment, applyStyles, applyStyleNames, variables) => {
   let el = ``;
   let textStyleObject, textClass = "";
   let styleProps = ["fontName", "fontSize", "textDecoration", "textCase", "lineHeight", "letterSpacing", "fills", "textStyleId", "fillStyleId", "listOptions", "indentation", "hyperlink"];
+  let characters = segment.characters;
+
+  // replace variable text
+  if (variables) {
+    variables.forEach(v => {
+      characters = characters.replaceAll(`{{${v.key}}}`, v.value);
+    })
+  }
 
   let styleTag = `style="`;
 
@@ -520,7 +518,7 @@ export const createSpan = (segment, applyStyles, applyStyleNames, variableValue)
     textClass = textStyleObject ? dashify(textStyleObject.name.split('/').pop()) : null;
   }
 
-  el += `\t\t<span class="f2hsegment ${applyStyleNames ? textClass : ''}" ${styleTag}>${variableValue ? variableValue : segment.characters}</span>`;
+  el += `\t\t<span class="f2hsegment ${applyStyleNames ? textClass : ''}" ${styleTag}>${characters}</span>`;
 
   if (segment.hyperlink) el += `\t\t</a>`;
 

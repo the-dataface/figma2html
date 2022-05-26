@@ -11,16 +11,40 @@ class StoredVariables {
   static get = async (): Promise<Variables> => {
     // get the stored variables
     let _variables = figma.currentPage.findOne(node => node.type === 'TEXT' && node.name === 'variables');
-    if (_variables) return JSON.parse(_variables.characters.replace(/\r/g, ""));
-    else return blankVariables;
+    if (_variables) {
+      let characters = _variables.characters
+        .replace(/\r/g, "") // remove line breaks
+        .replace(/\n/g, "") // remove line breaks
+        .replace(/\,(?!\s*?[\{\[\"\'\w])/g, "") // remove trailing comma
+        .replace(/[\u2018\u2019]/g, "'") // replace curly quotes
+        .replace(/[\u201C\u201D]/g, '"') // replace curly quotes
+
+      let variables = JSON.parse(characters);
+
+      StoredVariables.writeVariables();
+
+      return variables;
+    } else return blankVariables;
   };
 
   static writeVariables = async (): Promise<void> => {
     // write an example variables array to a text node on the current page
 
+    let storedVariables;
     // remove existing variables text node if found
     const existingVariables = figma.currentPage.findOne(node => node.type === 'TEXT' && node.name === 'variables');
-    if (existingVariables) existingVariables.remove();
+    if (existingVariables) {
+      let characters = existingVariables.characters
+        .replace(/\r/g, "") // remove line breaks
+        .replace(/\n/g, "") // remove line breaks
+        .replace(/\,(?!\s*?[\{\[\"\'\w])/g, "") // remove trailing comma
+        .replace(/[\u2018\u2019]/g, "'") // replace curly quotes
+        .replace(/[\u201C\u201D]/g, '"') // replace curly quotes
+
+      storedVariables = JSON.parse(characters);
+
+      existingVariables.remove();
+    }
 
     // load Inter for variables text node
     figma.loadFontAsync({ family: 'Inter', style: 'Regular' })
@@ -40,7 +64,7 @@ class StoredVariables {
 
         // create the node
         let textNode = figma.createText();
-        textNode.characters = JSON.stringify(blankVariables, null, 2).replace(/,/g, ",\r");
+        textNode.characters = JSON.stringify(storedVariables ? storedVariables : blankVariables, null, 2).replace(/,/g, ",\r");
         textNode.x = maxRight + 100;
         textNode.y = minTop;
         textNode.name = "variables";
