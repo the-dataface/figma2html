@@ -349,12 +349,16 @@
     </div>
 
     <div class="row">
-      <div class="setting">
-        <Section>Include Resize Script</Section>
+      <div class="setting switch-setting">
+        <div class="switch-title">
+          <Section>Include Resize Script</Section>
+        </div>
         <Switch value={includeResizer} bind:checked={includeResizer} on:change={onChangeConfig} />
       </div>
-      <div class="setting">
-        <Section>Center HTML Output</Section>
+      <div class="setting switch-setting">
+        <div class="switch-title">
+          <Section>Center HTML Output</Section>
+        </div>
         <Switch value={centerHtmlOutput} bind:checked={centerHtmlOutput} on:change={onChangeConfig} />
       </div>
     </div>
@@ -383,22 +387,30 @@
     </p>
 
     <div class="row">
-      <div class="setting">
-        <Section>Style Text Segments</Section>
+      <div class="setting switch-setting">
+        <div class="switch-title">
+          <Section>Style Text Segments</Section>
+        </div>
         <Switch value={styleTextSegments} bind:checked={styleTextSegments} on:change={onChangeConfig} />
       </div>
-      <div class="setting">
-        <Section>Include Figma Styles as Classes</Section>
+      <div class="setting switch-setting">
+        <div class="switch-title">
+          <Section>Include Figma Styles as Classes</Section>
+        </div>
         <Switch value={applyStyleNames} bind:checked={applyStyleNames} on:change={onChangeConfig} />
       </div>
     </div>
     <div class="row">
-      <div class="setting">
-        <Section>Convert Header Styles to H Tags</Section>
+      <div class="setting switch-setting">
+        <div class="switch-title">
+          <Section>Convert Header Styles to H Tags</Section>
+        </div>
         <Switch value={applyHtags} bind:checked={applyHtags} on:change={onChangeConfig} />
       </div>
-      <div class="setting">
-        <Section>Include Google Fonts</Section>
+      <div class="setting switch-setting">
+        <div class="switch-title">
+          <Section>Include Google Fonts</Section>
+        </div>
         <Switch value={includeGoogleFonts} bind:checked={includeGoogleFonts} on:change={onChangeConfig} />
       </div>
     </div>
@@ -449,13 +461,15 @@
       {/if}
     </div>
   </div>
-
   <div class="button-row">
     <Button on:click={onSelectExport} disabled={nodeCount === 0}>Export {nodeCount} images</Button>
     <Button variant="secondary" on:click={onReset}>Reset to Defaults</Button>
     <p class="link" on:click={onSaveSettings}>Save Settings</p>
     <p class="link" on:click={onLoadSettings}>Load Settings</p>
   </div>
+  <p class="utility">
+    Need help? <a href="https://github.com/the-dataface/figma2html">GitHub</a>
+  </p>
 </div>
 
 <style>
@@ -522,11 +536,25 @@
     flex-direction: column;
   }
 
+  .switch-setting {
+    margin-bottom: 16px;
+  }
+
+  .switch-title {
+    margin-bottom: -12px;
+  }
+
   .button-row {
     margin-top: 8px;
     display: flex;
     gap: 8px;
     align-items: center;
+  }
+
+  p.utility {
+    margin-top: 16px;
+    color: #999;
+    font-size: 12px;
   }
 
   .output-preview {
