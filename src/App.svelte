@@ -1,7 +1,7 @@
 <script lang="ts" type="module">
   import { onMount } from "svelte";
   import JSZip from "../node_modules/jszip/dist/jszip.min.js";
-  import { Asset, HTMLFile, Config, Extension, Size, FileType } from "./types";
+  import { Asset, HTMLFile, Config, Extension, Size, FileType, Scale } from "./types";
   import {
     Button,
     Section,
@@ -48,6 +48,7 @@
   let extensionOptions: ExtensionOption[] = [
     { value: "PNG", label: "PNG", group: null, selected: false },
     { value: "JPG", label: "JPG", group: null, selected: false },
+    { value: "SVG", label: "SVG", group: null, selected: false },
   ];
 
   $: {
@@ -56,8 +57,26 @@
     });
   }
 
+  interface ScaleOption {
+    value: Scale;
+    label: string;
+    selected: boolean;
+  }
+
+  let scale: Scale | undefined = undefined;
+  let scaleOptions: ScaleOption[] = [
+    { value: 1, label: "1x", selected: false },
+    { value: 2, label: "2x", selected: false },
+    { value: 4, label: "4x", selected: false },
+  ];
+
+  $: {
+    scaleOptions.forEach((o, i) => {
+      scaleOptions[i].selected = o.value === scale;
+    });
+  }
+
   let syntax: string | undefined = undefined;
-  let sizeConstraint: string | undefined = undefined;
   let includeResizer = true;
   let centerHtmlOutput = false;
   let applyStyleNames = false;
@@ -84,7 +103,7 @@
   const buildConfig = (): Config => {
     return {
       syntax,
-      sizeConstraint,
+      scale,
       extension,
       fileType,
       includeResizer,
@@ -108,8 +127,8 @@
       const config = message.config as Config;
 
       syntax = config.syntax;
-      sizeConstraint = config.sizeConstraint;
       extension = config.extension;
+      scale = config.scale;
       fileType = config.fileType;
       includeResizer = config.includeResizer;
       maxWidth = config.maxWidth;
@@ -279,16 +298,17 @@
 
     <div class="row">
       <div class="setting">
-        <Section>Image Size</Section>
-        <input
-          type="text"
-          placeholder="E.g. 2x, 64w, 200h"
-          disabled={!extension}
-          bind:value={sizeConstraint}
-          on:input={onChangeConfig}
+        <Section>Image Scale</Section>
+        <SelectMenu
+          bind:menuItems={scaleOptions}
+          disabled={!extension || extension === "SVG"}
+          on:change={(e) => {
+            scale = e.detail.value;
+            onChangeConfig();
+          }}
         />
       </div>
-      <div class="section">
+      <div class="setting">
         <Section>Format</Section>
         <SelectMenu
           bind:menuItems={extensionOptions}

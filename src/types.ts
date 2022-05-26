@@ -1,10 +1,11 @@
-export type Extension = "PNG" | "JPG";
+export type Extension = "PNG" | "JPG" | "SVG";
 export type FileType = "SVELTE" | "HTML";
 export type ConstraintType = "SCALE" | "WIDTH" | "HEIGHT";
+export type Scale = 1 | 2 | 4;
 
 export interface Config {
   syntax: string;
-  sizeConstraint: string;
+  scale: Scale;
   extension: Extension;
   fileType: FileType;
   includeResizer: boolean;

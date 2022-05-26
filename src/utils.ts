@@ -1,20 +1,20 @@
-import { Extension, Size, FileType } from "./types";
+import { Extension, Size, FileType, Scale } from "./types";
 
 const fontList = [];
 
 export const buildExportSettings = (config: {
   extension: Extension,
-  constraint: string,
+  scale: Scale,
   srcSize: Size,
 }): { settings: ExportSettings; destSize?: Size } => {
   const {
     extension,
-    constraint,
+    scale,
     srcSize,
   } = config;
 
-  if (constraint.endsWith("x")) {
-    const value = Number(constraint.slice(0, -1));
+  if (scale && extension !== "SVG") {
+    const value = scale;
     return {
       settings: {
         format: extension,
@@ -23,30 +23,6 @@ export const buildExportSettings = (config: {
       destSize: {
         width: srcSize.width * value,
         height: srcSize.height * value,
-      },
-    };
-  } else if (constraint.endsWith("w")) {
-    const value = Number(constraint.slice(0, -1));
-    return {
-      settings: {
-        format: extension,
-        constraint: { type: "WIDTH", value },
-      },
-      destSize: {
-        width: value,
-        height: srcSize.height * (value / srcSize.width),
-      },
-    };
-  } else if (constraint.endsWith("h")) {
-    const value = Number(constraint.slice(0, -1));
-    return {
-      settings: {
-        format: extension,
-        constraint: { type: "HEIGHT", value },
-      },
-      destSize: {
-        width: srcSize.width * (value / srcSize.height),
-        height: value,
       },
     };
   } else {

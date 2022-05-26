@@ -12,7 +12,7 @@ class StoredConfig {
     if (!_config) {
       return {
         syntax: camelize(figma.currentPage.name),
-        sizeConstraint: '2x',
+        scale: 2,
         extension: 'PNG',
         fileType: 'HTML',
         includeResizer: true,
@@ -143,7 +143,7 @@ const getAssets = async (
   config: Config,
   previewSettings: PreviewSettings,
 ): Promise<Asset[]> => {
-  const { syntax, extension, sizeConstraint, imagePath, altText } = config;
+  const { syntax, extension, scale, imagePath, altText } = config;
 
   tempFrame.create();
 
@@ -175,7 +175,7 @@ const getAssets = async (
     // generate image data
     const baseExportConfig = {
       extension,
-      constraint: sizeConstraint,
+      scale,
       srcSize: e.size,
     };
 
@@ -185,7 +185,7 @@ const getAssets = async (
 
     const { settings } = buildExportSettings(previewSettings.isFinal ? baseExportConfig : {
       extension: 'JPG',
-      constraint: '',
+      scale: 1,
       srcSize: previewSettings.thumbSize,
     });
 
