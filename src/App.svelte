@@ -228,6 +228,17 @@
     );
   };
 
+  const onWriteVariables = () => {
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: "writeVariables",
+        },
+      },
+      "*"
+    );
+  };
+
   const buildPreviewImages = async (assets: Asset[]): Promise<Asset[]> => {
     assets.forEach((asset) => {
       let blob = new Blob([asset.data], { type: `image/png` });
@@ -365,6 +376,12 @@
       <h3>Text Settings</h3>
     </div>
 
+    <p>
+      Using variable text in your frames? figma2html will look for a text node named "variables" and use its contents.
+
+      <span class="link" on:click={onWriteVariables}>Write an example variables node?</span>
+    </p>
+
     <div class="row">
       <div class="setting">
         <Section>Style Text Segments</Section>
@@ -463,7 +480,11 @@
     margin: 0;
   }
 
-  p.link {
+  p {
+    margin: 8px;
+  }
+
+  .link {
     text-decoration: underline;
     margin: 0;
   }

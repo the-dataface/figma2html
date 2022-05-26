@@ -1,7 +1,52 @@
-import { Exportable, Config, Asset, HTMLFile, PreviewSettings } from "./types";
+import { Exportable, Config, Variables, Asset, HTMLFile, PreviewSettings } from "./types";
 import { camelize, buildExportSettings, generateOutputHtml, generateOutputSvelte, log } from "./utils";
 
 figma.showUI(__html__, { width: 560, height: 900 });
+
+const blankVariables = [
+  { key: "hed", value: "This is the headline" },
+]
+
+class StoredVariables {
+  static get = async (): Promise<Variables> => {
+    // get the stored variables
+    let _variables = figma.currentPage.findOne(node => node.type === 'TEXT' && node.name === 'variables');
+    if (_variables) return JSON.parse(_variables.characters.replace(/\r/g, ""));
+    else return blankVariables;
+  };
+
+  static writeVariables = async (): Promise<void> => {
+    // write an example variables array to a text node on the current page
+
+    // remove existing variables text node if found
+    const existingVariables = figma.currentPage.findOne(node => node.type === 'TEXT' && node.name === 'variables');
+    if (existingVariables) existingVariables.remove();
+
+    // load Inter for variables text node
+    figma.loadFontAsync({ family: 'Inter', style: 'Regular' })
+      .then(() => {
+        // get all frames with names including "#" or named "settings"
+        const nodes = figma.currentPage.findAll(node => node.name.includes('#') || node.name === 'settings');
+
+        // get furthest point to the right
+        const maxRight = nodes.reduce((max, node) => {
+          return Math.max(max, node.x + node.width);
+        }, 0);
+
+        // get furthest point to the top
+        const minTop = nodes.reduce((min, node) => {
+          return Math.min(min, node.y);
+        }, 0);
+
+        // create the node
+        let textNode = figma.createText();
+        textNode.characters = JSON.stringify(blankVariables, null, 2).replace(/,/g, ",\r");
+        textNode.x = maxRight + 100;
+        textNode.y = minTop;
+        textNode.name = "variables";
+      })
+  }
+}
 
 class StoredConfig {
   static get = async (): Promise<Config> => {
@@ -43,10 +88,10 @@ class StoredConfig {
   }
 
   static writeSettings = async (config): Promise<void> => {
-    // write the config to a text node on the existing page
+    // write the config to a text node on the current page
 
     // remove existing settings text node if found
-    const settings = figma.currentPage.findOne(node => node.name === "settings");
+    const settings = figma.currentPage.findOne(node => node.type === "TEXT" && node.name === "settings");
     if (settings) settings.remove();
 
     // load Inter for settings text node
@@ -124,7 +169,8 @@ const getExportables = (): Exportable[] => {
 
 const getFile = async (
   config: Config,
-  assets
+  assets,
+  variables: Variables
 ): Promise<HTMLFile> => {
   const { syntax, fileType, includeResizer, centerHtmlOutput, maxWidth } = config;
 
@@ -132,7 +178,7 @@ const getFile = async (
   const file = {
     filename: `${syntax}`,
     extension: fileType,
-    data: fileType === "HTML" ? generateOutputHtml(config, assets) : generateOutputSvelte(config, assets)
+    data: fileType === "HTML" ? generateOutputHtml(config, assets, variables) : generateOutputSvelte(config, assets, variables)
   }
 
   return file;
@@ -216,7 +262,7 @@ const withModificationsForExport = (node: FrameNode): FrameNode => {
 }
 
 // Inspired by Naftali Beder https://github.com/naftalibeder/figma-frame-exporter
-const refreshPreview = async (config: Config | undefined) => {
+const refreshPreview = async (config: Config | undefined, variables: Variables | variables) => {
   const exportables = getExportables();
 
   let exampleAssets: Asset[] = [];
@@ -229,7 +275,7 @@ const refreshPreview = async (config: Config | undefined) => {
       {
         isFinal: false, thumbSize: { width: 32, height: 32 }
       });
-    exampleFile = await getFile(config, exampleAssets);
+    exampleFile = await getFile(config, exampleAssets, variables);
   }
 
   figma.ui.postMessage({
@@ -242,7 +288,7 @@ const refreshPreview = async (config: Config | undefined) => {
   });
 };
 
-const generateExport = async (config: Config) => {
+const generateExport = async (config: Config, variables: Variables) => {
   const exportables = getExportables();
 
   const assets = await getAssets(
@@ -251,7 +297,7 @@ const generateExport = async (config: Config) => {
     { isFinal: true },
   );
 
-  const file = await getFile(config, assets);
+  const file = await getFile(config, assets, variables);
 
   figma.ui.postMessage({
     type: "export",
@@ -266,20 +312,26 @@ figma.ui.onmessage = async (message) => {
 
   if (type === "init") {
     const storedConfig = await StoredConfig.get();
+    const storedVariables = await StoredVariables.get();
     log("Loaded stored config:", storedConfig);
-    figma.ui.postMessage({ type: "load", config: storedConfig });
-    await refreshPreview(storedConfig);
+    log("Loaded stored variables:", storedVariables);
+    figma.ui.postMessage({ type: "load", config: storedConfig, variables: storedVariables });
+    await refreshPreview(storedConfig, storedVariables);
   } else if (type === "config") {
     const storedConfig = await StoredConfig.set(message.config);
-    await refreshPreview(storedConfig);
+    const storedVariables = await StoredVariables.get();
+    await refreshPreview(storedConfig, storedVariables);
   } else if (type === "export") {
-    await generateExport(message.config);
+    const storedVariables = await StoredVariables.get();
+    await generateExport(message.config, storedVariables);
   } else if (type === "reset") {
     await StoredConfig.clear();
     const storedConfig = await StoredConfig.get();
+    const storedVariables = await StoredVariables.get();
     log("Loaded stored config:", storedConfig);
-    figma.ui.postMessage({ type: "load", config: storedConfig });
-    await refreshPreview(storedConfig);
+    log("Loaded stored variables:", storedVariables);
+    figma.ui.postMessage({ type: "load", config: storedConfig, variables: storedVariables });
+    await refreshPreview(storedConfig, storedVariables);
   } else if (type === "saveSettings") {
     const storedConfig = await StoredConfig.get();
     await StoredConfig.writeSettings(storedConfig);
@@ -287,16 +339,20 @@ figma.ui.onmessage = async (message) => {
   } else if (type === "loadSettings") {
     await StoredConfig.loadSettings();
     const storedConfig = await StoredConfig.get();
+    const storedVariables = await StoredVariables.get();
     log("Loaded stored config:", storedConfig);
-    figma.ui.postMessage({ type: "load", config: storedConfig });
-    await refreshPreview(storedConfig);
+    figma.ui.postMessage({ type: "load", config: storedConfig, variables: storedVariables });
+    await refreshPreview(storedConfig, storedVariables);
+  } else if (type === "writeVariables") {
+    await StoredVariables.writeVariables();
+    log("Writing example variables:", blankVariables);
   }
 };
 
-figma.on("selectionchange", async () => {
-  const storedConfig = await StoredConfig.get();
-  await refreshPreview(storedConfig);
-});
+// figma.on("selectionchange", async () => {
+//   const storedConfig = await StoredConfig.get();
+//   await refreshPreview(storedConfig);
+// });
 
 figma.on('close', () => {
   tempFrame.remove();

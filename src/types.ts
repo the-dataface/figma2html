@@ -20,6 +20,13 @@ export interface Config {
   includeGoogleFonts: boolean;
 }
 
+export interface Variable {
+  key: string;
+  value: string;
+}
+
+export interface Variables extends Array<Variable> { }
+
 export interface Size {
   width: number;
   height: number;

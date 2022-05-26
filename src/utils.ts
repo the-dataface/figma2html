@@ -36,7 +36,7 @@ export const buildExportSettings = (config: {
 };
 
 // Wrap content HTML in a <div>, add styles and resizer script, write to a file
-export const generateOutputSvelte = (config, assets) => {
+export const generateOutputSvelte = (config, assets, variables) => {
   let containerId = `${config.syntax}-box`;
   let linkSrc = config.clickableLink || '';
   let resizerJs = config.includeResizer ? getResizerScript(containerId, true) : "";
@@ -52,7 +52,7 @@ export const generateOutputSvelte = (config, assets) => {
   if (linkSrc) html += `\t<a class="f2hLink" href="${linkSrc}">\r`;
 
   assets.forEach(asset => {
-    html += forEachFrame(asset, widthRange, config);
+    html += forEachFrame(asset, widthRange, config, variables);
   });
 
   html += `</div>`;
@@ -84,7 +84,7 @@ export const generateOutputSvelte = (config, assets) => {
   return content;
 }
 
-export const generateOutputHtml = (config, assets) => {
+export const generateOutputHtml = (config, assets, variables) => {
   let containerId = `${config.syntax}-box`;
   let linkSrc = config.clickableLink || '';
   let resizerJs = config.includeResizer ? getResizerScript(containerId, false) : "";
@@ -100,7 +100,7 @@ export const generateOutputHtml = (config, assets) => {
   if (linkSrc) html += `\t<a class="f2hLink" href="${linkSrc}">\r`;
 
   assets.forEach(asset => {
-    html += forEachFrame(asset, widthRange, config);
+    html += forEachFrame(asset, widthRange, config, variables);
   });
 
   html += `</div>`;
@@ -150,7 +150,6 @@ export const generateGoogleFontScript = (fontList) => {
   // group fontList array by family
   let fontFamilies = [];
   fontList.forEach(font => {
-    // console.log(font);
     let family = font.family,
       weight = font.style === "Italic" ? weightLookup["Regular"] : weightLookup[font.style.replace(" Italic", "")],
       style = font.style.includes("Italic") ? "1," : "0,",
@@ -187,7 +186,7 @@ export const generateGoogleFontScript = (fontList) => {
   return fontScript;
 }
 
-export const forEachFrame = (asset, widthRange, config) => {
+export const forEachFrame = (asset, widthRange, config, variables) => {
   let frame = asset.node;
   let frameId = frame.id;
   let frameClass = `g-${frameId}`;
@@ -208,10 +207,10 @@ export const forEachFrame = (asset, widthRange, config) => {
   // convert all frames to groups for positioning
   const groups: GroupNode[] = createGroupsFromFrames(allNodes);
 
-  let textNodes = frame.findAll(child => child.type === 'TEXT');
 
+  // find all text nodes within the frame
   textFrames = frame.findAll(child => child.type === 'TEXT');
-  textData = convertTextFrames(textFrames, frame.width, frameHeight);
+  textData = convertTextFrames(textFrames, frame.width, frameHeight, variables);
 
   frameContent.html += `
   \r\t <!-- Frame: ${imgName.replace(`${config.imagePath}/`, "")} --> \r
@@ -256,25 +255,33 @@ export const createGroupFromFrame = (frameNode: FrameNode): GroupNode | null => 
   return group;
 }
 
-export const convertTextFrames = (textFrames, frameWidth, frameHeight) => {
+export const convertTextFrames = (textFrames, frameWidth, frameHeight, variables) => {
   let textData = [];
 
   let styleProps = ["fontName", "fontSize", "textDecoration", "textCase", "lineHeight", "letterSpacing", "fills", "textStyleId", "fillStyleId", "listOptions", "indentation", "hyperlink"];
 
   textFrames.forEach(textFrame => {
+    // check if textFrame.name is in variables
+    let variableValue = variables.filter(v => `{{${v.key}}}` === textFrame.name).length > 0 ? variables.filter(v => `{{${v.key}}}` === textFrame.name)[0].value : null;
+
     let textSegments, textStyleId, textStyleObject, textClass = "";
     let x, y, width, opacity, rotation;
 
     textSegments = textFrame.getStyledTextSegments(styleProps);
     textStyleId = textFrame.textStyleId;
 
+    // if (variableValue) {
+    //   textSegments[0].characters = variableValue;
+    //   console.log(textSegments);
+    // }
+
     if (textStyleId && typeof textStyleId !== 'symbol') {
       textStyleObject = figma.getStyleById(textStyleId);
       textClass = textStyleObject ? dashify(textStyleObject.name.split('/').pop()) : null;
     }
 
-    x = `${(textFrame.x / frameWidth) * 100}%`;
-    y = `${(textFrame.y / frameHeight) * 100}%`;
+    x = `${(textFrame.x / frameWidth) * 100}% `;
+    y = `${(textFrame.y / frameHeight) * 100}% `;
     width = `${textFrame.width}px`;
     opacity = textFrame.opacity;
     rotation = textFrame.rotation * -1;
@@ -282,6 +289,7 @@ export const convertTextFrames = (textFrames, frameWidth, frameHeight) => {
     textData.push({
       class: textClass,
       segments: textSegments,
+      variableValue: variableValue,
       x: x,
       y: y,
       width: width,
@@ -300,10 +308,11 @@ export const generateFrameCss = (frame, frameId) => {
     css = ``;
 
   css += `${t3}${id} {`;
-  css += `${t4}position: relative;`;
-  css += `${t4}overflow: hidden;`;
-  css += `${t4}display: none;`;
-  css += `${t3}}\r`;
+  css += `${t4}position: relative; `;
+  css += `${t4} overflow: hidden; `;
+  css += `${t4} display: none; `;
+  css += `${t3}
+}\r`;
 
   return css;
 }
@@ -311,49 +320,56 @@ export const generateFrameCss = (frame, frameId) => {
 export const generatePageCss = (containerId, config) => {
   let css = ``;
   let t2 = `\t\t`, t3 = `\r\t\t\t`, t4 = `\t\t\t\t`;
-  let blockStart = `${t2}#${containerId} `;
+  let blockStart = `${t2} #${containerId} `;
   let blockEnd = `\r ${t2} }\r\r`;
 
   if (config.maxWidth) {
-    css += `${blockStart} {`;
-    css += `${t3}max-width: ${config.maxWidth}px;`;
+    css += `${blockStart} {
+  `;
+    css += `${t3} max-width: ${config.maxWidth}px; `;
     css += blockEnd;
   }
   if (config.centerHtmlOutput) {
-    css += `${blockStart} .figma2html {`;
-    css += `${t3}margin: 0 auto;`;
+    css += `${blockStart} .figma2html {
+    `;
+    css += `${t3} margin: 0 auto; `;
     css += blockEnd;
   }
   if (config.clickableLink !== '') {
-    css += `${blockStart} .f2hLink {`;
-    css += `${t3}cursor: pointer;`;
-    css += `${t3}display: block;`;
+    css += `${blockStart} .f2hLink {
+      `;
+    css += `${t3} cursor: pointer; `;
+    css += `${t3} display: block; `;
     css += blockEnd;
   }
 
   // default <p> styles
-  css += `${blockStart} p {`;
-  css += `${t3} margin:0;`;
+  css += `${blockStart} p {
+        `;
+  css += `${t3} margin: 0; `;
   css += blockEnd;
 
-  css += `${blockStart} .frame {`;
-  css += `${t3} position:absolute;`;
+  css += `${blockStart} .frame {
+          `;
+  css += `${t3} position: absolute; `;
   css += blockEnd;
 
-  css += `${blockStart} .f2hImg {`;
-  // css += `${t3} position:absolute;`;
-  css += `${t3} width:100% !important;`;
-  css += `${t3} display: block;`;
-  css += `${t3} top: 0;`;
+  css += `${blockStart} .f2hImg {
+            `;
+  // css += `${ t3 } position: absolute; `;
+  css += `${t3} width: 100% !important; `;
+  css += `${t3} display: block; `;
+  css += `${t3} top: 0; `;
   css += blockEnd;
 
-  css += `${blockStart} .f2hSymbol {`;
-  css += `${t3} position:absolute;`;
-  css += `${t3} box-sizing: border-box;`;
+  css += `${blockStart} .f2hSymbol {
+              `;
+  css += `${t3} position: absolute; `;
+  css += `${t3} box-sizing: border-box; `;
   css += blockEnd;
 
-  css += `${blockStart} .f2hText {\rposition: absolute;\r}\r`;
-  css += `${blockStart} body {\margin: 0;\r}\r`;
+  css += `${blockStart} .f2hText { \rposition: absolute; \r } \r`;
+  css += `${blockStart} body { \margin: 0; \r } \r`;
   return css;
 }
 
@@ -387,7 +403,7 @@ export const getWidthRange = (assets) => {
 }
 
 export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange, textData, altText, config) => {
-  let id = `frame-${frameId.replace(":", "-")}`;
+  let id = `frame-${frameId.replace(":", "-")} `;
   let className = `${frameClass.replace(":", "-")} frame artboard`;
   let width = +frame.name.replace("#", "").replace("px", "");
   let range = widthRange.ranges[widthRange.widths.indexOf(width)];
@@ -400,17 +416,17 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
 
 
   // TO DO: fix this
-  // inlineSpacerStyle = `padding: 0 0 ${formatCssPct(height, width)} 0; `
+  // inlineSpacerStyle = `padding: 0 0 ${ formatCssPct(height, width) } 0; `
   inlineSpacerStyle = `padding: 0 0 0 0; `
-  if (width > 0) inlineStyle += `min-width: ${width}px; `;
-  if (range[1]) inlineStyle += `max-width: ${range[1]}px;`;
+  if (width > 0) inlineStyle += `min-width: ${width} px; `;
+  if (range[1]) inlineStyle += `max-width: ${range[1]} px; `;
 
-  html += `\t<div id="${id}" class="${className}" style="${inlineStyle}"`;
+  html += `\t <div id="${id}" class="${className}" style="${inlineStyle}"`;
   html += ` data-aspect-ratio="${roundTo(aspectRatio, 3)}"`;
   html += ` data-min-width="${range[0]}"`;
   if (range[1]) html += ` data-max-width="${range[1]}"`;
   html += `>\r`;
-  html += `\t\t<div style="${inlineSpacerStyle}" class="spacer"></div>\r`;
+  html += `\t\t <div style="${inlineSpacerStyle}" class="spacer"> </div>\r`;
   html += `\t\t
     <picture>
     \t\t<source srcset="${imgName}.${extension}" type="image/${extension}">
@@ -443,7 +459,8 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
             tag: segment.listOptions.type !== "NONE" ? "li" : config.applyHtags && (text.class === "h1" || text.class === "h2" || text.class === "h3" || text.class === "h4" || text.class === "h5" || text.class === "h6") ? text.class : "p",
             listType: segment.listOptions.type === "ORDERED" ? "ol" : segment.listOptions.type === "UNORDERED" ? "ul" : false,
             segments: [segment],
-            newElement: iNotZero && (!prevEndsNewLine || (thisIncludesNewLine && !thisEndsNewLine))
+            newElement: iNotZero && (!prevEndsNewLine || (thisIncludesNewLine && !thisEndsNewLine)),
+            variableValue: text.variableValue
           });
         }
       });
@@ -462,7 +479,7 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
         // if (isListItem && !prevElementIsListItem) el += `<${element.listType}>\r`;
         el += `<${element.tag}>`;
         element.segments.forEach(segment => {
-          el += createSpan(segment, config.styleTextSegments, config.applyStyleNames);
+          el += createSpan(segment, config.styleTextSegments, config.applyStyleNames, element.variableValue);
         });
         el += `</${element.tag}>\r`;
         // if (isListItem && !nextElementIsListItem) el += `</${element.listType}>\r`;
@@ -481,7 +498,7 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
   return html;
 }
 
-export const createSpan = (segment, applyStyles, applyStyleNames) => {
+export const createSpan = (segment, applyStyles, applyStyleNames, variableValue) => {
   let el = ``;
   let textStyleObject, textClass = "";
   let styleProps = ["fontName", "fontSize", "textDecoration", "textCase", "lineHeight", "letterSpacing", "fills", "textStyleId", "fillStyleId", "listOptions", "indentation", "hyperlink"];
@@ -503,7 +520,7 @@ export const createSpan = (segment, applyStyles, applyStyleNames) => {
     textClass = textStyleObject ? dashify(textStyleObject.name.split('/').pop()) : null;
   }
 
-  el += `\t\t<span class="f2hsegment ${applyStyleNames ? textClass : ''}" ${styleTag}>${segment.characters}</span>`;
+  el += `\t\t<span class="f2hsegment ${applyStyleNames ? textClass : ''}" ${styleTag}>${variableValue ? variableValue : segment.characters}</span>`;
 
   if (segment.hyperlink) el += `\t\t</a>`;
 
