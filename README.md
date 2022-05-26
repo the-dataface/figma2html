@@ -39,7 +39,7 @@ Pull down this repo. Run `npm install`, `npm run dev`, and then `npm run build`.
     [
       {
         "key": "hed",
-        "value": "Access to affordable credit is essential to the quality of life for American families."
+        "value": "This is a headline"
       }
     ]
     ```
