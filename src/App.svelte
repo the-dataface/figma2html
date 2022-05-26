@@ -27,8 +27,8 @@
 
   let fileType: FileType | undefined = undefined;
   let fileTypeOptions: FileTypeOption[] = [
-    // { value: "SVELTE", label: "SVELTE", group: null, selected: false }, // TO DO
     { value: "HTML", label: "HTML", group: null, selected: false },
+    { value: "SVELTE", label: "SVELTE", group: null, selected: false }, // TO DO
   ];
 
   $: {

@@ -132,7 +132,7 @@ const getFile = async (
   const file = {
     filename: `${syntax}`,
     extension: fileType,
-    data: fileType === "HTML" ? generateOutputHtml(config, assets) : generateOutputSvelte()
+    data: fileType === "HTML" ? generateOutputHtml(config, assets) : generateOutputSvelte(config, assets)
   }
 
   return file;
