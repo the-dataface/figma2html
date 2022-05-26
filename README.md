@@ -32,15 +32,28 @@ Pull down this repo. Run `npm install`, `npm run dev`, and then `npm run build`.
 - Option to wrap content in an `<a>` tag
 - Option to centre the HTML output
 - Save current settings as a JSON text frame or load settings from an existing JSON text frame if present
+- Variable text
+    - To use, make a text node named `variables` on your current page, or click the button to generate an example.
+    - The text node should contain an array of json objects like
+    ```
+    [
+      {
+        "key": "hed",
+        "value": "Access to affordable credit is essential to the quality of life for American families."
+      }
+    ]
+    ```
+    - Based on the above example, figma2html will look for any strings in your exportable frames that match the `key`, wrapped in curly brackets (i.e. `{{hed}}`) and replace with the `value`.
+    - Note that it does not replace the text in your artwork, just in the exported html.
 
 
 ## To do
 
-- [ ] Export to Svelte file
-- [ ] Allow lists within text nodes
-- [ ] Use variables within text nodes
+- [x] Export to Svelte file
+- [ ] ~~Allow lists within text nodes~~
+- [x] Use variables within text nodes
 - [x] Allow hyperlinks within text nodes
 - [ ] Tailwind classes?
 - [ ] CSS vs inline
-- [ ] Account for linebreaks within text frames
+- [x] Account for linebreaks within text frames
 - [x] Option to include Google Fonts tags

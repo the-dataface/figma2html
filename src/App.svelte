@@ -379,7 +379,7 @@
     <p>
       Using variable text in your frames? figma2html will look for a text node named "variables" and use its contents.
 
-      <span class="link" on:click={onWriteVariables}>Write an example variables node?</span>
+      <span class="link" on:click={onWriteVariables}>Create an example variables node?</span>
     </p>
 
     <div class="row">
