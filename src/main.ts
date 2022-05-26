@@ -123,7 +123,7 @@ class StoredConfig {
       .then(() => {
 
         // get all frames with names including "#"
-        const nodes = figma.currentPage.findAll(node => node.name.includes("#"));
+        const nodes = figma.currentPage.findAll(node => node.name.includes("#") || node.name === 'variables');
 
         // get furthest point to the right
         const maxRight = nodes.reduce((max, node) => {
