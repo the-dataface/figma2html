@@ -434,7 +434,7 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
       let effect = text.effect.length > 0 ? generateTextEffect(text.effect) : '';
 
       let style = `style="`;
-      style += `top: ${text.y}; left: ${text.x}; opacity: ${text.opacity}; width: ${text.width};`;
+      style += `top: ${text.y}; left: ${text.x}; opacity: ${text.opacity}; width: ${text.width}; ${effect}`;
 
       if (text.rotation !== 0) style += ` transform: rotate(${text.rotation}deg); transform-origin: left top;`;
       style += `"`;
@@ -451,7 +451,7 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
           els[els.length - 1].segments.push(segment)
         } else {
           els.push({
-            tag: segment.listOptions.type !== "NONE" ? "li" : config.applyHtags && ['h1','h2','h3','h4','h5','h6'].includes(text.class) ? text.class : "p",
+            tag: segment.listOptions.type !== "NONE" ? "li" : config.applyHtags && ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(text.class) ? text.class : "p",
             listType: segment.listOptions.type === "ORDERED" ? "ol" : segment.listOptions.type === "UNORDERED" ? "ul" : false,
             segments: [segment],
             newElement: iNotZero && (!prevEndsNewLine || (thisIncludesNewLine && !thisEndsNewLine)),
@@ -492,16 +492,25 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
   return html;
 }
 
-export const generateTextEffect = (effect) => {
-  let dropShadowEffect = effect.find(e => e.type === "DROP_SHADOW");
+export const generateTextEffect = (effects) => {
+  let css = ``;
 
-  if (!dropShadowEffect) return "";
+  let dropShadows = effects.filter(effect => effect.type === "DROP_SHADOW");
 
-  console.log(dropShadowEffect)
+  if (dropShadows) {
+    let textShadow = `text-shadow: `;
 
+    dropShadows.forEach((effect, i) => {
+      let x = effect.offset.x, y = effect.offset.y, r = effect.radius, rgba = `rgba(${effect.color.r * 255}, ${effect.color.g * 255}, ${effect.color.b * 255}, ${effect.color.a})`;
+      let end = i < dropShadows.length - 1 ? `, ` : `; `;
+      console.log(rgba);
+      textShadow += `${x}px ${y}px ${r}px ${rgba}${end}`;
+    })
 
+    css += textShadow;
+  }
 
-  return "";
+  return css;
 }
 
 export const createSpan = (segment, applyStyles, applyStyleNames, variables) => {
