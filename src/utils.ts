@@ -434,7 +434,7 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
       let effect = text.effect.length > 0 ? generateTextEffect(text.effect) : '';
 
       let style = `style="`;
-      style += `top: ${text.y}; left: ${text.x}; opacity: ${text.opacity}; width: ${text.width};`;
+      style += `top: ${text.y}; left: ${text.x}; opacity: ${text.opacity}; width: ${text.width}; ${effect}`;
 
       if (text.rotation !== 0) style += ` transform: rotate(${text.rotation}deg); transform-origin: left top;`;
       style += `"`;
@@ -492,16 +492,31 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
   return html;
 }
 
-export const generateTextEffect = (effect) => {
-  let dropShadowEffect = effect.find(e => e.type === "DROP_SHADOW");
+export const generateTextEffect = (effects) => {
+  let css = ``;
 
-  if (!dropShadowEffect) return "";
+  let dropShadows = effects.filter(effect => effect.type === "DROP_SHADOW" && effect.visible);
 
+  if (dropShadows.length > 0) {
+    let textShadow = `text-shadow: `;
 
+    dropShadows.forEach((effect, i) => {
+      let x = effect.offset.x, y = effect.offset.y, r = effect.radius, rgba = `rgba(${effect.color.r * 255}, ${effect.color.g * 255}, ${effect.color.b * 255}, ${effect.color.a})`;
+      let end = i < dropShadows.length - 1 ? `, ` : `; `;
+      textShadow += `${x}px ${y}px ${r}px ${rgba}${end}`;
+    })
 
+    css += textShadow;
+  }
 
+  let layerBlurs = effects.filter(effect => effect.type === "LAYER_BLUR" && effect.visible);
 
-  return "";
+  if (layerBlurs.length > 0) {
+    let blur = `filter: blur(${layerBlurs[0].radius}px); -webkit-filter: blur(${layerBlurs[0].radius}px); `;
+    css += blur;
+  }
+
+  return css;
 }
 
 export const createSpan = (segment, applyStyles, applyStyleNames, variables) => {
