@@ -9,7 +9,7 @@ Export Figma frames as responsive images with text elements rendered as HTML. A 
     - Name the frames your want to export in this format: `#[width]px`.
     - If you're using a Google Font that's built in to Figma, you'll have the option to automatically include the appropriate Google Fonts tag in your exported HTML. Otherwise, make sure you have any necessary webfonts set up in your project and they're named the same as they appear in Figma.
 2. Run the plugin and configure your settings
-    - In the plugin dialog, you can you load your preconfigured settings from a JSON text node named `settings` on the current page in your Figma doc, or you can write your current settings to a JSON text node.
+    - In the plugin dialog, you can you load your preconfigured settings from a YAML text node named `f2h-settings` on the current page in your Figma doc, or you can write your current settings to a YAML text node.
 3. Click Export and voila, you can save your exported images and HTML file as a zipped folder.
 
 
@@ -44,17 +44,16 @@ Export Figma frames as responsive images with text elements rendered as HTML. A 
 - Turn on `Include Figma Styles` as Classes to include any named styles in Figma as classes on your text elements. Ex. `Desktop/Utility Sans` will be included as `class="utility-sans"`.
 - Turn on `Convert Header Styles to H tags` to render text elements containing a header class in Figma (`h1`, `h2`, `h3`, etc.) with the appropriate H tag in the outputted HTML, instead of as a `<p>` element.
 - Turn on `Include Google Fonts` to include a Google Fonts tag for included Google Fonts in the outputted HTML.
+- **Including custom classes:** if you name a text layer like `f2h-class=[text-sm, font-sans]`, the exported `p` (or `h`) element will automatically include those classes (ie. `<p class="text-sm font-sans">`). Very useful for including Tailwind classes. Note that naming your layers like this will turn off `Style Text Elements` for that node, and will not include inline styling for child spans.
 
 **Variable Text**
-You can include variable text within your exportable frames. To do so, you need a text node on the current page named variables. Click the button in the plugin dialog to generate an example node. The text node should contain a JSON object with key/value pairs like this:
+You can include variable text within your exportable frames. To do so, you need a text node on the current page named `f2h-variables`. Click the button in the plugin dialog to generate an example node. The text node should be written in YAML with key/value pairs like this:
 ```
-{
-    "hed": "This is a headline"
-}
+hed: This is a headline
 ```
-Based on the above example, the plugin will ok for any strings in your exportable frames that match the key, wrapped in curly brackets (i.e. `{{hed}}`), and replace it with the `value`.
+Based on the above example, the plugin will ok for any strings in your exportable frames that match the key, wrapped in curly brackets (i.e. `{{hed}}`), and replace it with `This is a headline`. 
 
-Note that it does not replace the text in your artwork, just in the exported html.
+Note that it does not replace the text in your artwork, just in the exported html. Running the plugin will reformat the variables text node.
 
 
 ### Support + Feedback
