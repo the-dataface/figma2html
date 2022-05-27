@@ -261,15 +261,22 @@ export const convertTextFrames = (textFrames, frameWidth, frameHeight) => {
   let styleProps = ["fontName", "fontSize", "textDecoration", "textCase", "lineHeight", "letterSpacing", "fills", "textStyleId", "fillStyleId", "listOptions", "indentation", "hyperlink"];
 
   textFrames.forEach(textFrame => {
-    let textSegments, textStyleId, textStyleObject, textClass = "";
-    let x, y, width, opacity, rotation, resizeType, effect, strokes;
+    let textSegments;
+    let textStyleId, textStyleObject, textClass = "";
+    let x, y, width, opacity, rotation, resizeType, effect;
+    let classes;
 
     textSegments = textFrame.getStyledTextSegments(styleProps);
-    textStyleId = textFrame.textStyleId;
 
+    textStyleId = textFrame.textStyleId;
     if (textStyleId && typeof textStyleId !== 'symbol') {
       textStyleObject = figma.getStyleById(textStyleId);
       textClass = textStyleObject ? dashify(textStyleObject.name.split('/').pop()) : null;
+    }
+
+    if (textFrame.name.startsWith("f2h-class=")) {
+      let classList = textFrame.name.replace("f2h-class=", "").replaceAll(/[\[\]]/g, "");
+      classes = classList.split(",").map(value => value.trim());
     }
 
     x = `${(textFrame.x / frameWidth) * 100}% `;
@@ -281,6 +288,7 @@ export const convertTextFrames = (textFrames, frameWidth, frameHeight) => {
     effect = textFrame.effects;
 
     textData.push({
+      classes: classes,
       class: textClass,
       segments: textSegments,
       x: x,
@@ -439,6 +447,10 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
       if (text.rotation !== 0) style += ` transform: rotate(${text.rotation}deg); transform-origin: left top;`;
       style += `"`;
 
+      let classes = `class="`;
+      if (text.classes) text.classes.forEach((c, i) => classes += `${c}${i < text.classes.length - 1 ? ' ' : ''}`);
+      classes += `"`;
+
       let els = [];
       text.segments.forEach((segment, i) => {
         let iNotZero = i !== 0,
@@ -458,7 +470,7 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
           });
         }
       });
-
+      console.log(els);
       el += `<div class="f2hText" ${style}>`;
 
       els.forEach((element, i) => {
@@ -471,9 +483,9 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
         // if (isListItem) console.log("isListItem", isListItem, "listType", listType, "prevElementIsListItem", prevElementIsListItem, "nextElementIsListItem", nextElementIsListItem);
 
         // if (isListItem && !prevElementIsListItem) el += `<${element.listType}>\r`;
-        el += `<${element.tag}>`;
+        el += `<${element.tag} ${classes}>`;
         element.segments.forEach(segment => {
-          el += createSpan(segment, config.styleTextSegments, config.applyStyleNames, variables);
+          el += createSpan(segment, config.styleTextSegments && !text.classes, config.applyStyleNames, variables);
         });
         el += `</${element.tag}>\r`;
         // if (isListItem && !nextElementIsListItem) el += `</${element.listType}>\r`;
