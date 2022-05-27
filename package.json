@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "js-convert-case": "^4.2.0",
+    "js-yaml": "^4.1.0",
     "jszip": "3.9.1"
   }
 }
