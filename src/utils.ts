@@ -262,7 +262,7 @@ export const convertTextFrames = (textFrames, frameWidth, frameHeight) => {
 
   textFrames.forEach(textFrame => {
     let textSegments, textStyleId, textStyleObject, textClass = "";
-    let x, y, width, opacity, rotation, resizeType, effect;
+    let x, y, width, opacity, rotation, resizeType, effect, strokes;
 
     textSegments = textFrame.getStyledTextSegments(styleProps);
     textStyleId = textFrame.textStyleId;
@@ -494,7 +494,6 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
 
 export const generateTextEffect = (effects) => {
   let css = ``;
-  // console.log(effects);
 
   let dropShadows = effects.filter(effect => effect.type === "DROP_SHADOW" && effect.visible);
 
@@ -570,7 +569,7 @@ export const convertStyleProp = (prop, value) => {
   if (prop === "textCase") return ` text-transform: ${value === "ORIGINAL" ? "none" : value.toLowerCase()};`;
   if (prop === "lineHeight") return ` line-height: ${value.unit === "AUTO" ? "normal" : value.unit === "PERCENT" && value.value > 0 ? value.value / 100 : value.value + "px"};`;
   if (prop === "letterSpacing") return ` letter-spacing: ${value.unit === "PERCENT" && value.value > 0 ? value.unit / 100 : value.value + "px"};`;
-  if (prop === "fills") return ` color: rgba(${value[0].color.r * 255}, ${value[0].color.g * 255}, ${value[0].color.b * 255}, ${value[0].opacity}); mix-blend-mode: ${value[0].blendMode.toLowerCase()};`;
+  if (prop === "fills" && value.length > 0) return ` color: rgba(${value[0].color.r * 255}, ${value[0].color.g * 255}, ${value[0].color.b * 255}, ${value[0].opacity}); mix-blend-mode: ${value[0].blendMode.toLowerCase()};`;
   else return "";
 }
 
