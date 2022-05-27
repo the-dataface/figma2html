@@ -494,20 +494,27 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
 
 export const generateTextEffect = (effects) => {
   let css = ``;
-  console.log(effects);
+  // console.log(effects);
 
-  let dropShadows = effects.filter(effect => effect.type === "DROP_SHADOW");
+  let dropShadows = effects.filter(effect => effect.type === "DROP_SHADOW" && effect.visible);
 
-  if (dropShadows) {
+  if (dropShadows.length > 0) {
     let textShadow = `text-shadow: `;
 
     dropShadows.forEach((effect, i) => {
-      let x = effect.offset.x, y = effect.offset.y, r = effect.radius, rgba = `rgba(${effect.color.r * 255}, ${effect.color.g * 255}, ${effect.color.b * 255}, ${effect.visible ? effect.color.a : 0})`;
+      let x = effect.offset.x, y = effect.offset.y, r = effect.radius, rgba = `rgba(${effect.color.r * 255}, ${effect.color.g * 255}, ${effect.color.b * 255}, ${effect.color.a})`;
       let end = i < dropShadows.length - 1 ? `, ` : `; `;
       textShadow += `${x}px ${y}px ${r}px ${rgba}${end}`;
     })
 
     css += textShadow;
+  }
+
+  let layerBlurs = effects.filter(effect => effect.type === "LAYER_BLUR" && effect.visible);
+
+  if (layerBlurs.length > 0) {
+    let blur = `filter: blur(${layerBlurs[0].radius}px); -webkit-filter: blur(${layerBlurs[0].radius}px); `;
+    css += blur;
   }
 
   return css;

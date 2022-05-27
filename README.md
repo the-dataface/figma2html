@@ -17,8 +17,9 @@ Export Figma frames as responsive images with text elements rendered as HTML. A 
 - The plugin grabs all frames named `#[width]px` on your current page, unframes all children (turns frames into groups to get positions relative to the parent frame), hides all text layers, and exports as a `PNG`, `JPG`, or `SVG`, at a specified scale.
 - All text elements are added via absolutely positioned divs.
 - Text is rendered as `<p>` elements, with inline styles to match what you see in Figma.
-- [INSERT SOMETHING ABOUT POINT TEXT (width auto resize == "width and height") vs TEXT BOX WIDTH WIDTH]
-- The plugin supports rotated text as well.
+- Text frames with auto widths are rendered with `width=auto`, while text frames with set widths include that width as inline css.
+- Text is rendered with any visible drop shadows and layer blurs as inline css.
+- The plugin supports rotated text.
 - If `Include Resizer Script` is turned on, the outputted HTML will include JS to show and hide the correct image at the appropriate size, based on the named width of the frame.
 
 ### Options + Features
