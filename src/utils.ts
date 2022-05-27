@@ -494,6 +494,7 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
 
 export const generateTextEffect = (effects) => {
   let css = ``;
+  console.log(effects);
 
   let dropShadows = effects.filter(effect => effect.type === "DROP_SHADOW");
 
@@ -501,9 +502,8 @@ export const generateTextEffect = (effects) => {
     let textShadow = `text-shadow: `;
 
     dropShadows.forEach((effect, i) => {
-      let x = effect.offset.x, y = effect.offset.y, r = effect.radius, rgba = `rgba(${effect.color.r * 255}, ${effect.color.g * 255}, ${effect.color.b * 255}, ${effect.color.a})`;
+      let x = effect.offset.x, y = effect.offset.y, r = effect.radius, rgba = `rgba(${effect.color.r * 255}, ${effect.color.g * 255}, ${effect.color.b * 255}, ${effect.visible ? effect.color.a : 0})`;
       let end = i < dropShadows.length - 1 ? `, ` : `; `;
-      console.log(rgba);
       textShadow += `${x}px ${y}px ${r}px ${rgba}${end}`;
     })
 
