@@ -43,16 +43,13 @@ Export Figma frames as responsive images with text elements rendered as HTML. A 
 - Turn on `Include Google Fonts` to include a Google Fonts tag for included Google Fonts in the outputted HTML.
 
 **Variable Text**
-You can include variable text within your exportable frames. To do so, you need a text node on the current page named variables. Click the button in the plugin dialog to generate an example node. The text node should contain an array of JSON objects like: 
+You can include variable text within your exportable frames. To do so, you need a text node on the current page named variables. Click the button in the plugin dialog to generate an example node. The text node should contain a JSON object with key/value pairs like this:
 ```
-[
-  {
-    "key": "hed",
-    "value": "This is a headline"
-  }
-]
+{
+    "hed": "This is a headline"
+}
 ```
-Based on the above example, the plugin will ok for any strings in your exportable frames that match the key, wrapped in curly brackets (i.e. `{{hed}}`), and replace with the `value`.
+Based on the above example, the plugin will ok for any strings in your exportable frames that match the key, wrapped in curly brackets (i.e. `{{hed}}`), and replace it with the `value`.
 
 Note that it does not replace the text in your artwork, just in the exported html.
 
