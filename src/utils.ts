@@ -447,7 +447,7 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
           els[els.length - 1].segments.push(segment)
         } else {
           els.push({
-            tag: segment.listOptions.type !== "NONE" ? "li" : config.applyHtags && (text.class === "h1" || text.class === "h2" || text.class === "h3" || text.class === "h4" || text.class === "h5" || text.class === "h6") ? text.class : "p",
+            tag: segment.listOptions.type !== "NONE" ? "li" : config.applyHtags && ['h1','h2','h3','h4','h5','h6'].includes(text.class) ? text.class : "p",
             listType: segment.listOptions.type === "ORDERED" ? "ol" : segment.listOptions.type === "UNORDERED" ? "ul" : false,
             segments: [segment],
             newElement: iNotZero && (!prevEndsNewLine || (thisIncludesNewLine && !thisEndsNewLine)),
