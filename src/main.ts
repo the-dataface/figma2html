@@ -19,9 +19,6 @@ class StoredVariables {
 
       StoredVariables.writeVariables();
 
-      console.log("HERE", variables);
-      // console.log(yaml.dump(variables));
-
       return variables;
     } else return defaultVariables;
   };
@@ -58,7 +55,6 @@ class StoredVariables {
         // create the node
         let textNode = figma.createText();
         textNode.characters = yaml.dump(storedVariables ? storedVariables : defaultVariables, null, 2)
-        // .replace(/,/g, ",\r");
         textNode.x = maxRight + 100;
         textNode.y = minTop;
         textNode.name = "variables";
@@ -131,7 +127,7 @@ class StoredConfig {
 
         // create the node
         let textNode = figma.createText();
-        textNode.characters = JSON.stringify(config, null, 2).replace(/,/g, ",\r");
+        textNode.characters = yaml.dump(config, null, 2);
         textNode.x = maxRight + 100;
         textNode.y = minTop;
         textNode.name = "settings";
@@ -142,7 +138,7 @@ class StoredConfig {
     // find text node named "settings" and load
     const textNode = figma.currentPage.findOne(node => node.name === "settings" && node.type === "TEXT");
     if (textNode) {
-      const config = JSON.parse(textNode.characters.replace(/\r/g, ""));
+      const config = yaml.load(textNode.characters);
       await StoredConfig.set(config);
     }
   }
