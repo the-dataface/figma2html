@@ -21,11 +21,8 @@ export interface Config {
 }
 
 export interface Variable {
-  key: string;
-  value: string;
+  [key: string]: string
 }
-
-export interface Variables extends Array<Variable> { }
 
 export interface Size {
   width: number;

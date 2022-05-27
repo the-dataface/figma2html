@@ -1,21 +1,20 @@
-import { Exportable, Config, Variables, Asset, HTMLFile, PreviewSettings } from "./types";
+import { Exportable, Config, Variable, Asset, HTMLFile, PreviewSettings } from "./types";
 import { camelize, buildExportSettings, generateOutputHtml, generateOutputSvelte, log } from "./utils";
 
 figma.showUI(__html__, { width: 560, height: 500 });
 
-const blankVariables = [
-  { key: "hed", value: "This is the headline" },
-]
+const defaultVariables = {
+  "hed": "This is the headline"
+}
 
 class StoredVariables {
-  static get = async (): Promise<Variables> => {
+  static get = async (): Promise<Variable> => {
     // get the stored variables
     let _variables = figma.currentPage.findOne(node => node.type === 'TEXT' && node.name === 'variables');
     if (_variables) {
       let characters = _variables.characters
         .replace(/\r/g, "") // remove line breaks
         .replace(/\n/g, "") // remove line breaks
-        .replace(/\,(?!\s*?[\{\[\"\'\w])/g, "") // remove trailing comma
         .replace(/[\u2018\u2019]/g, "'") // replace curly quotes
         .replace(/[\u201C\u201D]/g, '"') // replace curly quotes
 
@@ -24,7 +23,7 @@ class StoredVariables {
       StoredVariables.writeVariables();
 
       return variables;
-    } else return blankVariables;
+    } else return defaultVariables;
   };
 
   static writeVariables = async (): Promise<void> => {
@@ -37,7 +36,6 @@ class StoredVariables {
       let characters = existingVariables.characters
         .replace(/\r/g, "") // remove line breaks
         .replace(/\n/g, "") // remove line breaks
-        .replace(/\,(?!\s*?[\{\[\"\'\w])/g, "") // remove trailing comma
         .replace(/[\u2018\u2019]/g, "'") // replace curly quotes
         .replace(/[\u201C\u201D]/g, '"') // replace curly quotes
 
@@ -64,7 +62,7 @@ class StoredVariables {
 
         // create the node
         let textNode = figma.createText();
-        textNode.characters = JSON.stringify(storedVariables ? storedVariables : blankVariables, null, 2).replace(/,/g, ",\r");
+        textNode.characters = JSON.stringify(storedVariables ? storedVariables : defaultVariables, null, 2).replace(/,/g, ",\r");
         textNode.x = maxRight + 100;
         textNode.y = minTop;
         textNode.name = "variables";
@@ -194,7 +192,7 @@ const getExportables = (): Exportable[] => {
 const getFile = async (
   config: Config,
   assets,
-  variables: Variables
+  variables: Variable
 ): Promise<HTMLFile> => {
   const { syntax, fileType, includeResizer, centerHtmlOutput, maxWidth } = config;
 
@@ -286,7 +284,7 @@ const withModificationsForExport = (node: FrameNode): FrameNode => {
 }
 
 // Inspired by Naftali Beder https://github.com/naftalibeder/figma-frame-exporter
-const refreshPreview = async (config: Config | undefined, variables: Variables | variables) => {
+const refreshPreview = async (config: Config | undefined, variables: Variable | undefined) => {
   const exportables = getExportables();
 
   let exampleAssets: Asset[] = [];
@@ -312,7 +310,7 @@ const refreshPreview = async (config: Config | undefined, variables: Variables |
   });
 };
 
-const generateExport = async (config: Config, variables: Variables) => {
+const generateExport = async (config: Config, variables: Variable) => {
   const exportables = getExportables();
 
   const assets = await getAssets(
@@ -369,7 +367,7 @@ figma.ui.onmessage = async (message) => {
     await refreshPreview(storedConfig, storedVariables);
   } else if (type === "writeVariables") {
     await StoredVariables.writeVariables();
-    log("Writing example variables:", blankVariables);
+    log("Writing example variables:", defaultVariables);
   }
 };
 

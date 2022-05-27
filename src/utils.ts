@@ -496,9 +496,10 @@ export const createSpan = (segment, applyStyles, applyStyleNames, variables) => 
 
   // replace variable text
   if (variables) {
-    variables.forEach(v => {
-      characters = characters.replaceAll(`{{${v.key}}}`, v.value);
-    })
+    Object.keys(variables).forEach(key => {
+      // replace all instances of the variable name with the value
+      characters = characters.replaceAll(`{{${key}}}`, variables[key]);
+    });
   }
 
   let styleTag = `style="`;
