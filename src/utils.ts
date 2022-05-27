@@ -262,7 +262,7 @@ export const convertTextFrames = (textFrames, frameWidth, frameHeight) => {
 
   textFrames.forEach(textFrame => {
     let textSegments, textStyleId, textStyleObject, textClass = "";
-    let x, y, width, opacity, rotation;
+    let x, y, width, opacity, rotation, resizeType, effect;
 
     textSegments = textFrame.getStyledTextSegments(styleProps);
     textStyleId = textFrame.textStyleId;
@@ -277,15 +277,18 @@ export const convertTextFrames = (textFrames, frameWidth, frameHeight) => {
     width = `${textFrame.width}px`;
     opacity = textFrame.opacity;
     rotation = textFrame.rotation * -1;
+    resizeType = textFrame.textAutoResize;
+    effect = textFrame.effects;
 
     textData.push({
       class: textClass,
       segments: textSegments,
       x: x,
       y: y,
-      width: width,
+      width: resizeType === "WIDTH_AND_HEIGHT" ? "auto" : width,
       opacity: opacity,
       rotation: rotation,
+      effect: effect
     });
   });
 
@@ -428,6 +431,7 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
   if (textData) {
     textData.forEach(text => {
       let el = ``;
+      let effect = text.effect.length > 0 ? generateTextEffect(text.effect) : '';
 
       let style = `style="`;
       style += `top: ${text.y}; left: ${text.x}; opacity: ${text.opacity}; width: ${text.width};`;
@@ -486,6 +490,18 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
   html += `\t</div>\r`;
 
   return html;
+}
+
+export const generateTextEffect = (effect) => {
+  let dropShadowEffect = effect.find(e => e.type === "DROP_SHADOW");
+
+  if (!dropShadowEffect) return "";
+
+  console.log(dropShadowEffect)
+
+
+
+  return "";
 }
 
 export const createSpan = (segment, applyStyles, applyStyleNames, variables) => {
