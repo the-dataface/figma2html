@@ -5,7 +5,7 @@ Export Figma frames as responsive images with text elements rendered as HTML. A 
 ### Instructions
 
 1. Create your artwork
-    - Size your frames based on the breakpoints you need for your website.
+    - Size your frames based on the breakpoints you need for your website (note that height breakpoints will be based on the width of your frames and height doesn’t matter).
     - Name the frames your want to export in this format: `#[width]px`.
     - If you're using a Google Font that's built in to Figma, you'll have the option to automatically include the appropriate Google Fonts tag in your exported HTML. Otherwise, make sure you have any necessary webfonts set up in your project and they're named the same as they appear in Figma.
 2. Run the plugin and configure your settings
@@ -17,6 +17,8 @@ Export Figma frames as responsive images with text elements rendered as HTML. A 
 - The plugin grabs all frames named `#[width]px` on your current page, unframes all children (turns frames into groups to get positions relative to the parent frame), hides all text layers, and exports as a `PNG`, `JPG`, or `SVG`, at a specified scale.
 - All text elements are added via absolutely positioned divs.
 - Text is rendered as `<p>` elements, with inline styles to match what you see in Figma.
+- [INSERT SOMETHING ABOUT POINT TEXT (width auto resize == "width and height") vs TEXT BOX WIDTH WIDTH]
+- The plugin supports rotated text as well.
 - If `Include Resizer Script` is turned on, the outputted HTML will include JS to show and hide the correct image at the appropriate size, based on the named width of the frame.
 
 ### Options + Features

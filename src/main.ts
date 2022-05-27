@@ -175,7 +175,7 @@ class TempFrame {
 const tempFrame = new TempFrame();
 
 const getExportables = (): Exportable[] => {
-  const nodes = figma.currentPage.findAll(node => node.name.includes("#"));
+  const nodes = figma.currentPage.findAll(node => node.name.startsWith("#") && node.name.endsWith("px") && node.type === "FRAME" && node.parent === figma.currentPage);
   const exportables: Exportable[] = [];
 
   for (const node of nodes) {
