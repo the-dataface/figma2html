@@ -11,7 +11,7 @@ const defaultVariables = {
 class StoredVariables {
   static get = async (): Promise<Variable> => {
     // get the stored variables
-    let _variables = figma.currentPage.findOne(node => node.type === 'TEXT' && node.name === 'variables');
+    let _variables = figma.currentPage.findOne(node => node.type === 'TEXT' && node.name === 'f2h-variables');
     if (_variables) {
 
       let characters = _variables.characters;
@@ -28,7 +28,7 @@ class StoredVariables {
 
     let storedVariables;
     // remove existing variables text node if found
-    const existingVariables = figma.currentPage.findOne(node => node.type === 'TEXT' && node.name === 'variables');
+    const existingVariables = figma.currentPage.findOne(node => node.type === 'TEXT' && node.name === 'f2h-variables');
     if (existingVariables) {
       let characters = existingVariables.characters;
       storedVariables = yaml.load(characters);
@@ -40,7 +40,7 @@ class StoredVariables {
     figma.loadFontAsync({ family: 'Inter', style: 'Regular' })
       .then(() => {
         // get all frames with names including "#" or named "settings"
-        const nodes = figma.currentPage.findAll(node => node.name.includes('#') || node.name === 'settings');
+        const nodes = figma.currentPage.findAll(node => node.name.includes('#') || node.name === 'f2h-settings');
 
         // get furthest point to the right
         const maxRight = nodes.reduce((max, node) => {
@@ -57,7 +57,7 @@ class StoredVariables {
         textNode.characters = yaml.dump(storedVariables ? storedVariables : defaultVariables, null, 2)
         textNode.x = maxRight + 100;
         textNode.y = minTop;
-        textNode.name = "variables";
+        textNode.name = "f2h-variables";
       })
   }
 }
@@ -105,7 +105,7 @@ class StoredConfig {
     // write the config to a text node on the current page
 
     // remove existing settings text node if found
-    const settings = figma.currentPage.findOne(node => node.type === "TEXT" && node.name === "settings");
+    const settings = figma.currentPage.findOne(node => node.type === "TEXT" && node.name === "f2h-settings");
     if (settings) settings.remove();
 
     // load Inter for settings text node
@@ -113,7 +113,7 @@ class StoredConfig {
       .then(() => {
 
         // get all frames with names including "#"
-        const nodes = figma.currentPage.findAll(node => node.name.includes("#") || node.name === 'variables');
+        const nodes = figma.currentPage.findAll(node => node.name.includes("#") || node.name === 'f2h-variables');
 
         // get furthest point to the right
         const maxRight = nodes.reduce((max, node) => {
@@ -130,13 +130,13 @@ class StoredConfig {
         textNode.characters = yaml.dump(config, null, 2);
         textNode.x = maxRight + 100;
         textNode.y = minTop;
-        textNode.name = "settings";
+        textNode.name = "f2h-settings";
       });
   }
 
   static loadSettings = async (): Promise<void> => {
     // find text node named "settings" and load
-    const textNode = figma.currentPage.findOne(node => node.name === "settings" && node.type === "TEXT");
+    const textNode = figma.currentPage.findOne(node => node.name === "f2h-settings" && node.type === "TEXT");
     if (textNode) {
       const config = yaml.load(textNode.characters);
       await StoredConfig.set(config);
