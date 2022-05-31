@@ -470,7 +470,7 @@ export const generateFrameDiv = (frame, frameId, frameClass, imgName, widthRange
           });
         }
       });
-      console.log(els);
+
       el += `<div class="f2hText" ${style}>`;
 
       els.forEach((element, i) => {
