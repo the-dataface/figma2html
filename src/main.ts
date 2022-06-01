@@ -1,7 +1,19 @@
 import yaml from 'js-yaml';
-
-import { Asset, Config, Exportable, HTMLFile, PreviewSettings, Variable } from './types';
-import { buildExportSettings, camelize, generateOutputHtml, generateOutputSvelte, log } from './utils';
+import {
+	Asset,
+	Config,
+	Exportable,
+	HTMLFile,
+	PreviewSettings,
+	Variable,
+} from './types';
+import {
+	buildExportSettings,
+	camelize,
+	generateOutputHtml,
+	generateOutputSvelte,
+	log,
+} from './utils';
 
 figma.showUI(__html__, { width: 560, height: 500 });
 
@@ -12,15 +24,13 @@ const defaultVariables = {
 class StoredVariables {
 	static get = async (): Promise<Variable> => {
 		// get the stored variables
-		let _variables = figma.currentPage.findOne(
+		let variablesNode = figma.currentPage.findOne(
 			(node) => node.type === 'TEXT' && node.name === 'f2h-variables'
 		);
-		if (_variables) {
-			let characters = _variables.characters;
-			let variables = yaml.load(characters);
 
+		if (!!variablesNode?.characters) {
+			let variables = yaml.load(variablesNode.characters);
 			StoredVariables.writeVariables();
-
 			return variables;
 		} else return defaultVariables;
 	};
@@ -33,7 +43,8 @@ class StoredVariables {
 		const existingVariables = figma.currentPage.findOne(
 			(node) => node.type === 'TEXT' && node.name === 'f2h-variables'
 		);
-		if (existingVariables) {
+
+		if (!!existingVariables?.characters) {
 			let characters = existingVariables.characters;
 			storedVariables = yaml.load(characters);
 
@@ -61,9 +72,7 @@ class StoredVariables {
 			// create the node
 			let textNode = figma.createText();
 			textNode.characters = yaml.dump(
-				storedVariables ? storedVariables : defaultVariables,
-				null,
-				2
+				storedVariables || defaultVariables
 			);
 			textNode.x = maxRight + 100;
 			textNode.y = minTop;
@@ -75,7 +84,7 @@ class StoredVariables {
 class StoredConfig {
 	static get = async (): Promise<Config> => {
 		// get the stored config
-		let _config = await figma.clientStorage.getAsync('config');
+		const _config = await figma.clientStorage.getAsync('config');
 
 		// set up config defaults if none found
 		if (!_config) {
@@ -87,9 +96,9 @@ class StoredConfig {
 				includeResizer: true,
 				maxWidth: null,
 				centerHtmlOutput: false,
-				clickableLink: '',
-				imagePath: 'img',
-				altText: '',
+				clickableLink: null,
+				imagePath: '/img',
+				altText: "",
 				applyStyleNames: true,
 				applyHtags: true,
 				styleTextSegments: true,
@@ -118,6 +127,7 @@ class StoredConfig {
 		const settings = figma.currentPage.findOne(
 			(node) => node.type === 'TEXT' && node.name === 'f2h-settings'
 		);
+
 		if (settings) settings.remove();
 
 		// load Inter for settings text node
@@ -140,7 +150,7 @@ class StoredConfig {
 
 			// create the node
 			let textNode = figma.createText();
-			textNode.characters = yaml.dump(config, null, 2);
+			textNode.characters = yaml.dump(config);
 			textNode.x = maxRight + 100;
 			textNode.y = minTop;
 			textNode.name = 'f2h-settings';
@@ -152,6 +162,7 @@ class StoredConfig {
 		const textNode = figma.currentPage.findOne(
 			(node) => node.name === 'f2h-settings' && node.type === 'TEXT'
 		);
+		
 		if (!!textNode?.characters) {
 			const config = yaml.load(textNode.characters);
 			await StoredConfig.set(config);
