@@ -244,7 +244,7 @@ const getAssets = async (
 
 	let assets: Asset[] = [];
 
-	exportables.forEach((exportable) => {
+	exportables.forEach(async (exportable) => {
 		let asset: Asset = {
 			filename: '',
 			extension,
@@ -292,7 +292,9 @@ const getAssets = async (
 		);
 
 		try {
-			asset.data = await(<ExportMixin>modifiedNode).exportAsync(settings);
+			asset.data = await (<ExportMixin>modifiedNode).exportAsync(
+				settings
+			);
 		} catch (exportable) {
 			log(exportable);
 			continue;
