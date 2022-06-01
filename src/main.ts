@@ -98,7 +98,7 @@ class StoredConfig {
 				centerHtmlOutput: false,
 				clickableLink: null,
 				imagePath: '/img',
-				altText: "",
+				altText: '',
 				applyStyleNames: true,
 				applyHtags: true,
 				styleTextSegments: true,
@@ -162,7 +162,7 @@ class StoredConfig {
 		const textNode = figma.currentPage.findOne(
 			(node) => node.name === 'f2h-settings' && node.type === 'TEXT'
 		);
-		
+
 		if (!!textNode?.characters) {
 			const config = yaml.load(textNode.characters);
 			await StoredConfig.set(config);
@@ -201,13 +201,13 @@ const getExportables = (): Exportable[] => {
 	);
 	const exportables: Exportable[] = [];
 
-	for (const node of nodes) {
+	nodes.forEach((node) => {
 		exportables.push({
 			id: node.id,
 			parentName: node.name,
 			size: { width: node.width, height: node.height },
 		});
-	}
+	});
 
 	return exportables;
 };
@@ -244,7 +244,7 @@ const getAssets = async (
 
 	let assets: Asset[] = [];
 
-	for (const e of exportables) {
+	exportables.forEach((exportable) => {
 		let asset: Asset = {
 			filename: '',
 			extension,
@@ -253,7 +253,7 @@ const getAssets = async (
 			node: undefined,
 		};
 
-		let originalNode = figma.getNodeById(e.id) as FrameNode;
+		let originalNode = figma.getNodeById(exportable.id) as FrameNode;
 		asset.node = originalNode;
 
 		// Hide all text layers.
@@ -264,7 +264,10 @@ const getAssets = async (
 			tempFrame.frame.appendChild(modifiedNode);
 		}
 
-		const filename = `${imagePath}/${e.parentName.replace('#', '')}`;
+		const filename = `${imagePath}/${exportable.parentName.replace(
+			'#',
+			''
+		)}`;
 		asset.filename = filename;
 
 		// generate image data
@@ -289,16 +292,14 @@ const getAssets = async (
 		);
 
 		try {
-			asset.data = await (<ExportMixin>modifiedNode).exportAsync(
-				settings
-			);
-		} catch (e) {
-			log(e);
+			asset.data = await(<ExportMixin>modifiedNode).exportAsync(settings);
+		} catch (exportable) {
+			log(exportable);
 			continue;
 		}
 
 		assets.push(asset);
-	}
+	});
 
 	tempFrame.remove();
 
@@ -309,9 +310,7 @@ const withModificationsForExport = (node: FrameNode): FrameNode => {
 	// hide all text layers
 	const nodesToHide = node.findAll((c) => c.type === 'TEXT');
 
-	for (const n of nodesToHide) {
-		n.visible = false;
-	}
+	nodesToHide.forEach((node) => (node.visible = false));
 
 	return node;
 };
