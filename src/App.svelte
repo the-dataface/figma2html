@@ -1,7 +1,8 @@
 <script lang="ts" type="module">
-  import ImportIcon from "./img/icons/import.svg";
   import ExportIcon from "./img/icons/export.svg";
   import HelpIcon from "./img/icons/help.svg";
+  import ImportIcon from "./img/icons/import.svg";
+  import TextIcon from "./img/icons/text.svg";
 
   import {
     Icon,
@@ -297,8 +298,10 @@
 <div class="content">
   <div class="group">
     <div class="header">
-      <Icon iconName={IconDraft} color="black" />
-      <h3>File Output</h3>
+      <div class="group-title">
+        <Icon iconName={IconDraft} color="black" />
+        <h3>File Output</h3>
+      </div>
     </div>
 
     <div class="row">
@@ -321,8 +324,10 @@
 
   <div class="group">
     <div class="header">
-      <Icon iconName={IconImage} color="black" />
-      <h3>Image Settings</h3>
+      <div class="group-title">
+        <Icon iconName={IconImage} color="black" />
+        <h3>Image Settings</h3>
+      </div>
     </div>
 
     <div class="row">
@@ -362,8 +367,10 @@
 
   <div class="group">
     <div class="header">
-      <Icon iconName={IconAdjust} color="black" />
-      <h3>Page Settings</h3>
+      <div class="group-title">
+        <Icon iconName={IconAdjust} color="black" />
+        <h3>Page Settings</h3>
+      </div>
     </div>
 
     <div class="row">
@@ -394,15 +401,15 @@
 
   <div class="group">
     <div class="header">
-      <Icon iconName={IconLibrary} color="black" />
-      <h3>Text Settings</h3>
+      <div class="group-title">
+        <Icon iconName={IconLibrary} color="black" />
+        <h3>Text Settings</h3>
+      </div>
+      <button class="secondary" on:click={onWriteVariables}>
+        <Icon iconName={TextIcon} color="#121212" />
+        <p>Generate Variable Text</p>
+      </button>
     </div>
-
-    <p>
-      Using variable text in your frames? figma2html will look for a text node named "variables" and use its contents.
-
-      <span class="link" on:click={onWriteVariables}>Create an example variables node?</span>
-    </p>
 
     <div class="row">
       <div class="setting switch-setting">
@@ -436,46 +443,37 @@
 
   <div>
     <div class="header">
-      <Icon iconName={IconVisible} color="black" />
-      <h3>Output Preview</h3>
+      <div class="group-title">
+        <Icon iconName={IconVisible} color="black" />
+        <h3>Output Preview</h3>
+      </div>
     </div>
 
-    <div class="output-preview">
-      <!-- Inspired by Naftali Beder https://github.com/naftalibeder/figma-frame-exporter -->
+    <div class="preview">
       {#if exampleAssets.length > 0}
-        {#each exampleAssets as exampleAsset, index}
-          {#if index > 0}
-            <hr />
-          {/if}
-          <div class="output-row">
-            <img class="output-thumb" src={exampleAsset.url} alt="asset thumbnail" />
-            <span class="output-filename">
-              {exampleAsset.filename}.{exampleAsset.extension.toLowerCase()}
-            </span>
-            {#if exampleAsset.size}
-              <span>
-                {displaySize(exampleAsset.size)}
-              </span>
-            {/if}
-          </div>
-        {/each}
         {#if exampleFile}
-          <hr />
-          <div class="output-row">
-            <img
-              class="output-thumb"
-              src={exampleFile.extension === "SVELTE"
-                ? "https://img.icons8.com/doodle/344/svetle.png"
-                : "https://img.icons8.com/ios/344/html.png"}
-              alt="asset icon"
-            />
-            <span class="output-filename">
-              {exampleFile.filename}.{exampleFile.extension.toLowerCase()}
-            </span>
+          <div class="preview-card">
+            <div class="preview-card-image">
+              <Icon iconName={IconDraft} color="black" />
+            </div>
+            <div class="preview-card-content">
+              <h5>{exampleFile.filename}.{exampleFile.extension.toLowerCase()}</h5>
+            </div>
           </div>
         {/if}
+        {#each exampleAssets as asset, i}
+          <div class="preview-card">
+            <img class="preview-card-image" src={asset.url} alt="asset thumbnail" />
+            <div class="preview-card-content">
+              <h5>{asset.filename}.{asset.extension.toLowerCase()}</h5>
+              {#if asset.size}
+                {displaySize(asset.size)} ({scale}x)
+              {/if}
+            </div>
+          </div>
+        {/each}
       {:else}
-        <div class="output-placeholder">Add a frame named #[size]px.</div>
+        <div class="output-placeholder">Add a frame named #[size]px...</div>
       {/if}
     </div>
   </div>
@@ -486,15 +484,15 @@
     <button class="primary" on:click={onSelectExport} disabled={nodeCount === 0}>Export {nodeCount} images</button>
     <button class="secondary" on:click={onReset}>
       <Icon iconName={IconSwap} color="#121212" />
-      Reset to Defaults
+      <p>Reset to Defaults</p>
     </button>
     <button class="secondary" on:click={onSaveSettings}>
       <Icon iconName={ImportIcon} color="#121212" />
-      Save Settings
+      <p>Save Settings</p>
     </button>
     <button class="secondary" on:click={onLoadSettings}>
       <Icon iconName={ExportIcon} color="#121212" />
-      Load Settings
+      <p>Load Settings</p>
     </button>
   </div>
   <button class="ellipses" on:click={onToggleMenu}>
@@ -504,12 +502,12 @@
 
 {#if menuOpen}
   <div class="menu-pane" transition:slide>
-    <a href="https://github.com/the-dataface/figma2html">
+    <a href="https://github.com/the-dataface/figma2html" target="_blank">
       <div class="menu-row">
         <Icon iconName={HelpIcon} color="#121212" /> About
       </div>
     </a>
-    <a href="https://github.com/the-dataface/figma2html/issues">
+    <a href="https://github.com/the-dataface/figma2html/issues" target="_blank">
       <div class="menu-row">
         <Icon iconName={IconWarning} color="#121212" /> Report Issue
       </div>
@@ -552,8 +550,8 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    gap: 8px;
-    padding: 8px;
+    gap: 24px;
+    padding: 12px;
     font-size: small;
     margin-bottom: 72px;
   }
@@ -638,6 +636,10 @@
     opacity: 0.5;
   }
 
+  button.secondary p {
+    margin-left: -4px;
+  }
+
   button.secondary:hover {
     opacity: 1;
   }
@@ -650,6 +652,12 @@
   .header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+  }
+
+  .group-title {
+    display: flex;
+    align-items: center;
   }
 
   .row {
@@ -659,11 +667,11 @@
     gap: 8px;
   }
 
-  .group {
-    /* border-bottom: 1px solid lightgray; */
-    margin-bottom: 16px;
-    padding-bottom: 24px;
-  }
+  /* .group { */
+  /* border-bottom: 1px solid lightgray; */
+  /* margin-bottom: 16px; */
+  /* padding-bottom: 12px; */
+  /* } */
 
   .setting {
     display: flex;
@@ -683,6 +691,51 @@
     margin-top: 16px;
     color: #999;
     font-size: 12px;
+  }
+
+  .preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .preview-card {
+    width: calc(50% - 6px);
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    gap: 12px;
+  }
+
+  .preview-card-image {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .preview-card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .preview-card-content h5 {
+    font-size: 12px;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+
+  .preview-card-content p {
+    font-size: 10px;
+    font-weight: 400;
+    margin: 0;
   }
 
   .output-preview {
