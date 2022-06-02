@@ -1,4 +1,3 @@
-import yaml from 'js-yaml';
 import {
 	Asset,
 	Config,
@@ -7,13 +6,17 @@ import {
 	PreviewSettings,
 	Variable,
 } from './types';
-import {
-	buildExportSettings,
-	camelize,
-	generateOutputHtml,
-	generateOutputSvelte,
-	log,
-} from './utils';
+
+import yaml from 'js-yaml';
+
+import camelize from 'lib/utils/camelize';
+import log from 'lib/utils/log';
+
+import createSettingsBlock from 'lib/generator/createSettingsBlock';
+import { fontList } from 'lib/generator/styleProps';
+import html from 'lib/generator/html/wrapper';
+
+log(fontList);
 
 figma.showUI(__html__, { width: 560, height: 500 });
 
@@ -28,7 +31,9 @@ class StoredVariables {
 			(node) => node.type === 'TEXT' && node.name === 'f2h-variables'
 		);
 
-		if (!!variablesNode?.characters) {
+		log('variablesNode', variablesNode);
+
+		if (!!variablesNode) {
 			let variables = yaml.load(variablesNode.characters);
 			StoredVariables.writeVariables();
 			return variables;
@@ -44,7 +49,9 @@ class StoredVariables {
 			(node) => node.type === 'TEXT' && node.name === 'f2h-variables'
 		);
 
-		if (!!existingVariables?.characters) {
+		console.log('existingVariables', existingVariables);
+
+		if (!!existingVariables) {
 			let characters = existingVariables.characters;
 			storedVariables = yaml.load(characters);
 
@@ -97,7 +104,7 @@ class StoredConfig {
 				maxWidth: null,
 				centerHtmlOutput: false,
 				clickableLink: null,
-				imagePath: '/img',
+				imagePath: 'img',
 				altText: '',
 				applyStyleNames: true,
 				applyHtags: true,
@@ -163,7 +170,9 @@ class StoredConfig {
 			(node) => node.name === 'f2h-settings' && node.type === 'TEXT'
 		);
 
-		if (!!textNode?.characters) {
+		console.log('loadSettings', textNode);
+
+		if (!!textNode) {
 			const config = yaml.load(textNode.characters);
 			await StoredConfig.set(config);
 		}
@@ -199,38 +208,27 @@ const getExportables = (): Exportable[] => {
 			node.type === 'FRAME' &&
 			node.parent === figma.currentPage
 	);
-	const exportables: Exportable[] = [];
 
-	nodes.forEach((node) => {
-		exportables.push({
-			id: node.id,
-			parentName: node.name,
-			size: { width: node.width, height: node.height },
-		});
+	return nodes.map(({ id, name, width, height }) => {
+		return {
+			id,
+			parentName: name,
+			size: { width, height },
+		};
 	});
-
-	return exportables;
 };
 
+// create html file
 const getFile = async (
 	config: Config,
 	assets,
 	variables: Variable
 ): Promise<HTMLFile> => {
-	const { syntax, fileType, includeResizer, centerHtmlOutput, maxWidth } =
-		config;
-
-	// create html file
-	const file = {
-		filename: `${syntax}`,
-		extension: fileType,
-		data:
-			fileType === 'HTML'
-				? generateOutputHtml(config, assets, variables)
-				: generateOutputSvelte(config, assets, variables),
+	return {
+		filename: config.syntax,
+		extension: config.fileType,
+		data: html({ config, assets, variables }),
 	};
-
-	return file;
 };
 
 const getAssets = async (
@@ -238,16 +236,14 @@ const getAssets = async (
 	config: Config,
 	previewSettings: PreviewSettings
 ): Promise<Asset[]> => {
-	const { syntax, extension, scale, imagePath, altText } = config;
-
 	tempFrame.create();
 
 	let assets: Asset[] = [];
 
-	exportables.forEach(async (exportable) => {
+	for (let exportable of exportables) {
 		let asset: Asset = {
 			filename: '',
-			extension,
+			extension: config.extension,
 			size: undefined,
 			data: new Uint8Array(),
 			node: undefined,
@@ -264,7 +260,7 @@ const getAssets = async (
 			tempFrame.frame.appendChild(modifiedNode);
 		}
 
-		const filename = `${imagePath}/${exportable.parentName.replace(
+		const filename = `${config.imagePath}/${exportable.parentName.replace(
 			'#',
 			''
 		)}`;
@@ -272,16 +268,16 @@ const getAssets = async (
 
 		// generate image data
 		const baseExportConfig = {
-			extension,
-			scale,
-			srcSize: e.size,
+			extension: config.extension,
+			scale: config.scale,
+			srcSize: exportable.size,
 		};
 
-		const { destSize } = buildExportSettings(baseExportConfig);
+		const { destSize } = createSettingsBlock(baseExportConfig);
 
 		asset.size = destSize;
 
-		const { settings } = buildExportSettings(
+		const { settings } = createSettingsBlock(
 			previewSettings.isFinal
 				? baseExportConfig
 				: {
@@ -297,11 +293,10 @@ const getAssets = async (
 			);
 		} catch (exportable) {
 			log(exportable);
-			continue;
 		}
 
 		assets.push(asset);
-	});
+	}
 
 	tempFrame.remove();
 
@@ -323,6 +318,8 @@ const refreshPreview = async (
 	variables: Variable | undefined
 ) => {
 	const exportables = getExportables();
+
+	log('exportables', exportables);
 
 	let exampleAssets: Asset[] = [];
 	let exampleFile: HTMLFile;
@@ -348,9 +345,13 @@ const refreshPreview = async (
 const generateExport = async (config: Config, variables: Variable) => {
 	const exportables = getExportables();
 
+	log('exportables', exportables);
+
 	const assets = await getAssets(exportables, config, { isFinal: true });
 
 	const file = await getFile(config, assets, variables);
+
+	log('assets + file', { assets, file });
 
 	figma.ui.postMessage({
 		type: 'export',
