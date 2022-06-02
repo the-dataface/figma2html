@@ -717,6 +717,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0px 0px 13.5155px rgba(0, 0, 0, 0.05);
   }
 
   .preview-card-content {
