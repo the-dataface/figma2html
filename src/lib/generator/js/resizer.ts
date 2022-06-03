@@ -8,50 +8,48 @@ export default (containerId, isSvelte) => {
 		if (!('querySelector' in document)) return;
 
 		const elementInView = (el) => {
-			let bounds = el.getBoundingClientRect();
+			const bounds = el.getBoundingClientRect();
 
 			return bounds.top < window.innerHeight && bounds.bottom > 0;
 		};
 
 		const updateImgSrc = (img) => {
-			let src = img.getAttribute('data-src');
+			const src = img.getAttribute('data-src');
 
-			if (src && img.getAttribute('src') != src) {
+			if (src && img.getAttribute('src') != src)
 				img.setAttribute('src', src);
-			}
 		};
 
 		const onIntersectionChange = (entries) => {
-			let isIntersecting = entries.reduce(function (memo, entry) {
-				return memo || entry.isIntersecting;
-			}, false);
+			const isIntersecting = entries.reduce(
+				(memo, entry) => memo || entry.isIntersecting,
+				false
+			);
 
 			if (isIntersecting) {
 				waiting = false;
-
 				update();
 			}
 		};
 
-		const selectChildren = (selector, parent) => {
-			return parent
+		const selectChildren = (selector, parent) =>
+			parent
 				? Array.prototype.slice.call(parent.querySelectorAll(selector))
 				: [];
-		};
 
 		// based on underscore.js
 		const throttle = (func, wait) => {
-			let timeout = null,
-				previous = 0;
+			let timeout = null;
+			let previous = 0;
 
-			function run() {
+			const run = () => {
 				previous = Date.now();
 				timeout = null;
 				func();
-			}
+			};
 
 			return function () {
-				let remaining = wait - (Date.now() - previous);
+				const remaining = wait - (Date.now() - previous);
 
 				if (remaining <= 0 || remaining > wait) {
 					clearTimeout(timeout);
@@ -63,23 +61,24 @@ export default (containerId, isSvelte) => {
 		};
 
 		const update = () => {
-			let frames = selectChildren(
-					'.' + nameSpace + 'artboard[data-min-width]',
-					container
-				),
-				width = Math.round(container.getBoundingClientRect().width);
+			const frames = selectChildren(
+				`.${nameSpace}artboard:where([data-min-width],[data-max-width])`,
+				container
+			);
+
+			const width = Math.round(container.offsetWidth);
 
 			// Set frame visibility based on container width
 			frames.forEach(function (el) {
-				let minwidth = el.getAttribute('data-min-width'),
-					maxwidth = el.getAttribute('data-max-width');
+				let minwidth = el.getAttribute('data-min-width');
+				let maxwidth = el.getAttribute('data-max-width');
 
 				if (
 					+minwidth <= width &&
 					(+maxwidth >= width || maxwidth === null)
 				) {
 					if (!waiting)
-						selectChildren('.' + nameSpace + 'f2hImg', el).forEach(
+						selectChildren(`.${nameSpace}f2hImg`, el).forEach(
 							updateImgSrc
 						);
 					el.style.display = 'block';
@@ -102,10 +101,10 @@ export default (containerId, isSvelte) => {
 			}
 		};
 
-		let container = document.getElementById(containerId);
+		const container = document.getElementById(containerId);
+		const onResize = throttle(update, 200);
+		const nameSpace = '';
 
-		let nameSpace = '';
-		let onResize = throttle(update, 200);
 		let waiting = !!window.IntersectionObserver;
 		let observer;
 
@@ -115,20 +114,10 @@ export default (containerId, isSvelte) => {
 		window.addEventListener('resize', onResize);
 	};
 
-	let optStr =
-		'{namespace: "' +
-		'' +
-		'", setup: window.setupInteractive || window.getComponent}';
-
 	// convert resizer function to JS source code
-	let resizerJs =
-		'(' +
-		trim(resizer.toString().replace(/ {2}/g, '\t')) + // indent with tabs
-		')("' +
-		containerId +
-		'", ' +
-		optStr +
-		');';
+	const resizerJs = `(${trim(
+		resizer.toString().replace(/ {2}/g, '\t')
+	)})("${containerId}", {namespace: "", setup: window.setupInteractive || window.getComponent});`;
 
 	if (isSvelte)
 		return `<script>\n\timport { onMount } from 'svelte';\n\tonMount(() => {\n\t\t${resizerJs}\n\t\t});\n</script>`;
