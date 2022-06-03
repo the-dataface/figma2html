@@ -97,13 +97,13 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 
 			let els = [];
 			text.segments.forEach((segment, i) => {
-				const prevEndsNewLine = !i
+				const prevEndsNewLine = !!i
 					? text.segments[i - 1].characters.slice(-1) === '\n'
 					: false;
 				const thisEndsNewLine = segment.characters.slice(-1) === '\n';
 				const thisIncludesNewLine = segment.characters.includes('\n');
 				const notNewElement =
-					!i &&
+					!!i &&
 					!prevEndsNewLine &&
 					!(thisIncludesNewLine && !thisEndsNewLine);
 
@@ -128,7 +128,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 								: false,
 						segments: [segment],
 						newElement:
-							!i &&
+							!!i &&
 							(!prevEndsNewLine ||
 								(thisIncludesNewLine && !thisEndsNewLine)),
 					});
@@ -149,7 +149,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 
 				// if (isListItem && !prevElementIsListItem) el += `<${element.listType}>\n`;
 				el += `\n<${element.tag} ${stringify.attrs({
-					class: text?.classes.join(' '),
+					class: text.classes ? text.classes.join(' ') : '',
 				})}>`;
 				element.segments.forEach((segment) => {
 					el += span(

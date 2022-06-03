@@ -1,4 +1,6 @@
 export default (fontList) => {
+	if (!fontList) return;
+
 	let weightLookup = {
 		Thin: 100,
 		ExtraLight: 200,

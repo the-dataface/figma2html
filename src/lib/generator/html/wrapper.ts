@@ -39,7 +39,8 @@ export default ({ config, assets, variables }) => {
 
 	if (config.includeResizer) html += `\n\n${js.resizer(containerId, false)}`;
 
-	if (config.includedGoogleFonts) html += `\n\n${js.fonts(fontList)}`;
+	if (config.includedGoogleFonts && !!fontList.length)
+		html += `\n\n${js.fonts(fontList)}`;
 
 	html += `\n\n<!-- End figma2html generated content - ${timestamp()} -->`;
 
