@@ -27,14 +27,14 @@ const defaultVariables = {
 class StoredVariables {
 	static get = async (): Promise<Variable> => {
 		// get the stored variables
-		let variablesNode = figma.currentPage.findOne(
+		const variablesNode = figma.currentPage.findOne(
 			(node) => node.type === 'TEXT' && node.name === 'f2h-variables'
 		);
 
 		log('variablesNode', variablesNode);
 
-		if (!!variablesNode) {
-			let variables = yaml.load(variablesNode.characters);
+		if (!!variablesNode?.characters) {
+			const variables = yaml.load(variablesNode.characters);
 			StoredVariables.writeVariables();
 			return variables;
 		} else return defaultVariables;
@@ -49,9 +49,9 @@ class StoredVariables {
 			(node) => node.type === 'TEXT' && node.name === 'f2h-variables'
 		);
 
-		console.log('existingVariables', existingVariables);
+		log('existingVariables', existingVariables);
 
-		if (!!existingVariables) {
+		if (!!existingVariables?.characters) {
 			let characters = existingVariables.characters;
 			storedVariables = yaml.load(characters);
 
@@ -166,14 +166,14 @@ class StoredConfig {
 
 	static loadSettings = async (): Promise<void> => {
 		// find text node named "settings" and load
-		const textNode = figma.currentPage.findOne(
+		const settingsNode = figma.currentPage.findOne(
 			(node) => node.name === 'f2h-settings' && node.type === 'TEXT'
 		);
 
-		console.log('loadSettings', textNode);
+		log('settingsNode', settingsNode);
 
-		if (!!textNode) {
-			const config = yaml.load(textNode.characters);
+		if (!!settingsNode?.characters) {
+			const config = yaml.load(settingsNode.characters);
 			await StoredConfig.set(config);
 		}
 	};
@@ -319,8 +319,6 @@ const refreshPreview = async (
 ) => {
 	const exportables = getExportables();
 
-	log('exportables', exportables);
-
 	let exampleAssets: Asset[] = [];
 	let exampleFile: HTMLFile;
 
@@ -344,8 +342,6 @@ const refreshPreview = async (
 
 const generateExport = async (config: Config, variables: Variable) => {
 	const exportables = getExportables();
-
-	log('exportables', exportables);
 
 	const assets = await getAssets(exportables, config, { isFinal: true });
 
