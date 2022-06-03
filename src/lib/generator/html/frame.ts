@@ -79,8 +79,9 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 	if (textData) {
 		textData.forEach((text) => {
 			let el = ``;
-			let effect =
-				text.effect.length > 0 ? css.textEffect(text.effect) : '';
+
+			let effect = '';
+			if (!!text.effect.length) effect = css.textEffect(text.effect);
 
 			// base styles
 			const style = {
@@ -91,17 +92,22 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 			};
 
 			if (text.rotation !== 0) {
-				style.transform = `rotate(${text.rotation}deg)`;
+				style['transform'] = `rotate(${text.rotation}deg)`;
 				style['transform-origin'] = 'left top';
 			}
 
 			let els = [];
 			text.segments.forEach((segment, i) => {
-				const prevEndsNewLine = !!i
-					? text.segments[i - 1].characters.slice(-1) === '\n'
-					: false;
-				const thisEndsNewLine = segment.characters.slice(-1) === '\n';
-				const thisIncludesNewLine = segment.characters.includes('\n');
+				// did the last line end with a line break?
+				const prevEndsNewLine =
+					text?.segments[i - 1]?.characters.endsWith('\n');
+
+				// does this line end with a line break?
+				const thisEndsNewLine = segment?.characters.endsWith('\n');
+
+				// does this line include a line break?
+				const thisIncludesNewLine = segment?.characters.includes('\n');
+
 				const notNewElement =
 					!!i &&
 					!prevEndsNewLine &&
