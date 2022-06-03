@@ -1,7 +1,22 @@
+import {
+	Asset,
+	Config,
+	Exportable,
+	HTMLFile,
+	PreviewSettings,
+	Variable,
+} from './types';
+
 import yaml from 'js-yaml';
 
-import { Asset, Config, Exportable, HTMLFile, PreviewSettings, Variable } from './types';
-import { buildExportSettings, camelize, generateOutputHtml, generateOutputSvelte, log } from './utils';
+import camelize from 'lib/utils/camelize';
+import log from 'lib/utils/log';
+
+import createSettingsBlock from 'lib/generator/createSettingsBlock';
+import { fontList } from 'lib/generator/styleProps';
+import html from 'lib/generator/html/wrapper';
+
+log(fontList);
 
 figma.showUI(__html__, { width: 560, height: 500 });
 
@@ -12,15 +27,15 @@ const defaultVariables = {
 class StoredVariables {
 	static get = async (): Promise<Variable> => {
 		// get the stored variables
-		let _variables = figma.currentPage.findOne(
+		const variablesNode = figma.currentPage.findOne(
 			(node) => node.type === 'TEXT' && node.name === 'f2h-variables'
 		);
-		if (_variables) {
-			let characters = _variables.characters;
-			let variables = yaml.load(characters);
 
+		log('variablesNode', variablesNode);
+
+		if (!!variablesNode?.characters) {
+			const variables = yaml.load(variablesNode.characters);
 			StoredVariables.writeVariables();
-
 			return variables;
 		} else return defaultVariables;
 	};
@@ -33,7 +48,10 @@ class StoredVariables {
 		const existingVariables = figma.currentPage.findOne(
 			(node) => node.type === 'TEXT' && node.name === 'f2h-variables'
 		);
-		if (existingVariables) {
+
+		log('existingVariables', existingVariables);
+
+		if (!!existingVariables?.characters) {
 			let characters = existingVariables.characters;
 			storedVariables = yaml.load(characters);
 
@@ -61,9 +79,7 @@ class StoredVariables {
 			// create the node
 			let textNode = figma.createText();
 			textNode.characters = yaml.dump(
-				storedVariables ? storedVariables : defaultVariables,
-				null,
-				2
+				storedVariables || defaultVariables
 			);
 			textNode.x = maxRight + 100;
 			textNode.y = minTop;
@@ -75,7 +91,7 @@ class StoredVariables {
 class StoredConfig {
 	static get = async (): Promise<Config> => {
 		// get the stored config
-		let _config = await figma.clientStorage.getAsync('config');
+		const _config = await figma.clientStorage.getAsync('config');
 
 		// set up config defaults if none found
 		if (!_config) {
@@ -87,7 +103,7 @@ class StoredConfig {
 				includeResizer: true,
 				maxWidth: null,
 				centerHtmlOutput: false,
-				clickableLink: '',
+				clickableLink: null,
 				imagePath: 'img',
 				altText: '',
 				applyStyleNames: true,
@@ -118,6 +134,7 @@ class StoredConfig {
 		const settings = figma.currentPage.findOne(
 			(node) => node.type === 'TEXT' && node.name === 'f2h-settings'
 		);
+
 		if (settings) settings.remove();
 
 		// load Inter for settings text node
@@ -140,7 +157,7 @@ class StoredConfig {
 
 			// create the node
 			let textNode = figma.createText();
-			textNode.characters = yaml.dump(config, null, 2);
+			textNode.characters = yaml.dump(config);
 			textNode.x = maxRight + 100;
 			textNode.y = minTop;
 			textNode.name = 'f2h-settings';
@@ -149,11 +166,14 @@ class StoredConfig {
 
 	static loadSettings = async (): Promise<void> => {
 		// find text node named "settings" and load
-		const textNode = figma.currentPage.findOne(
+		const settingsNode = figma.currentPage.findOne(
 			(node) => node.name === 'f2h-settings' && node.type === 'TEXT'
 		);
-		if (!!textNode?.characters) {
-			const config = yaml.load(textNode.characters);
+
+		log('settingsNode', settingsNode);
+
+		if (!!settingsNode?.characters) {
+			const config = yaml.load(settingsNode.characters);
 			await StoredConfig.set(config);
 		}
 	};
@@ -188,38 +208,27 @@ const getExportables = (): Exportable[] => {
 			node.type === 'FRAME' &&
 			node.parent === figma.currentPage
 	);
-	const exportables: Exportable[] = [];
 
-	for (const node of nodes) {
-		exportables.push({
-			id: node.id,
-			parentName: node.name,
-			size: { width: node.width, height: node.height },
-		});
-	}
-
-	return exportables;
+	return nodes.map(({ id, name, width, height }) => {
+		return {
+			id,
+			parentName: name,
+			size: { width, height },
+		};
+	});
 };
 
+// create html file
 const getFile = async (
 	config: Config,
 	assets,
 	variables: Variable
 ): Promise<HTMLFile> => {
-	const { syntax, fileType, includeResizer, centerHtmlOutput, maxWidth } =
-		config;
-
-	// create html file
-	const file = {
-		filename: `${syntax}`,
-		extension: fileType,
-		data:
-			fileType === 'HTML'
-				? generateOutputHtml(config, assets, variables)
-				: generateOutputSvelte(config, assets, variables),
+	return {
+		filename: config.syntax,
+		extension: config.fileType,
+		data: html({ config, assets, variables }),
 	};
-
-	return file;
 };
 
 const getAssets = async (
@@ -227,22 +236,20 @@ const getAssets = async (
 	config: Config,
 	previewSettings: PreviewSettings
 ): Promise<Asset[]> => {
-	const { syntax, extension, scale, imagePath, altText } = config;
-
 	tempFrame.create();
 
 	let assets: Asset[] = [];
 
-	for (const e of exportables) {
+	for (let exportable of exportables) {
 		let asset: Asset = {
 			filename: '',
-			extension,
+			extension: config.extension,
 			size: undefined,
 			data: new Uint8Array(),
 			node: undefined,
 		};
 
-		let originalNode = figma.getNodeById(e.id) as FrameNode;
+		let originalNode = figma.getNodeById(exportable.id) as FrameNode;
 		asset.node = originalNode;
 
 		// Hide all text layers.
@@ -253,21 +260,24 @@ const getAssets = async (
 			tempFrame.frame.appendChild(modifiedNode);
 		}
 
-		const filename = `${imagePath}/${e.parentName.replace('#', '')}`;
+		const filename = `${config.imagePath}/${exportable.parentName.replace(
+			'#',
+			''
+		)}`;
 		asset.filename = filename;
 
 		// generate image data
 		const baseExportConfig = {
-			extension,
-			scale,
-			srcSize: e.size,
+			extension: config.extension,
+			scale: config.scale,
+			srcSize: exportable.size,
 		};
 
-		const { destSize } = buildExportSettings(baseExportConfig);
+		const { destSize } = createSettingsBlock(baseExportConfig);
 
 		asset.size = destSize;
 
-		const { settings } = buildExportSettings(
+		const { settings } = createSettingsBlock(
 			previewSettings.isFinal
 				? baseExportConfig
 				: {
@@ -281,9 +291,8 @@ const getAssets = async (
 			asset.data = await (<ExportMixin>modifiedNode).exportAsync(
 				settings
 			);
-		} catch (e) {
-			log(e);
-			continue;
+		} catch (exportable) {
+			log(exportable);
 		}
 
 		assets.push(asset);
@@ -298,9 +307,7 @@ const withModificationsForExport = (node: FrameNode): FrameNode => {
 	// hide all text layers
 	const nodesToHide = node.findAll((c) => c.type === 'TEXT');
 
-	for (const n of nodesToHide) {
-		n.visible = false;
-	}
+	nodesToHide.forEach((node) => (node.visible = false));
 
 	return node;
 };
@@ -339,6 +346,8 @@ const generateExport = async (config: Config, variables: Variable) => {
 	const assets = await getAssets(exportables, config, { isFinal: true });
 
 	const file = await getFile(config, assets, variables);
+
+	log('assets + file', { assets, file });
 
 	figma.ui.postMessage({
 		type: 'export',
