@@ -146,7 +146,6 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 			// if text.customAttributes array contains an object with key 'class', add it to the class
 			if (text.customAttributes.length) {
 				text.customAttributes.forEach((attr) => {
-					console.log(attr)
 					if (attr.key === 'class') elClass += ` ${attr.value.join(" ")}`;
 					else elAttributes += ` ${attr.key}="${attr.value}"`;
 				});
