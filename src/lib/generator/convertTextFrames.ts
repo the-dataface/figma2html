@@ -20,6 +20,7 @@ export default (textFrames, frameWidth, frameHeight) => {
 	return textFrames.map((textFrame) => {
 		let elClass;
 		let customClasses;
+		let customAttributes = [];
 
 		const segments = textFrame.getStyledTextSegments(styleProps);
 		const styleId = textFrame.textStyleId;
@@ -36,8 +37,23 @@ export default (textFrames, frameWidth, frameHeight) => {
 				.split(',')
 				.map((value) => value.trim());
 
+		// turn layer name into custom attributes if it starts with [f2h]
+		if (textFrame.name.startsWith('[f2h]')) {
+			let layerName = textFrame.name.replace('[f2h]', '');
+			let attributes = layerName.split(';');
+
+			attributes.forEach(attr => {
+				customAttributes.push({
+					key: attr.split(':')[0],
+					value: attr.split(':')[1].split(',').map(v => v.trim())
+				});
+			});
+		}
+
+
 		return {
 			customClasses,
+			customAttributes,
 			class: elClass,
 			segments,
 			x: `${(textFrame.x / frameWidth) * 100}% `,
