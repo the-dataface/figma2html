@@ -36,8 +36,21 @@ class StoredVariables {
 		if (!!variablesNode?.characters) {
 			const variables = yaml.load(variablesNode.characters);
 			StoredVariables.writeVariables();
+
+			figma.ui.postMessage({
+				type: 'variables',
+				variables: variables
+			});
+
 			return variables;
-		} else return defaultVariables;
+		} else {
+			figma.ui.postMessage({
+				type: 'variables',
+				variables: null
+			});
+
+			return defaultVariables;
+		}
 	};
 
 	static writeVariables = async (): Promise<void> => {
@@ -84,6 +97,11 @@ class StoredVariables {
 			textNode.x = maxRight + 100;
 			textNode.y = minTop;
 			textNode.name = 'f2h-variables';
+
+			figma.ui.postMessage({
+				type: 'variables',
+				variables: storedVariables || defaultVariables
+			});
 		});
 	};
 }
@@ -281,10 +299,10 @@ const getAssets = async (
 			previewSettings.isFinal
 				? baseExportConfig
 				: {
-						extension: 'JPG',
-						scale: 1,
-						srcSize: previewSettings.thumbSize,
-				  }
+					extension: 'JPG',
+					scale: 1,
+					srcSize: previewSettings.thumbSize,
+				}
 		);
 
 		try {
