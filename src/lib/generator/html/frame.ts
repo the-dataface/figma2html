@@ -118,20 +118,12 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 				} else {
 					els.push({
 						tag:
-							segment.listOptions.type !== 'NONE'
-								? 'li'
-								: config.applyHtags &&
-								  ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(
-										text.class
-								  )
+							config.applyHtags &&
+								['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(
+									text.class
+								)
 								? text.class
 								: 'p',
-						listType:
-							segment.listOptions.type === 'ORDERED'
-								? 'ol'
-								: segment.listOptions.type === 'UNORDERED'
-								? 'ul'
-								: false,
 						segments: [segment],
 						newElement:
 							!!i &&
@@ -140,33 +132,21 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 					});
 				}
 			});
+
 			el += `<div class="f2hText" style="${stringify.styles(
 				style
 			)} ${effect}">`;
 
 			els.forEach((element, i) => {
-				// lists don't work because figma doesn't segment them by line
-				// let isListItem = element.tag === "li",
-				//   listType = isListItem ? element.listType : null,
-				//   prevElementIsListItem = i !== 0 && els[i - 1].tag === "li",
-				//   nextElementIsListItem = i !== els.length - 1 && els[i + 1].tag === "li";
-
-				// if (isListItem) console.log("isListItem", isListItem, "listType", listType, "prevElementIsListItem", prevElementIsListItem, "nextElementIsListItem", nextElementIsListItem);
-
-				// if (isListItem && !prevElementIsListItem) el += `<${element.listType}>\n`;
 				el += `\n<${element.tag} ${stringify.attrs({
 					class: text.classes ? text.classes.join(' ') : '',
+					style: text.baseStyle
 				})}>`;
+
 				element.segments.forEach((segment) => {
-					el += span(
-						segment,
-						config.styleTextSegments && !text.classes,
-						config.applyStyleNames,
-						variables
-					);
+					el += span(segment, variables);
 				});
 				el += `</${element.tag}>\n`;
-				// if (isListItem && !nextElementIsListItem) el += `</${element.listType}>\n`;
 			});
 
 			el += `</div>\n`;

@@ -1,25 +1,5 @@
-import dashify from 'lib/utils/dashify';
-
-import styleProps from 'lib/generator/styleProps';
-
-export default (segment, applyStyles, applyStyleNames, variables) => {
+export default (segment, variables) => {
 	let el = ``;
-	let textStyleObject;
-	let textClass = '';
-	let props = [
-		'fontName',
-		'fontSize',
-		'textDecoration',
-		'textCase',
-		'lineHeight',
-		'letterSpacing',
-		'fills',
-		'textStyleId',
-		'fillStyleId',
-		'listOptions',
-		'indentation',
-		'hyperlink',
-	];
 	let characters = segment.characters;
 
 	// replace variable text
@@ -30,32 +10,38 @@ export default (segment, applyStyles, applyStyleNames, variables) => {
 		});
 	}
 
-	let styleTag = `style="`;
+	// if segment has a hyperlink, add an a tag
+	if (segment.hyperlink) el += `\t\t<a href="${segment.hyperlink.value}" target="_blank">`;
 
-	if (applyStyles) {
-		props.forEach((prop) => {
-			if (segment[prop])
-				styleTag += styleProps.convert(prop, segment[prop]);
-		});
-	}
+	// if segment.isBaseStyle is false, then add a span with inline styles
+	if (!segment.isBaseStyle) el += `\t\t<span style="${segment.styleString}">`;
 
-	styleTag += `"`;
+	// if segment.isOtherWeight is not false, then add a span with inline styles
+	if (segment.isOtherWeight) el += `\t\t<span style="font-weight: ${segment.isOtherWeight}">`;
 
-	if (segment.hyperlink)
-		el += `\t\t<a href="${segment.hyperlink.value}" target="_blank">`;
+	// if segment isItalic is true, add an i tag
+	if (segment.isItalic) el += `\t\t<i>`;
 
-	if (segment.textStyleId && typeof segment.textStyleId !== 'symbol') {
-		textStyleObject = figma.getStyleById(segment.textStyleId);
-		textClass = textStyleObject
-			? dashify(textStyleObject.name.split('/').pop())
-			: null;
-	}
+	// if segment isBold is true, add a b tag
+	if (segment.isBold) el += `\t\t<b>`;
 
-	el += `\t\t<span class="f2hsegment ${
-		applyStyleNames ? textClass : ''
-	}" ${styleTag}>${characters}</span>`;
+	// add characters
+	el += characters;
 
-	if (segment.hyperlink) el += `\t\t</a>`;
+	// if segment isBold is true, close b tag
+	if (segment.isBold) el += `</b>`;
+
+	// if segment isItalic is true, close i tag
+	if (segment.isItalic) el += `</i>`;
+
+	// if segment.isOtherWeight is not false, then close span tag
+	if (segment.isOtherWeight) el += `</span>`;
+
+	// if segment.isBaseStyle is false, close span tag
+	if (!segment.isBaseStyle) el += `</span>`;
+
+	// if segment has a hyperlink, close a tag
+	if (segment.hyperlink) el += `</a>`;
 
 	return el;
 };
