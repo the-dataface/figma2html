@@ -1,4 +1,4 @@
-export default (segment, variables) => {
+export default (segment, variables, styleTextSegments) => {
 	let el = ``;
 	let characters = segment.characters;
 
@@ -14,10 +14,10 @@ export default (segment, variables) => {
 	if (segment.hyperlink) el += `<a href="${segment.hyperlink.value}" target="_blank">`;
 
 	// if segment.isBaseStyle is false, then add a span with inline styles
-	if (!segment.isBaseStyle) el += `<span style="${segment.styleString}">`;
+	if (!segment.isBaseStyle && styleTextSegments) el += `<span style="${segment.styleString}">`;
 
 	// if segment.isOtherWeight is not false, then add a span with inline styles
-	if (segment.isOtherWeight) el += `<span style="font-weight: ${segment.isOtherWeight}">`;
+	if (segment.isOtherWeight && styleTextSegments) el += `<span style="font-weight: ${segment.isOtherWeight}">`;
 
 	// if segment isItalic is true, add an i tag
 	if (segment.isItalic) el += `<i>`;
@@ -35,10 +35,10 @@ export default (segment, variables) => {
 	if (segment.isItalic) el += `</i>`;
 
 	// if segment.isOtherWeight is not false, then close span tag
-	if (segment.isOtherWeight) el += `</span>`;
+	if (segment.isOtherWeight && styleTextSegments) el += `</span>`;
 
 	// if segment.isBaseStyle is false, close span tag
-	if (!segment.isBaseStyle) el += `</span>`;
+	if (!segment.isBaseStyle && styleTextSegments) el += `</span>`;
 
 	// if segment has a hyperlink, close a tag
 	if (segment.hyperlink) el += `</a>`;

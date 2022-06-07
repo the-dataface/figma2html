@@ -85,7 +85,8 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 		pStyle = baseStyles.sort((a, b) => baseStyles.filter((v) => v === a).length - baseStyles.filter((v) => v === b).length).pop();
 
 		// add pStyle to css
-		if (pStyle) frameContent.css += `\n\t#${id} p { ${pStyle.replaceAll('undefined', '')} }`;
+		if (config.styleTextSegments)
+			if (pStyle) frameContent.css += `\n\t#${id} p { ${pStyle.replaceAll('undefined', '')} }`;
 
 		textData.forEach((text) => {
 			let el = ``;
@@ -154,16 +155,15 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 				})}>`;
 
 				element.segments.forEach((segment) => {
-					el += span(segment, variables);
+					el += span(segment, variables, config.styleTextSegments);
 				});
 
 				el += `</${element.tag}>\n`;
 
-				console.log("baseStyle", text.baseStyle);
-				console.log("pStyle", pStyle);
-
-				// if text.baseStyle is not the same as pStyle, append text.baseStyle to frameContent.css
-				if (text.baseStyle !== pStyle) frameContent.css += `\n\t#${id} .${text.elId}${text.class.replaceAll(' ', '.')} { ${text.baseStyle.replaceAll('undefined', '')} }`;
+				if (config.styleTextSegments) {
+					// if text.baseStyle is not the same as pStyle, append text.baseStyle to frameContent.css
+					if (text.baseStyle !== pStyle) frameContent.css += `\n\t#${id} .${text.elId}${text.class.replaceAll(' ', '.')} { ${text.baseStyle.replaceAll('undefined', '')} }`;
+				}
 			});
 
 			el += `\t\t</div>\n`;
