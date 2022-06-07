@@ -21,7 +21,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 	const aspectRatio = width / height;
 	const extension = config.extension.toLowerCase();
 
-	frameContent.css += `\t${css.frame(id)}\n`;
+	frameContent.css += `\t${css.frame(id)}`;
 
 	// find all frame nodes within the frame
 	const allNodes = node.findAll((node) => node.type === 'FRAME');
@@ -73,7 +73,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 		'data-src': filename + '.' + extension,
 		src: 'data:image/gif;base64,R0lGODlhCgAKAIAAAB8fHwAAACH5BAEAAAAALAAAAAAKAAoAAAIIhI+py+0PYysAOw==',
 		loading: 'lazy',
-	})}/>\n\t\t</picture>`;
+	})}/>\n\t\t</picture>\n`;
 
 	if (textData) {
 		textData.forEach((text) => {
@@ -132,13 +132,13 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 				}
 			});
 
-			el += `<div class="f2h-text" style="${stringify.styles(
+			el += `\t\t<div class="f2h-text" style="${stringify.styles(
 				style
 			)} ${effect}">`;
 
 			els.forEach(element => {
 				// console.log(element.tag)
-				el += `\n<${element.tag} ${stringify.attrs({
+				el += `\n\t\t\t<${element.tag} ${stringify.attrs({
 					class: `${text.elId} ${text.class} ${text.customClasses ? text.customClasses.join(' ') : ''}`
 				})}>`;
 
@@ -152,7 +152,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 				frameContent.css += `\n\t#${id} .${text.elId}${text.class.replaceAll(' ', '.')} { ${text.baseStyle.replaceAll('undefined', '')} }`;
 			});
 
-			el += `</div>\n`;
+			el += `\t\t</div>\n`;
 
 			frameContent.html += el;
 		});

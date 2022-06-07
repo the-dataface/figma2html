@@ -11,19 +11,19 @@ export default (segment, variables) => {
 	}
 
 	// if segment has a hyperlink, add an a tag
-	if (segment.hyperlink) el += `\t\t<a href="${segment.hyperlink.value}" target="_blank">`;
+	if (segment.hyperlink) el += `<a href="${segment.hyperlink.value}" target="_blank">`;
 
 	// if segment.isBaseStyle is false, then add a span with inline styles
-	if (!segment.isBaseStyle) el += `\t\t<span style="${segment.styleString}">`;
+	if (!segment.isBaseStyle) el += `<span style="${segment.styleString}">`;
 
 	// if segment.isOtherWeight is not false, then add a span with inline styles
-	if (segment.isOtherWeight) el += `\t\t<span style="font-weight: ${segment.isOtherWeight}">`;
+	if (segment.isOtherWeight) el += `<span style="font-weight: ${segment.isOtherWeight}">`;
 
 	// if segment isItalic is true, add an i tag
-	if (segment.isItalic) el += `\t\t<i>`;
+	if (segment.isItalic) el += `<i>`;
 
 	// if segment isBold is true, add a b tag
-	if (segment.isBold) el += `\t\t<b>`;
+	if (segment.isBold) el += `<b>`;
 
 	// add characters
 	el += characters;
