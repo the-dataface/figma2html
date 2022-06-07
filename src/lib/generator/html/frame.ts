@@ -90,6 +90,8 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 
 		textData.forEach((text) => {
 			let el = ``;
+			let elClass = "f2h-text";
+			let elAttributes = "";
 
 			let effect = '';
 			if (!!text.effect.length) effect = css.textEffect(text.effect);
@@ -144,12 +146,19 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 				}
 			});
 
-			el += `\t\t<div class="f2h-text" style="${stringify.styles(
+			// if text.customAttributes array contains an object with key 'class', add it to the class
+			if (text.customAttributes.length) {
+				text.customAttributes.forEach((attr) => {
+					if (attr.key === 'class') elClass += ` ${attr.value.join(" ")}`;
+					else elAttributes += ` ${attr.key}="${attr.value}"`;
+				});
+			}
+
+			el += `<div class="${elClass}" ${elAttributes} style="${stringify.styles(
 				style
 			)} ${effect}">`;
 
 			els.forEach(element => {
-				// console.log(element.tag)
 				el += `\n\t\t\t<${element.tag} ${stringify.attrs({
 					class: `${text.elId} ${text.class} ${text.customClasses ? text.customClasses.join(' ') : ''}`
 				})}>`;

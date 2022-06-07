@@ -20,7 +20,7 @@
     Switch,
   } from "figma-plugin-ds-svelte";
   import { onMount } from "svelte";
-  import { slide } from "svelte/transition";
+  import { slide, fade } from "svelte/transition";
   import JSZip from "../node_modules/jszip/dist/jszip.min.js";
   import { Asset, Config, Extension, FileType, HTMLFile, Scale, Size } from "./types";
 
@@ -101,6 +101,8 @@
   let exampleAssets: Asset[] = [];
   let exampleFile: HTMLFile;
 
+  let showVariablesButton = false;
+
   const displaySize = (size: Size): string => {
     const rounded: Size = {
       width: Math.round(size.width),
@@ -165,6 +167,8 @@
       setTimeout(() => {
         loading = false;
       }, 1500);
+    } else if (type === "variables") {
+      showVariablesButton = message.variables === null;
     }
   };
 
@@ -405,10 +409,12 @@
         <Icon iconName={IconLibrary} color="black" />
         <h3>Text Settings</h3>
       </div>
-      <button class="secondary" on:click={onWriteVariables}>
-        <Icon iconName={TextIcon} color="#121212" />
-        <p>Generate Variable Text</p>
-      </button>
+      {#if showVariablesButton}
+        <button class="secondary" on:click={onWriteVariables} out:fade>
+          <Icon iconName={TextIcon} color="#121212" />
+          <p>Generate Variable Text</p>
+        </button>
+      {/if}
     </div>
 
     <div class="row">

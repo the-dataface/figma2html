@@ -23,6 +23,7 @@ export default (textFrames, frameWidth, frameHeight) => {
 		let elId = `f2h-text-${i}`;
 		let customClasses;
 		let textSegments = [];
+		let customAttributes = [];
 
 		let segments = textFrame.getStyledTextSegments(props);
 		const styleId = textFrame.textStyleId;
@@ -71,19 +72,25 @@ export default (textFrames, frameWidth, frameHeight) => {
 		if (styleId && typeof styleId !== 'symbol' && styleObject)
 			elClass += ` ${dashify(styleObject.name.split('/')[0])}`;
 
-		// turn f2h-class=x, y, z into an array
-		if (textFrame.name.startsWith('f2h-class='))
-			customClasses = textFrame.name
-				.replace('f2h-class=', '')
-				.replaceAll(/[\[\]]/g, '')
-				.split(',')
-				.map((value) => value.trim());
-
 		// get base style and change font-weight to 400 and style to normal
 		const baseStyle = textSegments[0].styleString.replace('font-weight: 700', 'font-weight: 400').replace('font-style: italic', 'font-style: normal');
 
+		// turn layer name into custom attributes if it starts with [f2h]
+		if (textFrame.name.startsWith('[f2h]')) {
+			let layerName = textFrame.name.replace('[f2h]', '');
+			let attributes = layerName.split(';');
+
+			attributes.forEach(attr => {
+				customAttributes.push({
+					key: attr.split(':')[0],
+					value: attr.split(':')[1].split(',').map(v => v.trim())
+				});
+			});
+		}
+
 		return {
 			customClasses,
+			customAttributes,
 			class: elClass,
 			elId,
 			segments: textSegments,
