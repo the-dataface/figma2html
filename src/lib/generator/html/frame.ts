@@ -79,6 +79,8 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 	if (textData) {
 		textData.forEach((text) => {
 			let el = ``;
+			let elClass = "f2hText";
+			let elAttributes = "";
 
 			let effect = '';
 			if (!!text.effect.length) effect = css.textEffect(text.effect);
@@ -121,17 +123,17 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 							segment.listOptions.type !== 'NONE'
 								? 'li'
 								: config.applyHtags &&
-								  ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(
+									['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(
 										text.class
-								  )
-								? text.class
-								: 'p',
+									)
+									? text.class
+									: 'p',
 						listType:
 							segment.listOptions.type === 'ORDERED'
 								? 'ol'
 								: segment.listOptions.type === 'UNORDERED'
-								? 'ul'
-								: false,
+									? 'ul'
+									: false,
 						segments: [segment],
 						newElement:
 							!!i &&
@@ -140,7 +142,16 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 					});
 				}
 			});
-			el += `<div class="f2hText" style="${stringify.styles(
+
+			// if text.customAttributes array contains an object with key 'class', add it to the class
+			if (text.customAttributes.length) {
+				text.customAttributes.forEach((attr) => {
+					if (attr.key === 'class') elClass += ` ${attr.value.join(" ")}`;
+					else elAttributes += ` ${attr.key}="${attr.value}"`;
+				});
+			}
+
+			el += `<div class="${elClass}" ${elAttributes} style="${stringify.styles(
 				style
 			)} ${effect}">`;
 
