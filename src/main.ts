@@ -36,14 +36,29 @@ class StoredVariables {
 		if (!!variablesNode?.characters) {
 			const variables = yaml.load(variablesNode.characters);
 			StoredVariables.writeVariables();
+
+			figma.ui.postMessage({
+				type: 'variables',
+				variables: variables
+			});
+
 			return variables;
-		} else return defaultVariables;
+		} else {
+			figma.ui.postMessage({
+				type: 'variables',
+				variables: null
+			});
+
+			return defaultVariables;
+		}
 	};
 
 	static writeVariables = async (): Promise<void> => {
 		// write an example variables array to a text node on the current page
 
 		let storedVariables;
+		let xPos;
+
 		// remove existing variables text node if found
 		const existingVariables = figma.currentPage.findOne(
 			(node) => node.type === 'TEXT' && node.name === 'f2h-variables'
@@ -52,6 +67,9 @@ class StoredVariables {
 		log('existingVariables', existingVariables);
 
 		if (!!existingVariables?.characters) {
+			// save xPos of existing variables text node if it exists
+			xPos = existingVariables.x;
+
 			let characters = existingVariables.characters;
 			storedVariables = yaml.load(characters);
 
@@ -81,9 +99,14 @@ class StoredVariables {
 			textNode.characters = yaml.dump(
 				storedVariables || defaultVariables
 			);
-			textNode.x = maxRight + 100;
+			textNode.x = xPos || maxRight + 100;
 			textNode.y = minTop;
 			textNode.name = 'f2h-variables';
+
+			figma.ui.postMessage({
+				type: 'variables',
+				variables: storedVariables || defaultVariables
+			});
 		});
 	};
 }
@@ -130,12 +153,19 @@ class StoredConfig {
 	static writeSettings = async (config): Promise<void> => {
 		// write the config to a text node on the current page
 
+		let xPos;
+
 		// remove existing settings text node if found
 		const settings = figma.currentPage.findOne(
 			(node) => node.type === 'TEXT' && node.name === 'f2h-settings'
 		);
 
-		if (settings) settings.remove();
+		if (settings) {
+			// save xPos if settings node exists
+			xPos = settings.x;
+
+			settings.remove();
+		}
 
 		// load Inter for settings text node
 		figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
@@ -158,7 +188,7 @@ class StoredConfig {
 			// create the node
 			let textNode = figma.createText();
 			textNode.characters = yaml.dump(config);
-			textNode.x = maxRight + 100;
+			textNode.x = xPos || maxRight + 100;
 			textNode.y = minTop;
 			textNode.name = 'f2h-settings';
 		});
@@ -281,10 +311,10 @@ const getAssets = async (
 			previewSettings.isFinal
 				? baseExportConfig
 				: {
-						extension: 'JPG',
-						scale: 1,
-						srcSize: previewSettings.thumbSize,
-				  }
+					extension: 'JPG',
+					scale: 1,
+					srcSize: previewSettings.thumbSize,
+				}
 		);
 
 		try {
