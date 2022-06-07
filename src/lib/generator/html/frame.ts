@@ -10,6 +10,8 @@ import { createGroupsFromFrames } from 'lib/generator/group';
 
 export default ({ node, filename, widthRange, altText, config, variables }) => {
 	let inlineStyle = '';
+	let pStyle;
+
 	const frameContent = { html: '', css: '', js: '' };
 
 	const frameClass = `f2h-frame`;
@@ -44,7 +46,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 	// 	return pct.toFixed(2) + '%';
 	// };
 
-	frameContent.html += `\n<!-- Frame: ${filename.split('/').slice(-1)} -->\n`;
+	frameContent.html += `\n\t<!-- Frame: ${filename.split('/').slice(-1)} -->\n`;
 	frameContent.html += `\t<div ${stringify.attrs({
 		id: id,
 		class: `${frameClass.replace(':', '-')} frame artboard`,
@@ -76,6 +78,15 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 	})}/>\n\t\t</picture>\n`;
 
 	if (textData) {
+		// make an array of the baseStyle property of each text node
+		const baseStyles = textData.map((text) => text.baseStyle);
+
+		// get the most frequent value in baseStyles and make pStyle equal to it
+		pStyle = baseStyles.sort((a, b) => baseStyles.filter((v) => v === a).length - baseStyles.filter((v) => v === b).length).pop();
+
+		// add pStyle to css
+		if (pStyle) frameContent.css += `\n\t#${id} p { ${pStyle.replaceAll('undefined', '')} }`;
+
 		textData.forEach((text) => {
 			let el = ``;
 
@@ -148,8 +159,11 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 
 				el += `</${element.tag}>\n`;
 
-				// add this element's css
-				frameContent.css += `\n\t#${id} .${text.elId}${text.class.replaceAll(' ', '.')} { ${text.baseStyle.replaceAll('undefined', '')} }`;
+				console.log("baseStyle", text.baseStyle);
+				console.log("pStyle", pStyle);
+
+				// if text.baseStyle is not the same as pStyle, append text.baseStyle to frameContent.css
+				if (text.baseStyle !== pStyle) frameContent.css += `\n\t#${id} .${text.elId}${text.class.replaceAll(' ', '.')} { ${text.baseStyle.replaceAll('undefined', '')} }`;
 			});
 
 			el += `\t\t</div>\n`;
