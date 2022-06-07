@@ -1,4 +1,4 @@
-export default ({ containerId, config }) => {
+export default ({ containerId, config, frameCss }) => {
 	const id = `#${containerId}`;
 	const selectors = {};
 
@@ -35,13 +35,15 @@ export default ({ containerId, config }) => {
 		display: 'block',
 	};
 
-	const computedStyles = Object.entries(selectors)
+	let computedStyles = Object.entries(selectors)
 		.map(([selector, properties]) => {
 			return `\t${selector} { ${Object.entries(properties)
 				.map(([property, value]) => `\n\t\t${property}: ${value};`)
 				.join('')}\n\t}`;
 		})
 		.join('\n\n');
+
+	computedStyles += `\n\n${frameCss}`;
 
 	return computedStyles;
 };

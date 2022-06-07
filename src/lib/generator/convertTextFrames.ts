@@ -18,8 +18,9 @@ export default (textFrames, frameWidth, frameHeight) => {
 	];
 
 	// return array of text frame style + class data
-	return textFrames.map((textFrame) => {
-		let elClass;
+	return textFrames.map((textFrame, i) => {
+		let elClass = ``;
+		let elId = `f2h-text-${i}`;
 		let customClasses;
 		let textSegments = [];
 
@@ -68,7 +69,7 @@ export default (textFrames, frameWidth, frameHeight) => {
 		});
 
 		if (styleId && typeof styleId !== 'symbol' && styleObject)
-			elClass = dashify(styleObject.name.split('/')[0]);
+			elClass += ` ${dashify(styleObject.name.split('/')[0])}`;
 
 		// turn f2h-class=x, y, z into an array
 		if (textFrame.name.startsWith('f2h-class='))
@@ -84,6 +85,7 @@ export default (textFrames, frameWidth, frameHeight) => {
 		return {
 			customClasses,
 			class: elClass,
+			elId,
 			segments: textSegments,
 			baseStyle,
 			x: `${(textFrame.x / frameWidth) * 100}% `,

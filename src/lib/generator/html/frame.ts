@@ -1,5 +1,6 @@
 import roundTo from 'lib/utils/roundTo';
 import stringify from 'lib/utils/stringify';
+import trim from 'lib/utils/trim';
 
 import css from 'lib/generator/css/index';
 import span from './span';
@@ -9,20 +10,18 @@ import { createGroupsFromFrames } from 'lib/generator/group';
 
 export default ({ node, filename, widthRange, altText, config, variables }) => {
 	let inlineStyle = '';
-	let html = ``;
-
-	const frameId = node.id;
-	const frameClass = `g-${frameId}`;
-	const frameWidth = +node.name.replace('#', '').replace('px', '');
-	const frameHeight = node.height;
 	const frameContent = { html: '', css: '', js: '' };
 
-	const id = `frame-${frameId.replace(':', '-')}`;
+	const frameClass = `f2h-frame`;
 	const width = +node.name.replace('#', '').replace('px', '');
+	const frameHeight = node.height;
+	const id = `f2h-frame-${width}`;
 	const range = widthRange.ranges[widthRange.widths.indexOf(width)];
 	const height = node.height;
 	const aspectRatio = width / height;
 	const extension = config.extension.toLowerCase();
+
+	frameContent.css += `\t${css.frame(id)}\n`;
 
 	// find all frame nodes within the frame
 	const allNodes = node.findAll((node) => node.type === 'FRAME');
@@ -45,8 +44,8 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 	// 	return pct.toFixed(2) + '%';
 	// };
 
-	html += `\n<!-- Frame: ${filename.split('/').slice(-1)} -->\n`;
-	html += `\t<div ${stringify.attrs({
+	frameContent.html += `\n<!-- Frame: ${filename.split('/').slice(-1)} -->\n`;
+	frameContent.html += `\t<div ${stringify.attrs({
 		id: id,
 		class: `${frameClass.replace(':', '-')} frame artboard`,
 		'data-aspect-ratio': roundTo(aspectRatio, 3),
@@ -55,7 +54,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 		style: inlineStyle,
 	})}>`;
 
-	html += `\n\t\t<div ${stringify.attrs({
+	frameContent.html += `\n\t\t<div ${stringify.attrs({
 		class: 'spacer',
 		style: stringify.styles({
 			padding: '0 0 0 0',
@@ -64,7 +63,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 		}),
 	})}></div>`;
 
-	html += `\n\t\t<picture>\n\t\t\t<source ${stringify.attrs({
+	frameContent.html += `\n\t\t<picture>\n\t\t\t<source ${stringify.attrs({
 		srcset: filename + '.' + extension,
 		type: 'image/' + extension,
 	})}>\n\t\t\t<img ${stringify.attrs({
@@ -120,9 +119,9 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 						tag:
 							config.applyHtags &&
 								['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(
-									text.class
+									trim(text.class)
 								)
-								? text.class
+								? trim(text.class)
 								: 'p',
 						segments: [segment],
 						newElement:
@@ -133,32 +132,33 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 				}
 			});
 
-			el += `<div class="f2h-text ${text.class}" style="${stringify.styles(
+			el += `<div class="f2h-text" style="${stringify.styles(
 				style
 			)} ${effect}">`;
 
-			els.forEach((element, i) => {
+			els.forEach(element => {
+				// console.log(element.tag)
 				el += `\n<${element.tag} ${stringify.attrs({
-					class: text.classes ? text.classes.join(' ') : '',
-					style: text.baseStyle
+					class: `${text.elId} ${text.class} ${text.customClasses ? text.customClasses.join(' ') : ''}`
 				})}>`;
 
 				element.segments.forEach((segment) => {
 					el += span(segment, variables);
 				});
+
 				el += `</${element.tag}>\n`;
+
+				// add this element's css
+				frameContent.css += `\n\t#${id} .${text.elId}${text.class.replaceAll(' ', '.')} { ${text.baseStyle.replaceAll('undefined', '')} }`;
 			});
 
 			el += `</div>\n`;
 
-			html += el;
+			frameContent.html += el;
 		});
 	}
 
-	html += `\t</div>\n`;
+	frameContent.html += `\t</div>\n`;
 
-	// TODO: something with the frame's css
-	// css.frame(frame, frameId);
-
-	return html;
+	return frameContent;
 };
