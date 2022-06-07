@@ -1,5 +1,6 @@
 import roundTo from 'lib/utils/roundTo';
 import stringify from 'lib/utils/stringify';
+import trim from 'lib/utils/trim';
 
 import css from 'lib/generator/css/index';
 import span from './span';
@@ -9,20 +10,20 @@ import { createGroupsFromFrames } from 'lib/generator/group';
 
 export default ({ node, filename, widthRange, altText, config, variables }) => {
 	let inlineStyle = '';
-	let html = ``;
+	let pStyle;
 
-	const frameId = node.id;
-	const frameClass = `g-${frameId}`;
-	const frameWidth = +node.name.replace('#', '').replace('px', '');
-	const frameHeight = node.height;
 	const frameContent = { html: '', css: '', js: '' };
 
-	const id = `frame-${frameId.replace(':', '-')}`;
+	const frameClass = `f2h-frame`;
 	const width = +node.name.replace('#', '').replace('px', '');
+	const frameHeight = node.height;
+	const id = `f2h-frame-${width}`;
 	const range = widthRange.ranges[widthRange.widths.indexOf(width)];
 	const height = node.height;
 	const aspectRatio = width / height;
 	const extension = config.extension.toLowerCase();
+
+	frameContent.css += `\t${css.frame(id)}`;
 
 	// find all frame nodes within the frame
 	const allNodes = node.findAll((node) => node.type === 'FRAME');
@@ -45,8 +46,8 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 	// 	return pct.toFixed(2) + '%';
 	// };
 
-	html += `\n<!-- Frame: ${filename.split('/').slice(-1)} -->\n`;
-	html += `\t<div ${stringify.attrs({
+	frameContent.html += `\n\t<!-- Frame: ${filename.split('/').slice(-1)} -->\n`;
+	frameContent.html += `\t<div ${stringify.attrs({
 		id: id,
 		class: `${frameClass.replace(':', '-')} frame artboard`,
 		'data-aspect-ratio': roundTo(aspectRatio, 3),
@@ -55,7 +56,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 		style: inlineStyle,
 	})}>`;
 
-	html += `\n\t\t<div ${stringify.attrs({
+	frameContent.html += `\n\t\t<div ${stringify.attrs({
 		class: 'spacer',
 		style: stringify.styles({
 			padding: '0 0 0 0',
@@ -64,22 +65,32 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 		}),
 	})}></div>`;
 
-	html += `\n\t\t<picture>\n\t\t\t<source ${stringify.attrs({
+	frameContent.html += `\n\t\t<picture>\n\t\t\t<source ${stringify.attrs({
 		srcset: filename + '.' + extension,
 		type: 'image/' + extension,
 	})}>\n\t\t\t<img ${stringify.attrs({
 		id: 'img-' + id,
-		class: 'f2hImg',
+		class: 'f2h-img',
 		alt: altText,
 		'data-src': filename + '.' + extension,
 		src: 'data:image/gif;base64,R0lGODlhCgAKAIAAAB8fHwAAACH5BAEAAAAALAAAAAAKAAoAAAIIhI+py+0PYysAOw==',
 		loading: 'lazy',
-	})}/>\n\t\t</picture>`;
+	})}/>\n\t\t</picture>\n`;
 
 	if (textData) {
+		// make an array of the baseStyle property of each text node
+		const baseStyles = textData.map((text) => text.baseStyle);
+
+		// get the most frequent value in baseStyles and make pStyle equal to it
+		pStyle = baseStyles.sort((a, b) => baseStyles.filter((v) => v === a).length - baseStyles.filter((v) => v === b).length).pop();
+
+		// add pStyle to css
+		if (config.styleTextSegments)
+			if (pStyle) frameContent.css += `\n\t#${id} p { ${pStyle.replaceAll('undefined', '')} }`;
+
 		textData.forEach((text) => {
 			let el = ``;
-			let elClass = "f2hText";
+			let elClass = "f2h-text";
 			let elAttributes = "";
 
 			let effect = '';
@@ -120,20 +131,12 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 				} else {
 					els.push({
 						tag:
-							segment.listOptions.type !== 'NONE'
-								? 'li'
-								: config.applyHtags &&
-									['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(
-										text.class
-									)
-									? text.class
-									: 'p',
-						listType:
-							segment.listOptions.type === 'ORDERED'
-								? 'ol'
-								: segment.listOptions.type === 'UNORDERED'
-									? 'ul'
-									: false,
+							config.applyHtags &&
+								['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(
+									trim(text.class)
+								)
+								? trim(text.class)
+								: 'p',
 						segments: [segment],
 						newElement:
 							!!i &&
@@ -155,41 +158,30 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 				style
 			)} ${effect}">`;
 
-			els.forEach((element, i) => {
-				// lists don't work because figma doesn't segment them by line
-				// let isListItem = element.tag === "li",
-				//   listType = isListItem ? element.listType : null,
-				//   prevElementIsListItem = i !== 0 && els[i - 1].tag === "li",
-				//   nextElementIsListItem = i !== els.length - 1 && els[i + 1].tag === "li";
-
-				// if (isListItem) console.log("isListItem", isListItem, "listType", listType, "prevElementIsListItem", prevElementIsListItem, "nextElementIsListItem", nextElementIsListItem);
-
-				// if (isListItem && !prevElementIsListItem) el += `<${element.listType}>\n`;
-				el += `\n<${element.tag} ${stringify.attrs({
-					class: text.classes ? text.classes.join(' ') : '',
+			els.forEach(element => {
+				el += `\n\t\t\t<${element.tag} ${stringify.attrs({
+					class: `${text.elId} ${text.class} ${text.customClasses ? text.customClasses.join(' ') : ''}`
 				})}>`;
+
 				element.segments.forEach((segment) => {
-					el += span(
-						segment,
-						config.styleTextSegments && !text.classes,
-						config.applyStyleNames,
-						variables
-					);
+					el += span(segment, variables, config.styleTextSegments);
 				});
+
 				el += `</${element.tag}>\n`;
-				// if (isListItem && !nextElementIsListItem) el += `</${element.listType}>\n`;
+
+				if (config.styleTextSegments) {
+					// if text.baseStyle is not the same as pStyle, append text.baseStyle to frameContent.css
+					if (text.baseStyle !== pStyle) frameContent.css += `\n\t#${id} .${text.elId}${text.class.replaceAll(' ', '.')} { ${text.baseStyle.replaceAll('undefined', '')} }`;
+				}
 			});
 
-			el += `</div>\n`;
+			el += `\t\t</div>\n`;
 
-			html += el;
+			frameContent.html += el;
 		});
 	}
 
-	html += `\t</div>\n`;
+	frameContent.html += `\t</div>\n`;
 
-	// TODO: something with the frame's css
-	// css.frame(frame, frameId);
-
-	return html;
+	return frameContent;
 };

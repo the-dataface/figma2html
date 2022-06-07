@@ -1,4 +1,4 @@
-export default ({ containerId, config }) => {
+export default ({ containerId, config, frameCss }) => {
 	const id = `#${containerId}`;
 	const selectors = {};
 
@@ -10,7 +10,7 @@ export default ({ containerId, config }) => {
 
 	// add clickable link base styles
 	if (config.clickableLink !== '')
-		selectors[`${id} .f2hLink`] = {
+		selectors[`${id} .f2h-link`] = {
 			cursor: 'pointer',
 		};
 
@@ -18,30 +18,32 @@ export default ({ containerId, config }) => {
 	selectors[`${id} p, ${id} .body`] = { margin: '0' };
 
 	// image placement
-	selectors[`${id} .f2hImg`] = {
+	selectors[`${id} .f2h-img`] = {
 		width: '100% !important',
 		top: '0',
 	};
 
-	selectors[`${id} .f2hSymbol`] = {
+	selectors[`${id} .f2h-symbol`] = {
 		'box-sizing': 'border-box',
 	};
 
-	selectors[`${id} :where(.frame, .f2hText, .f2hSymbol)`] = {
+	selectors[`${id} :where(.frame, .f2h-text, .f2h-symbol)`] = {
 		position: 'absolute',
 	};
 
-	selectors[`${id} :where(.f2hLink, .f2hImg)`] = {
+	selectors[`${id} :where(.f2h-link, .f2h-img)`] = {
 		display: 'block',
 	};
 
-	const computedStyles = Object.entries(selectors)
+	let computedStyles = Object.entries(selectors)
 		.map(([selector, properties]) => {
 			return `\t${selector} { ${Object.entries(properties)
 				.map(([property, value]) => `\n\t\t${property}: ${value};`)
 				.join('')}\n\t}`;
 		})
 		.join('\n\n');
+
+	computedStyles += `\n\n${frameCss}`;
 
 	return computedStyles;
 };

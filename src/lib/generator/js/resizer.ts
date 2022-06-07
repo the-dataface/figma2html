@@ -78,7 +78,7 @@ export default (containerId, isSvelte) => {
 					(+maxwidth >= width || maxwidth === null)
 				) {
 					if (!waiting)
-						selectChildren(`.${nameSpace}f2hImg`, el).forEach(
+						selectChildren(`.${nameSpace}f2h-img`, el).forEach(
 							updateImgSrc
 						);
 					el.style.display = 'block';
