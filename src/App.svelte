@@ -481,7 +481,7 @@
 
 <div class="footer">
   <div class="footer-inner">
-    <button class="primary" on:click={onSelectExport} disabled={nodeCount === 0}>Export {nodeCount} images</button>
+    <button class="primary" on:click={onSelectExport} disabled={nodeCount === 0}>Export {nodeCount + 1} Files</button>
     <button class="secondary" on:click={onReset}>
       <Icon iconName={IconSwap} color="#121212" />
       <p>Reset to Defaults</p>
