@@ -20,7 +20,7 @@ export default ({ config, assets, variables }) => {
 	html += `\n\n<div id="${containerId}" class="figma2html">`;
 
 	if (config.clickableLink)
-		html += `\n\t<a class="f2hLink" href="${config.clickableLink}">`;
+		html += `\n\t<a class="f2h-link" href="${config.clickableLink}">`;
 
 	html += `\n${config.clickableLink ? '\t\t' : '\t'}${assets
 		.map(({ node, filename }) =>

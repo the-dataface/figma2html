@@ -69,7 +69,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 		type: 'image/' + extension,
 	})}>\n\t\t\t<img ${stringify.attrs({
 		id: 'img-' + id,
-		class: 'f2hImg',
+		class: 'f2h-img',
 		alt: altText,
 		'data-src': filename + '.' + extension,
 		src: 'data:image/gif;base64,R0lGODlhCgAKAIAAAB8fHwAAACH5BAEAAAAALAAAAAAKAAoAAAIIhI+py+0PYysAOw==',
@@ -133,7 +133,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 				}
 			});
 
-			el += `<div class="f2hText" style="${stringify.styles(
+			el += `<div class="f2h-text ${text.class}" style="${stringify.styles(
 				style
 			)} ${effect}">`;
 
