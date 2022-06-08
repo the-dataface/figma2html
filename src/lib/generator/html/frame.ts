@@ -25,11 +25,16 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 
 	frameContent.css += `\t${css.frame(id)}`;
 
-	// find all frame nodes within the frame
-	const allNodes = node.findAll((node) => node.type === 'FRAME');
+	// console.log(node);
 
-	// convert all frames to groups for positioning
-	const groups: GroupNode[] = createGroupsFromFrames(allNodes);
+	// // find all frame nodes within the frame
+	// const allNodes = node.findAll((node) => node.type === 'FRAME');
+
+	// // find all frame nodes within the frame with a child node of type TEXT
+	// const allTextNodes = allNodes.filter((node) => node.children.find((child) => child.type === 'TEXT'));
+
+	// // convert all frames to groups for positioning
+	// const groups: GroupNode[] = createGroupsFromFrames(allTextNodes);
 
 	// find all text nodes within the frame
 	const textFrames = node.findAll((child) => child.type === 'TEXT');

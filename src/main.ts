@@ -15,6 +15,7 @@ import log from 'lib/utils/log';
 import createSettingsBlock from 'lib/generator/createSettingsBlock';
 import { fontList } from 'lib/generator/styleProps';
 import html from 'lib/generator/html/wrapper';
+import { createGroupsFromFrames } from 'lib/generator/group';
 
 log(fontList);
 
@@ -280,20 +281,24 @@ const getAssets = async (
 		};
 
 		let originalNode = figma.getNodeById(exportable.id) as FrameNode;
-		asset.node = originalNode;
+
+		// Convert all frames within this frame that contain text layers to groups
+		let grouplessNode = originalNode.clone();
+		grouplessNode = withModificationsForText(grouplessNode);
 
 		// Hide all text layers.
 		let modifiedNode = originalNode.clone();
 		modifiedNode = withModificationsForExport(modifiedNode);
 
 		if (tempFrame.frame) {
+			tempFrame.frame.appendChild(grouplessNode);
 			tempFrame.frame.appendChild(modifiedNode);
 		}
 
-		const filename = `${config.imagePath}/${exportable.parentName.replace(
-			'#',
-			''
-		)}`;
+		asset.node = grouplessNode;
+		// asset.node = originalNode;
+
+		const filename = `${config.imagePath}/${exportable.parentName.replace('#', '')}`;
 		asset.filename = filename;
 
 		// generate image data
@@ -328,9 +333,22 @@ const getAssets = async (
 		assets.push(asset);
 	}
 
-	tempFrame.remove();
+	// tempFrame.remove();
 
 	return assets;
+};
+
+const withModificationsForText = (node: FrameNode): FrameNode => {
+	// find all frame nodes within the frame
+	const allNodes = node.findAll((node) => node.type === 'FRAME');
+
+	// find all frame nodes within the frame with a child node of type TEXT
+	const allTextNodes = allNodes.filter((node) => node.children.find((child) => child.type === 'TEXT'));
+
+	// convert all frames to groups for positioning
+	const groups: GroupNode[] = createGroupsFromFrames(allTextNodes);
+
+	return node;
 };
 
 const withModificationsForExport = (node: FrameNode): FrameNode => {
@@ -360,6 +378,8 @@ const refreshPreview = async (
 		exampleFile = await getFile(config, exampleAssets, variables);
 	}
 
+	tempFrame.remove();
+
 	figma.ui.postMessage({
 		type: 'preview',
 		preview: {
@@ -378,6 +398,8 @@ const generateExport = async (config: Config, variables: Variable) => {
 	const file = await getFile(config, assets, variables);
 
 	log('assets + file', { assets, file });
+
+	tempFrame.remove();
 
 	figma.ui.postMessage({
 		type: 'export',

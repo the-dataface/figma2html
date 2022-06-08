@@ -25,6 +25,7 @@ export default ({ config, assets, variables }) => {
 		)
 		.join('\n\n');
 
+
 	html += `\n\n<style>\n${css.page({
 		containerId,
 		config,
