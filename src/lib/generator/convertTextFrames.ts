@@ -1,5 +1,6 @@
 import dashify from 'lib/utils/dashify';
 import styleProps from 'lib/generator/styleProps';
+import trim from 'lib/utils/trim';
 
 export default (textFrames, frameWidth, frameHeight) => {
 	const props = [
@@ -70,10 +71,13 @@ export default (textFrames, frameWidth, frameHeight) => {
 		});
 
 		if (styleId && typeof styleId !== 'symbol' && styleObject)
-			elClass += ` ${dashify(styleObject.name.split('/')[0])}`;
+			elClass += ` ${dashify(styleObject.name.split('/')[styleObject.name.split('/').length - 1])}`
 
 		// get base style and change font-weight to 400 and style to normal
-		const baseStyle = textSegments[0].styleString.replace('font-weight: 700', 'font-weight: 400').replace('font-style: italic', 'font-style: normal');
+		const tag = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(
+			trim(elClass)
+		) ? trim(elClass) : 'p';
+		const baseStyle = { tag, style: textSegments[0].styleString.replace('font-weight: 700', 'font-weight: 400').replace('font-style: italic', 'font-style: normal'); }
 
 		// turn layer name into custom attributes if it starts with [f2h]
 		if (textFrame.name.startsWith('[f2h]')) {
@@ -97,6 +101,8 @@ export default (textFrames, frameWidth, frameHeight) => {
 			baseStyle,
 			x: `${(textFrame.x / frameWidth) * 100}% `,
 			y: `${(textFrame.y / frameHeight) * 100}% `,
+			horizontalAlignment: textFrame.textAlignHorizontal,
+			verticalAlignment: textFrame.textAlignVertical,
 			width:
 				textFrame.textAutoResize === 'WIDTH_AND_HEIGHT'
 					? 'auto'

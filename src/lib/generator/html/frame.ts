@@ -76,12 +76,14 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 
 		// get the most frequent value in baseStyles and make pStyle equal to it
 		pStyle = baseStyles.sort((a, b) => baseStyles.filter((v) => v === a).length - baseStyles.filter((v) => v === b).length).pop();
+		console.log(pStyle);
 
 		// add pStyle to css
 		if (config.styleTextSegments)
-			if (pStyle) frameContent.css += `\n\t#${id} p { ${pStyle.replaceAll('undefined', '')} }`;
+			if (pStyle) frameContent.css += `\n\t#${id} ${pStyle.tag} { ${pStyle.style.replaceAll('undefined', '')} }`;
 
 		textData.forEach((text) => {
+			// console.log(text.class);
 			let el = ``;
 			let elClass = "f2h-text";
 			let elAttributes = "";
@@ -164,7 +166,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 
 				if (config.styleTextSegments) {
 					// if text.baseStyle is not the same as pStyle, append text.baseStyle to frameContent.css
-					if (text.baseStyle !== pStyle) frameContent.css += `\n\t#${id} .${text.elId}${text.class.replaceAll(' ', '.')} { ${text.baseStyle.replaceAll('undefined', '')} }`;
+					if (text.baseStyle.style !== pStyle.style) frameContent.css += `\n\t#${id} .${text.elId}${text.class.replaceAll(' ', '.')} { ${text.baseStyle.style.replaceAll('undefined', '')} }`;
 				}
 			});
 
