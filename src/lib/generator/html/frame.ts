@@ -76,14 +76,12 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 
 		// get the most frequent value in baseStyles and make pStyle equal to it
 		pStyle = baseStyles.sort((a, b) => baseStyles.filter((v) => v === a).length - baseStyles.filter((v) => v === b).length).pop();
-		console.log(pStyle);
 
 		// add pStyle to css
 		if (config.styleTextSegments)
 			if (pStyle) frameContent.css += `\n\t#${id} ${pStyle.tag} { ${pStyle.style.replaceAll('undefined', '')} }`;
 
 		textData.forEach((text) => {
-			// console.log(text.class);
 			let el = ``;
 			let elClass = "f2h-text";
 			let elAttributes = "";
