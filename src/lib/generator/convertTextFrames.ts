@@ -1,5 +1,6 @@
 import dashify from 'lib/utils/dashify';
 import styleProps from 'lib/generator/styleProps';
+import trim from 'lib/utils/trim';
 
 export default (textFrames, frameWidth, frameHeight) => {
 	const props = [
@@ -24,6 +25,8 @@ export default (textFrames, frameWidth, frameHeight) => {
 		let customClasses;
 		let textSegments = [];
 		let customAttributes = [];
+		let x, y;
+		let translateX, translateY;
 
 		let segments = textFrame.getStyledTextSegments(props);
 		const styleId = textFrame.textStyleId;
@@ -70,10 +73,13 @@ export default (textFrames, frameWidth, frameHeight) => {
 		});
 
 		if (styleId && typeof styleId !== 'symbol' && styleObject)
-			elClass += ` ${dashify(styleObject.name.split('/')[0])}`;
+			elClass += ` ${dashify(styleObject.name.split('/')[styleObject.name.split('/').length - 1])}`
 
 		// get base style and change font-weight to 400 and style to normal
-		const baseStyle = textSegments[0].styleString.replace('font-weight: 700', 'font-weight: 400').replace('font-style: italic', 'font-style: normal');
+		const tag = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(
+			trim(elClass)
+		) ? trim(elClass) : 'p';
+		const baseStyle = { tag, style: textSegments[0].styleString.replace('font-weight: 700', 'font-weight: 400').replace('font-style: italic', 'font-style: normal'); }
 
 		// turn layer name into custom attributes if it starts with [f2h]
 		if (textFrame.name.startsWith('[f2h]')) {
@@ -88,6 +94,33 @@ export default (textFrames, frameWidth, frameHeight) => {
 			});
 		}
 
+		// get x positioning based on horizontal alignment
+		if (textFrame.textAlignHorizontal === "LEFT") {
+			x = (textFrame.x / frameWidth) * 100;
+			translateX = 0;
+		} else if (textFrame.textAlignHorizontal === "CENTER") {
+			x = ((textFrame.x + textFrame.width / 2) / frameWidth) * 100;
+			translateX = -50;
+		} else if (textFrame.textAlignHorizontal === "RIGHT") {
+			x = ((textFrame.x + textFrame.width) / frameWidth) * 100;
+			translateX = -100;
+		} else if (textFrame.textAlignHorizontal === "JUSTIFIED") {
+			x = (textFrame.x / frameWidth) * 100;
+			translateX = 0;
+		}
+
+		// get y positioning based on vertical alignment
+		if (textFrame.textAlignVertical === "TOP") {
+			y = (textFrame.y / frameHeight) * 100;
+			translateY = 0;
+		} else if (textFrame.textAlignVertical === "MIDDLE") {
+			y = ((textFrame.y + textFrame.height / 2) / frameHeight) * 100;
+			translateY = -50;
+		} else if (textFrame.textAlignVertical === "BOTTOM") {
+			y = ((textFrame.y + textFrame.height) / frameHeight) * 100;
+			translateY = -100;
+		}
+
 		return {
 			customClasses,
 			customAttributes,
@@ -95,13 +128,16 @@ export default (textFrames, frameWidth, frameHeight) => {
 			elId,
 			segments: textSegments,
 			baseStyle,
-			x: `${(textFrame.x / frameWidth) * 100}% `,
-			y: `${(textFrame.y / frameHeight) * 100}% `,
+			x: `${x}% `,
+			y: `${y}% `,
+			horizontalAlignment: textFrame.textAlignHorizontal,
+			verticalAlignment: textFrame.textAlignVertical,
 			width:
 				textFrame.textAutoResize === 'WIDTH_AND_HEIGHT'
 					? 'auto'
 					: `${textFrame.width}px`,
 			opacity: textFrame.opacity,
+			translate: `${translateX}%, ${translateY}%`,
 			rotation: textFrame.rotation * -1,
 			effect: textFrame.effects,
 		};

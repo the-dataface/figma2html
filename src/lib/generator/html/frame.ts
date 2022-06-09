@@ -6,7 +6,6 @@ import css from 'lib/generator/css/index';
 import span from './span';
 
 import convertTextFrames from 'lib/generator/convertTextFrames';
-import { createGroupsFromFrames } from 'lib/generator/group';
 
 export default ({ node, filename, widthRange, altText, config, variables }) => {
 	let inlineStyle = '';
@@ -24,17 +23,6 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 	const extension = config.extension.toLowerCase();
 
 	frameContent.css += `\t${css.frame(id)}`;
-
-	// console.log(node);
-
-	// // find all frame nodes within the frame
-	// const allNodes = node.findAll((node) => node.type === 'FRAME');
-
-	// // find all frame nodes within the frame with a child node of type TEXT
-	// const allTextNodes = allNodes.filter((node) => node.children.find((child) => child.type === 'TEXT'));
-
-	// // convert all frames to groups for positioning
-	// const groups: GroupNode[] = createGroupsFromFrames(allTextNodes);
 
 	// find all text nodes within the frame
 	const textFrames = node.findAll((child) => child.type === 'TEXT');
@@ -91,7 +79,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 
 		// add pStyle to css
 		if (config.styleTextSegments)
-			if (pStyle) frameContent.css += `\n\t#${id} p { ${pStyle.replaceAll('undefined', '')} }`;
+			if (pStyle) frameContent.css += `\n\t#${id} ${pStyle.tag} { ${pStyle.style.replaceAll('undefined', '')} }`;
 
 		textData.forEach((text) => {
 			let el = ``;
@@ -109,10 +97,11 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 				width: text.width,
 			};
 
-			if (text.rotation !== 0) {
-				style['transform'] = `rotate(${text.rotation}deg)`;
-				style['transform-origin'] = 'left top';
-			}
+			// if (text.rotation !== 0) {
+			style['transform'] = `translate(${text.translate}) rotate(${text.rotation}deg)`;
+			style['transform-origin'] = 'left top';
+			style['text-align'] = text.horizontalAlignment.toLowerCase();
+			// }
 
 			let els = [];
 			text.segments.forEach((segment, i) => {
@@ -176,7 +165,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 
 				if (config.styleTextSegments) {
 					// if text.baseStyle is not the same as pStyle, append text.baseStyle to frameContent.css
-					if (text.baseStyle !== pStyle) frameContent.css += `\n\t#${id} .${text.elId}${text.class.replaceAll(' ', '.')} { ${text.baseStyle.replaceAll('undefined', '')} }`;
+					if (text.baseStyle.style !== pStyle.style) frameContent.css += `\n\t#${id} .${text.elId}${text.class.replaceAll(' ', '.')} { ${text.baseStyle.style.replaceAll('undefined', '')} }`;
 				}
 			});
 
