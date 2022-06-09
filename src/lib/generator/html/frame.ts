@@ -97,10 +97,11 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 				width: text.width,
 			};
 
-			if (text.rotation !== 0) {
-				style['transform'] = `rotate(${text.rotation}deg)`;
-				style['transform-origin'] = 'left top';
-			}
+			// if (text.rotation !== 0) {
+			style['transform'] = `translate(${text.translate}) rotate(${text.rotation}deg)`;
+			style['transform-origin'] = 'left top';
+			style['text-align'] = text.horizontalAlignment.toLowerCase();
+			// }
 
 			let els = [];
 			text.segments.forEach((segment, i) => {

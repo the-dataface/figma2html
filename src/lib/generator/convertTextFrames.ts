@@ -25,6 +25,8 @@ export default (textFrames, frameWidth, frameHeight) => {
 		let customClasses;
 		let textSegments = [];
 		let customAttributes = [];
+		let x, y;
+		let translateX, translateY;
 
 		let segments = textFrame.getStyledTextSegments(props);
 		const styleId = textFrame.textStyleId;
@@ -92,6 +94,33 @@ export default (textFrames, frameWidth, frameHeight) => {
 			});
 		}
 
+		// get x positioning based on horizontal alignment
+		if (textFrame.textAlignHorizontal === "LEFT") {
+			x = (textFrame.x / frameWidth) * 100;
+			translateX = 0;
+		} else if (textFrame.textAlignHorizontal === "CENTER") {
+			x = ((textFrame.x + textFrame.width / 2) / frameWidth) * 100;
+			translateX = -50;
+		} else if (textFrame.textAlignHorizontal === "RIGHT") {
+			x = ((textFrame.x + textFrame.width) / frameWidth) * 100;
+			translateX = -100;
+		} else if (textFrame.textAlignHorizontal === "JUSTIFIED") {
+			x = (textFrame.x / frameWidth) * 100;
+			translateX = 0;
+		}
+
+		// get y positioning based on vertical alignment
+		if (textFrame.textAlignVertical === "TOP") {
+			y = (textFrame.y / frameHeight) * 100;
+			translateY = 0;
+		} else if (textFrame.textAlignVertical === "MIDDLE") {
+			y = ((textFrame.y + textFrame.height / 2) / frameHeight) * 100;
+			translateY = -50;
+		} else if (textFrame.textAlignVertical === "BOTTOM") {
+			y = ((textFrame.y + textFrame.height) / frameHeight) * 100;
+			translateY = -100;
+		}
+
 		return {
 			customClasses,
 			customAttributes,
@@ -99,8 +128,8 @@ export default (textFrames, frameWidth, frameHeight) => {
 			elId,
 			segments: textSegments,
 			baseStyle,
-			x: `${(textFrame.x / frameWidth) * 100}% `,
-			y: `${(textFrame.y / frameHeight) * 100}% `,
+			x: `${x}% `,
+			y: `${y}% `,
 			horizontalAlignment: textFrame.textAlignHorizontal,
 			verticalAlignment: textFrame.textAlignVertical,
 			width:
@@ -108,6 +137,7 @@ export default (textFrames, frameWidth, frameHeight) => {
 					? 'auto'
 					: `${textFrame.width}px`,
 			opacity: textFrame.opacity,
+			translate: `${translateX}%, ${translateY}%`,
 			rotation: textFrame.rotation * -1,
 			effect: textFrame.effects,
 		};
