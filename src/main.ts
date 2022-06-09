@@ -126,6 +126,7 @@ class StoredConfig {
 				fileType: 'HTML',
 				includeResizer: true,
 				maxWidth: null,
+				responsiveness: 'DYNAMIC',
 				centerHtmlOutput: false,
 				clickableLink: null,
 				imagePath: 'img',

@@ -39,6 +39,9 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 	// 	return pct.toFixed(2) + '%';
 	// };
 
+	// if responsiveness is fixed, set the width to the max width
+	if (config.responsiveness === 'FIXED') inlineStyle += `width: ${width}px;`;
+
 	frameContent.html += `\n\t<!-- Frame: ${filename.split('/').slice(-1)} -->\n`;
 	frameContent.html += `\t<div ${stringify.attrs({
 		id: id,
