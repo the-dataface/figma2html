@@ -125,6 +125,7 @@ class StoredConfig {
 				extension: 'PNG',
 				fileType: 'HTML',
 				includeResizer: true,
+				testingMode: false,
 				maxWidth: null,
 				responsiveness: 'DYNAMIC',
 				centerHtmlOutput: false,
@@ -289,7 +290,7 @@ const getAssets = async (
 
 		// Hide all text layers.
 		let modifiedNode = originalNode.clone();
-		modifiedNode = withModificationsForExport(modifiedNode);
+		modifiedNode = withModificationsForExport(modifiedNode, config);
 
 		if (tempFrame.frame) {
 			tempFrame.frame.appendChild(grouplessNode);
@@ -352,11 +353,17 @@ const withModificationsForText = (node: FrameNode): FrameNode => {
 	return node;
 };
 
-const withModificationsForExport = (node: FrameNode): FrameNode => {
-	// hide all text layers
-	const nodesToHide = node.findAll((c) => c.type === 'TEXT');
+const withModificationsForExport = (node: FrameNode, config: Config): FrameNode => {
 
-	nodesToHide.forEach((node) => (node.visible = false));
+	const textNodes = node.findAll((c) => c.type === 'TEXT');
+
+	if (!config.testingMode) {
+		// hide all text layers if testingMode is false
+		textNodes.forEach((node) => (node.visible = false));
+	} else {
+		// fade all text layers if testingMode is true
+		textNodes.forEach((node) => (node.opacity = 0.5));
+	}
 
 	return node;
 };
