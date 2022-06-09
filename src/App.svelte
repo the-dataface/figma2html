@@ -393,7 +393,7 @@
     </div>
     <div class="row">
       <div class="setting">
-        <Section>Max Width (px)</Section>
+        <Section>Add Max Container Width (px)</Section>
         <input type="number" placeholder="1920" bind:value={maxWidth} on:input={onChangeConfig} />
       </div>
       <div class="setting">
