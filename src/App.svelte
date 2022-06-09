@@ -22,7 +22,7 @@
   import { onMount } from "svelte";
   import { slide, fade } from "svelte/transition";
   import JSZip from "../node_modules/jszip/dist/jszip.min.js";
-  import { Asset, Config, Extension, FileType, HTMLFile, Scale, Size } from "./types";
+  import { Asset, Config, Extension, FileType, HTMLFile, Scale, Responsiveness, Size } from "./types";
 
   let loading = false,
     menuOpen = false;
@@ -85,6 +85,24 @@
     });
   }
 
+  interface ResponsivenessOption {
+    value: Responsiveness;
+    label: string;
+    selected: boolean;
+  }
+
+  let responsiveness: Responsiveness | undefined = undefined;
+  let responsivenessOptions: ResponsivenessOption[] = [
+    { value: "DYNAMIC", label: "DYNAMIC", selected: false },
+    { value: "FIXED", label: "FIXED", selected: false },
+  ];
+
+  $: {
+    responsivenessOptions.forEach((o, i) => {
+      responsivenessOptions[i].selected = o.value === responsiveness;
+    });
+  }
+
   let syntax: string | undefined = undefined;
   let includeResizer = true;
   let centerHtmlOutput = false;
@@ -119,6 +137,7 @@
       fileType,
       includeResizer,
       maxWidth,
+      responsiveness,
       centerHtmlOutput,
       clickableLink,
       imagePath,
@@ -143,6 +162,7 @@
       fileType = config.fileType;
       includeResizer = config.includeResizer;
       maxWidth = config.maxWidth;
+      responsiveness = config.responsiveness;
       centerHtmlOutput = config.centerHtmlOutput;
       clickableLink = config.clickableLink;
       imagePath = config.imagePath;
@@ -393,12 +413,24 @@
     </div>
     <div class="row">
       <div class="setting">
-        <Section>Max Width (px)</Section>
+        <Section>Add Max Container Width (px)</Section>
         <input type="number" placeholder="1920" bind:value={maxWidth} on:input={onChangeConfig} />
       </div>
       <div class="setting">
         <Section>Clickable Link</Section>
         <input type="text" placeholder="Link image?" bind:value={clickableLink} on:change={onChangeConfig} />
+      </div>
+    </div>
+    <div class="row">
+      <div class="setting">
+        <Section>Responsiveness</Section>
+        <SelectMenu
+          bind:menuItems={responsivenessOptions}
+          on:change={(e) => {
+            responsiveness = e.detail.value;
+            onChangeConfig();
+          }}
+        />
       </div>
     </div>
   </div>

@@ -1,7 +1,7 @@
 export type Extension = "PNG" | "JPG" | "SVG";
 export type FileType = "SVELTE" | "HTML";
-export type ConstraintType = "SCALE" | "WIDTH" | "HEIGHT";
 export type Scale = 1 | 2 | 4;
+export type Responsiveness = "DYNAMIC" | "FIXED";
 
 export interface Config {
   syntax: string;
@@ -9,6 +9,7 @@ export interface Config {
   extension: Extension;
   fileType: FileType;
   includeResizer: boolean;
+  responsiveness: Responsiveness;
   maxWidth: number;
   centerHtmlOutput: boolean;
   clickableLink: string;
