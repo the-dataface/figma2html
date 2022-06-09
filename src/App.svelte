@@ -105,6 +105,7 @@
 
   let syntax: string | undefined = undefined;
   let includeResizer = true;
+  let testingMode = false;
   let centerHtmlOutput = false;
   let applyStyleNames = false;
   let applyHtags = false;
@@ -136,6 +137,7 @@
       extension,
       fileType,
       includeResizer,
+      testingMode,
       maxWidth,
       responsiveness,
       centerHtmlOutput,
@@ -161,6 +163,7 @@
       scale = config.scale;
       fileType = config.fileType;
       includeResizer = config.includeResizer;
+      testingMode = config.testingMode;
       maxWidth = config.maxWidth;
       responsiveness = config.responsiveness;
       centerHtmlOutput = config.centerHtmlOutput;
@@ -413,16 +416,6 @@
     </div>
     <div class="row">
       <div class="setting">
-        <Section>Add Max Container Width (px)</Section>
-        <input type="number" placeholder="1920" bind:value={maxWidth} on:input={onChangeConfig} />
-      </div>
-      <div class="setting">
-        <Section>Clickable Link</Section>
-        <input type="text" placeholder="Link image?" bind:value={clickableLink} on:change={onChangeConfig} />
-      </div>
-    </div>
-    <div class="row">
-      <div class="setting">
         <Section>Responsiveness</Section>
         <SelectMenu
           bind:menuItems={responsivenessOptions}
@@ -431,6 +424,22 @@
             onChangeConfig();
           }}
         />
+      </div>
+      <div class="setting switch-setting">
+        <div class="switch-title">
+          <Section>Testing Mode</Section>
+        </div>
+        <Switch value={testingMode} bind:checked={testingMode} on:change={onChangeConfig} />
+      </div>
+    </div>
+    <div class="row">
+      <div class="setting">
+        <Section>Add Max Container Width (px)</Section>
+        <input type="number" placeholder="1920" bind:value={maxWidth} on:input={onChangeConfig} />
+      </div>
+      <div class="setting">
+        <Section>Clickable Link</Section>
+        <input type="text" placeholder="Link image?" bind:value={clickableLink} on:change={onChangeConfig} />
       </div>
     </div>
   </div>

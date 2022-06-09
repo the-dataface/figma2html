@@ -9,6 +9,7 @@ export interface Config {
   extension: Extension;
   fileType: FileType;
   includeResizer: boolean;
+  testingMode: boolean;
   responsiveness: Responsiveness;
   maxWidth: number;
   centerHtmlOutput: boolean;
