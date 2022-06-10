@@ -939,11 +939,23 @@
   :global(.switch-setting label:before) {
     background-color: var(--figma-color-bg) !important;
     border: 1px solid var(--figma-color-border) !important;
+    height: 18px !important;
+    width: 32px !important;
+    border-radius: 10px !important;
+    transition: all;
+  }
+
+  :global(.switch-setting:hover label:before) {
+    border: 1px solid var(--figma-color-border-strong) !important;
   }
 
   :global(.switch-setting label:after) {
     background-color: var(--figma-color-bg-secondary) !important;
-    border: 1px solid var(--figma-color-border) !important;
+    border: none !important;
+    top: 14px !important;
+    left: 12px !important;
+    height: 12px !important;
+    width: 12px !important;
   }
 
   :global(.switch-setting input:checked + label:before) {
@@ -953,6 +965,7 @@
 
   :global(.switch-setting input:checked + label:after) {
     background-color: var(--figma-color-bg-success) !important;
-    border: 1px solid var(--figma-color-text) !important;
+    border: none !important;
+    left: 14px !important;
   }
 </style>
