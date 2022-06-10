@@ -551,7 +551,7 @@
   <div class="menu-pane" transition:slide>
     <a href="https://github.com/the-dataface/figma2html" target="_blank">
       <div class="menu-row">
-        <Icon iconName={HelpIcon} color="#121212" /> About
+        <Icon iconName={HelpIcon} /> About
       </div>
     </a>
     <a href="https://github.com/the-dataface/figma2html/issues" target="_blank">
@@ -569,7 +569,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(var(--figma-color-bg), 0.9);
     z-index: 999;
   }
 
@@ -601,6 +601,7 @@
     padding: 12px;
     font-size: small;
     margin-bottom: 72px;
+    color: var(--figma-color-text);
   }
 
   .footer {
@@ -613,8 +614,9 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid lightgray;
-    background: white;
+    /* border-top: 1px solid lightgray; */
+    border-top: 1px solid var(--figma-color-border);
+    background: var(--figma-color-bg);
   }
 
   .footer-inner {
@@ -631,9 +633,10 @@
     right: 8px;
     display: flex;
     flex-direction: column;
-    border: 1px solid lightgray;
+    /* border: 1px solid var(--figma-color-text-secondary); */
+    border: 1px solid var(--figma-color-border);
     border-radius: 8px;
-    background-color: #fff;
+    background-color: var(--figma-color-bg);
   }
 
   .menu-row {
@@ -641,16 +644,24 @@
     align-items: center;
     padding: 8px;
     font-size: 14px;
-    color: #999;
+    color: var(--figma-color-text);
   }
 
   .menu-row:hover {
-    color: #121212;
+    color: var(--figma-color-text-secondary);
   }
 
-  button {
+  :global(svg) {
+    fill: var(--figma-color-text) !important;
+  }
+
+  :global(button svg) {
+    fill: var(--figma-color-text-secondary) !important;
+  }
+
+  .footer button {
     height: 100%;
-    color: black;
+    color: var(--figma-color-text);
     padding: 0;
     display: flex;
     align-items: center;
@@ -661,39 +672,42 @@
     border: none;
   }
 
-  button:hover {
+  .footer button:hover {
     opacity: 0.8;
   }
 
-  button.primary {
+  .footer button.primary {
     padding: 8px 16px;
-    background: #333;
-    color: #fff;
+    background: var(--figma-color-bg-success);
+    color: var(--figma-color-bg);
     font-weight: bold;
   }
 
-  button.primary:disabled {
+  :global(.figma-dark .footer button.primary) {
+    color: var(--figma-color-text) !important;
+  }
+
+  .footer button.primary:disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+    background: var(--figma-color-bg-secondary) !important;
   }
 
-  button.secondary {
+  .footer button.secondary {
     font-size: 11px;
-    color: #121212;
-    opacity: 0.5;
+    color: var(--figma-color-text-secondary);
   }
 
-  button.secondary p {
+  .footer button.secondary p {
     margin-left: -4px;
   }
 
-  button.secondary:hover {
-    opacity: 1;
+  .footer button.secondary:hover {
+    opacity: 0.8;
   }
 
-  button.ellipses {
+  .footer button.ellipses {
     padding: 8px 8px;
-    border-left: 1px solid lightgray;
+    border-left: 1px solid var(--figma-color-border);
   }
 
   .header {
@@ -714,16 +728,14 @@
     gap: 8px;
   }
 
-  /* .group { */
-  /* border-bottom: 1px solid lightgray; */
-  /* margin-bottom: 16px; */
-  /* padding-bottom: 12px; */
-  /* } */
-
   .setting {
     display: flex;
     flex: 1;
     flex-direction: column;
+  }
+
+  :global(.setting div) {
+    color: var(--figma-color-text) !important;
   }
 
   .switch-setting {
@@ -734,12 +746,6 @@
     margin-bottom: -12px;
   }
 
-  p.utility {
-    margin-top: 16px;
-    color: #999;
-    font-size: 12px;
-  }
-
   .preview {
     display: flex;
     flex-wrap: wrap;
@@ -748,7 +754,7 @@
 
   .preview-card {
     width: calc(50% - 6px);
-    border: 1px solid lightgray;
+    border: 1px solid var(--figma-color-border);
     border-radius: 8px;
     font-size: 12px;
     display: flex;
@@ -765,6 +771,10 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0px 0px 13.5155px rgba(0, 0, 0, 0.05);
+  }
+
+  :global(.figma-dark .preview-card-image) {
+    box-shadow: 0px 0px 13.5155px rgba(255, 255, 255, 0.1) !important;
   }
 
   .preview-card-content {
@@ -827,11 +837,80 @@
     font-size: 12px;
     height: 32px;
     padding: 8px;
-    border: 1px solid lightgray;
-    border-radius: 4px;
   }
 
-  input:hover {
-    border-color: #000;
+  :global(input) {
+    border: 1px solid var(--figma-color-border);
+    background-color: var(--figma-color-bg);
+    border-radius: 1px;
+    color: var(--figma-color-text);
+  }
+
+  :global(input:hover) {
+    border: 1px solid var(--figma-color-border);
+  }
+
+  :global(input:focus) {
+    outline: 1px solid var(--figma-color-border-selected);
+  }
+
+  :global(input::placeholder) {
+    color: var(--figma-color-text-tertiary);
+  }
+
+  :global(.content button) {
+    background-color: var(--figma-color-bg) !important;
+    border-radius: 1px !important;
+    height: 32px !important;
+    margin-top: 0 !important;
+  }
+
+  :global(.content button:hover) {
+    border: 1px solid var(--figma-color-border) !important;
+  }
+
+  :global(.content button:focus) {
+    outline: 1px solid var(--figma-color-border-selected);
+  }
+
+  :global(.content button .label, .content button .placeholder) {
+    color: var(--figma-color-text) !important;
+    margin-top: 0 !important;
+  }
+
+  :global(.content button .caret svg path) {
+    fill: var(--figma-color-text-secondary) !important;
+  }
+
+  :global(.content button:hover .caret svg path) {
+    fill: var(--figma-color-text) !important;
+  }
+
+  :global(.content ul li .label) {
+    color: var(--figma-color-bg) !important;
+  }
+
+  :global(.figma-dark .content ul li .label) {
+    color: var(--figma-color-text) !important;
+  }
+
+  :global(.switch-setting label:before) {
+    background-color: var(--figma-color-bg) !important;
+    border: 1px solid var(--figma-color-border) !important;
+  }
+
+  :global(.switch-setting label:after) {
+    background-color: var(--figma-color-bg-secondary) !important;
+    border: 1px solid var(--figma-color-border) !important;
+  }
+
+  :global(.switch-setting input:checked + label:before) {
+    background-color: var(--figma-color-bg) !important;
+    border: 1px solid var(--figma-color-text) !important;
+  }
+
+  :global(.switch-setting input:checked + label:after) {
+    background-color: var(--figma-color-bg-success) !important;
+    border: 1px solid var(--figma-color-text) !important;
   }
 </style>
