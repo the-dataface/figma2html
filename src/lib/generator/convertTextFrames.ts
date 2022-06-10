@@ -113,7 +113,7 @@ export default (textFrames, frameWidth, frameHeight) => {
 		if (textFrame.textAlignVertical === "TOP") {
 			y = (textFrame.y / frameHeight) * 100;
 			translateY = 0;
-		} else if (textFrame.textAlignVertical === "MIDDLE") {
+		} else if (textFrame.textAlignVertical === "CENTER") {
 			y = ((textFrame.y + textFrame.height / 2) / frameHeight) * 100;
 			translateY = -50;
 		} else if (textFrame.textAlignVertical === "BOTTOM") {
