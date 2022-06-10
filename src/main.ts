@@ -19,7 +19,7 @@ import { createGroupsFromFrames } from 'lib/generator/group';
 
 log(fontList);
 
-figma.showUI(__html__, { width: 560, height: 500 });
+figma.showUI(__html__, { width: 560, height: 500, themeColors: true });
 
 const defaultVariables = {
 	hed: 'This is the headline',
