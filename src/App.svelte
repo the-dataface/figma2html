@@ -569,8 +569,12 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(var(--figma-color-bg), 0.9);
+    background-color: rgba(255, 255, 255, 0.9);
     z-index: 999;
+  }
+
+  :global(.figma-dark .overlay) {
+    background-color: rgba(0, 0, 0, 0.9) !important;
   }
 
   .overlay .spinner {
