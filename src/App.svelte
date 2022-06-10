@@ -451,7 +451,7 @@
         <h3>Text Settings</h3>
       </div>
       {#if showVariablesButton}
-        <button class="secondary" on:click={onWriteVariables} out:fade>
+        <button class="generate" on:click={onWriteVariables} out:fade>
           <Icon iconName={TextIcon} color="#121212" />
           <p>Generate Variable Text</p>
         </button>
@@ -488,7 +488,7 @@
     </div>
   </div>
 
-  <div>
+  <div class="group">
     <div class="header">
       <div class="group-title">
         <Icon iconName={IconVisible} color="black" />
@@ -528,7 +528,9 @@
 
 <div class="footer">
   <div class="footer-inner">
-    <button class="primary" on:click={onSelectExport} disabled={nodeCount === 0}>Export {nodeCount + 1} Files</button>
+    <button class="primary" on:click={onSelectExport} disabled={nodeCount === 0}
+      >Export {nodeCount > 0 ? nodeCount + 1 : 0} Files</button
+    >
     <button class="secondary" on:click={onReset}>
       <Icon iconName={IconSwap} color="#121212" />
       <p>Reset to Defaults</p>
@@ -601,11 +603,19 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    gap: 24px;
-    padding: 12px;
+    /* gap: 12px; */
+    /* padding: 12px; */
     font-size: small;
     margin-bottom: 72px;
     color: var(--figma-color-text);
+  }
+
+  .group {
+    padding: 16px;
+  }
+
+  .group:not(:last-of-type) {
+    border-bottom: 1px solid var(--figma-color-border);
   }
 
   .footer {
@@ -661,6 +671,34 @@
 
   :global(button svg) {
     fill: var(--figma-color-text-secondary) !important;
+  }
+
+  button.generate {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: none;
+    background: none;
+    color: var(--figma-color-text-secondary);
+    cursor: pointer;
+    font-size: 11px;
+  }
+
+  button.generate p {
+    margin-left: -4px;
+  }
+  button.generate:hover {
+    color: var(--figma-color-text) !important;
+    border: none !important;
+    background: none !important;
+  }
+
+  button.generate svg {
+    fill: var(--figma-color-text);
+  }
+
+  button.generate:hover svg {
+    fill: var(--figma-color-text-secondary);
   }
 
   .footer button {
@@ -851,7 +889,7 @@
   }
 
   :global(input:hover) {
-    border: 1px solid var(--figma-color-border);
+    border: 1px solid var(--figma-color-border-strong);
   }
 
   :global(input:focus) {
