@@ -25,7 +25,7 @@ Export Figma frames as responsive images with text elements rendered as HTML. A 
 ### Options + Features
 **File Output**
 - The inputted Filename will be the name of the outputted zipped folder and HTML file. You can customize this, but will default to the current page name in Figma.
-- Filetype options include `HTML` and `SVELTE`, but note that the SVELTE option hasn't been fully tested.
+- Filetype options include `html` and `html`, but note that the `svelte` option hasn't been fully tested.
 
 **Image Settings**
 - Input an `Image Scale` to export images at a specified scale.
@@ -36,7 +36,7 @@ Export Figma frames as responsive images with text elements rendered as HTML. A 
 **Page Settings**
 - Turn on `Include Resizer Script` to include JS in your outputted file which will show and hide the appropriate image at the appropriate size.
 - Turn on `Center HTML Output` to center your page content in the outputted HTML.
-- The `Responsiveness` dropdown has two options: `DYNAMIC` means that f2h containers will fill the width of the screen, while `FIXED` forces f2h containers to maintain the widths at which they were designed in Figma.
+- Turn on `Fluid` to have the f2h containers fill the width of the screen. If off, f2h containers will maintain the widths at which they were designed in Figma.
 - Turn on `Testing Mode` to keep text visible on exported images. Useful for comparing layouts in the exported HTML vs the designs in Figma.
 - Input a `Max Width` in pixels to apply a max width to your page content.
 - Include a `Clickable Link` to wrap your output in an `<a>` tag.
