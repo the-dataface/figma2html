@@ -423,7 +423,7 @@ const generateExport = async (config: Config, variables: Variable) => {
 };
 
 figma.ui.onmessage = async (message) => {
-	const type = message.type;
+	const { type } = message;
 	log('Message:', type);
 
 	let storedConfig;

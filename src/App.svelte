@@ -1,4 +1,5 @@
 <script lang="ts" type="module">
+	import './app.css';
 	import ExportIcon from './img/icons/export.svg';
 	import HelpIcon from './img/icons/help.svg';
 	import ImportIcon from './img/icons/import.svg';
@@ -144,131 +145,74 @@
 
 	window.onmessage = async (event: MessageEvent) => {
 		const message = event.data.pluginMessage;
-		const type = message.type;
 
-		if (type === 'load') {
-			const config = message.config as Config;
+		switch (message.type) {
+			case 'load':
+				const config = message.config as Config;
 
-			syntax = config.syntax;
-			extension = config.extension;
-			scale = config.scale;
-			fileType = config.fileType;
-			includeResizer = config.includeResizer;
-			testingMode = config.testingMode;
-			maxWidth = config.maxWidth;
-			fluid = config.fluid;
-			centerHtmlOutput = config.centerHtmlOutput;
-			clickableLink = config.clickableLink;
-			imagePath = config.imagePath;
-			altText = config.altText;
-			applyStyleNames = config.applyStyleNames;
-			applyHtags = config.applyHtags;
-			styleTextSegments = config.styleTextSegments;
-			includeGoogleFonts = config.includeGoogleFonts;
-		} else if (type === 'preview') {
-			const preview = message.preview;
-			nodeCount = preview.nodeCount;
-			exampleAssets = preview.exampleAssets;
-			exampleFile = preview.exampleFile;
-			exampleAssets = await buildPreviewImages(exampleAssets);
-		} else if (type === 'export') {
-			const url = await buildZipArchive(message.assets, message.file);
-			const link = document.createElement('a');
-			link.href = url;
-			link.download = `${syntax}.zip`;
-			link.click();
+				syntax = config.syntax;
+				extension = config.extension;
+				scale = config.scale;
+				fileType = config.fileType;
+				includeResizer = config.includeResizer;
+				testingMode = config.testingMode;
+				maxWidth = config.maxWidth;
+				fluid = config.fluid;
+				centerHtmlOutput = config.centerHtmlOutput;
+				clickableLink = config.clickableLink;
+				imagePath = config.imagePath;
+				altText = config.altText;
+				applyStyleNames = config.applyStyleNames;
+				applyHtags = config.applyHtags;
+				styleTextSegments = config.styleTextSegments;
+				includeGoogleFonts = config.includeGoogleFonts;
+				break;
+			case 'preview':
+				const preview = message.preview;
+				nodeCount = preview.nodeCount;
+				exampleAssets = preview.exampleAssets;
+				exampleFile = preview.exampleFile;
+				exampleAssets = await buildPreviewImages(exampleAssets);
+				break;
+			case 'export':
+				const url = await buildZipArchive(message.assets, message.file);
+				const link = document.createElement('a');
+				link.href = url;
+				link.download = `${syntax}.zip`;
+				link.click();
 
-			setTimeout(() => {
-				loading = false;
-			}, 1500);
-		} else if (type === 'variables') {
-			showVariablesButton = message.variables === null;
+				setTimeout(() => {
+					loading = false;
+				}, 1500);
+				break;
+			case 'variables':
+				showVariablesButton = message.variables === null;
+				break;
 		}
 	};
 
-	onMount(() => {
-		parent.postMessage(
-			{
-				pluginMessage: {
-					type: 'init',
-				},
-			},
-			'*'
-		);
-	});
+	interface PostMessage {
+		type:
+			| 'init'
+			| 'load'
+			| 'config'
+			| 'export'
+			| 'reset'
+			| 'saveSettings'
+			| 'loadSettings'
+			| 'writeVariables';
+		config?: Config | null;
+	}
 
-	const onChangeConfig = () => {
-		parent.postMessage(
-			{
-				pluginMessage: {
-					type: 'config',
-					config: buildConfig(),
-				},
-			},
-			'*'
-		);
-	};
+	const postMessage = (message: PostMessage) =>
+		parent.postMessage({ pluginMessage: message }, '*');
 
-	const onSelectExport = () => {
-		loading = true;
-		parent.postMessage(
-			{
-				pluginMessage: {
-					type: 'export',
-					config: buildConfig(),
-				},
-			},
-			'*'
-		);
-	};
+	onMount(() => postMessage({ type: 'init' }));
 
-	const onReset = () => {
-		parent.postMessage(
-			{
-				pluginMessage: {
-					type: 'reset',
-				},
-			},
-			'*'
-		);
-	};
+	const onChangeConfig = () =>
+		postMessage({ type: 'config', config: buildConfig() });
 
-	const onSaveSettings = () => {
-		parent.postMessage(
-			{
-				pluginMessage: {
-					type: 'saveSettings',
-				},
-			},
-			'*'
-		);
-	};
-
-	const onLoadSettings = () => {
-		parent.postMessage(
-			{
-				pluginMessage: {
-					type: 'loadSettings',
-				},
-			},
-			'*'
-		);
-	};
-
-	const onWriteVariables = () => {
-		parent.postMessage(
-			{
-				pluginMessage: {
-					type: 'writeVariables',
-				},
-			},
-			'*'
-		);
-	};
-
-	const onToggleMenu = () => {
-		menuOpen = !menuOpen;
-	};
+	const onToggleMenu = () => (menuOpen = !menuOpen);
 
 	const buildPreviewImages = async (assets: Asset[]): Promise<Asset[]> => {
 		assets.forEach((asset) => {
@@ -482,7 +426,11 @@
 				<h3>Text Settings</h3>
 			</div>
 			{#if showVariablesButton}
-				<button class="generate" on:click={onWriteVariables} out:fade>
+				<button
+					class="generate"
+					on:click={() => postMessage({ type: 'writeVariables' })}
+					out:fade
+				>
 					<Icon iconName={TextIcon} color="#121212" />
 					<p>Generate Variable Text</p>
 				</button>
@@ -587,19 +535,31 @@
 	<div class="footer-inner">
 		<button
 			class="primary"
-			on:click={onSelectExport}
+			on:click={() => {
+				loading = true;
+				postMessage({ type: 'export', config: buildConfig() });
+			}}
 			disabled={nodeCount === 0}
 			>Export {nodeCount > 0 ? nodeCount + 1 : 0} Files</button
 		>
-		<button class="secondary" on:click={onReset}>
+		<button
+			class="secondary"
+			on:click={() => postMessage({ type: 'reset' })}
+		>
 			<Icon iconName={IconSwap} color="#121212" />
 			<p>Reset to Defaults</p>
 		</button>
-		<button class="secondary" on:click={onSaveSettings}>
+		<button
+			class="secondary"
+			on:click={() => postMessage({ type: 'saveSettings' })}
+		>
 			<Icon iconName={ImportIcon} color="#121212" />
 			<p>Save Settings</p>
 		</button>
-		<button class="secondary" on:click={onLoadSettings}>
+		<button
+			class="secondary"
+			on:click={() => postMessage({ type: 'loadSettings' })}
+		>
 			<Icon iconName={ExportIcon} color="#121212" />
 			<p>Load Settings</p>
 		</button>
@@ -626,410 +586,3 @@
 		</a>
 	</div>
 {/if}
-
-<style global>
-	.overlay {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-color: rgba(255, 255, 255, 0.9);
-		z-index: 999;
-	}
-
-	.figma-dark .overlay {
-		background-color: rgba(0, 0, 0, 0.9) !important;
-	}
-
-	.overlay .spinner {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-	}
-
-	h3 {
-		margin: 0;
-	}
-
-	p {
-		margin: 8px;
-	}
-
-	.link {
-		text-decoration: underline;
-		margin: 0;
-	}
-
-	.content {
-		display: flex;
-		flex: 1;
-		flex-direction: column;
-		/* gap: 12px; */
-		/* padding: 12px; */
-		font-size: small;
-		margin-bottom: 72px;
-		color: var(--figma-color-text);
-	}
-
-	.group {
-		padding: 16px;
-	}
-
-	.group:not(:last-of-type) {
-		border-bottom: 1px solid var(--figma-color-border);
-	}
-
-	.footer {
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		width: 100%;
-		height: 48px;
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: center;
-		/* border-top: 1px solid lightgray; */
-		border-top: 1px solid var(--figma-color-border);
-		background: var(--figma-color-bg);
-	}
-
-	.footer-inner {
-		height: 100%;
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		gap: 8px;
-	}
-
-	.menu-pane {
-		position: fixed;
-		bottom: 52px;
-		right: 8px;
-		display: flex;
-		flex-direction: column;
-		/* border: 1px solid var(--figma-color-text-secondary); */
-		border: 1px solid var(--figma-color-border);
-		border-radius: 8px;
-		background-color: var(--figma-color-bg);
-	}
-
-	.menu-row {
-		display: flex;
-		align-items: center;
-		padding: 8px;
-		font-size: 14px;
-		color: var(--figma-color-text);
-	}
-
-	.menu-row:hover {
-		color: var(--figma-color-text-secondary);
-	}
-
-	svg {
-		fill: var(--figma-color-text) !important;
-	}
-
-	button svg {
-		fill: var(--figma-color-text-secondary) !important;
-	}
-
-	button.generate {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		border: none;
-		background: none;
-		color: var(--figma-color-text-secondary);
-		cursor: pointer;
-		font-size: 11px;
-	}
-
-	button.generate p {
-		margin-left: -4px;
-	}
-	button.generate:hover {
-		color: var(--figma-color-text) !important;
-		border: none !important;
-		background: none !important;
-	}
-
-	button.generate svg {
-		fill: var(--figma-color-text);
-	}
-
-	button.generate:hover svg {
-		fill: var(--figma-color-text-secondary);
-	}
-
-	.footer button {
-		height: 100%;
-		color: var(--figma-color-text);
-		padding: 0;
-		display: flex;
-		align-items: center;
-		flex-wrap: none;
-		cursor: pointer;
-		background: none;
-		border-radius: 0;
-		border: none;
-	}
-
-	.footer button:hover {
-		opacity: 0.8;
-	}
-
-	.footer button.primary {
-		padding: 8px 16px;
-		background: var(--figma-color-bg-success);
-		color: var(--figma-color-bg);
-		font-weight: bold;
-	}
-
-	.figma-dark .footer button.primary {
-		color: var(--figma-color-text) !important;
-	}
-
-	.footer button.primary:disabled {
-		cursor: not-allowed;
-		background: var(--figma-color-bg-secondary) !important;
-	}
-
-	.footer button.secondary {
-		font-size: 11px;
-		color: var(--figma-color-text-secondary);
-	}
-
-	.footer button.secondary p {
-		margin-left: -4px;
-	}
-
-	.footer button.secondary:hover {
-		opacity: 0.8;
-	}
-
-	.footer button.ellipses {
-		padding: 8px 8px;
-		border-left: 1px solid var(--figma-color-border);
-	}
-
-	.header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-
-	.group-title {
-		display: flex;
-		align-items: center;
-	}
-
-	.row {
-		display: flex;
-		flex: 1;
-		flex-direction: row;
-		gap: 8px;
-	}
-
-	.setting {
-		display: flex;
-		flex: 1;
-		flex-direction: column;
-	}
-
-	.setting div {
-		color: var(--figma-color-text) !important;
-	}
-
-	.switch-setting {
-		margin-bottom: 16px;
-	}
-
-	.switch-title {
-		margin-bottom: -12px;
-	}
-
-	.preview {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 12px;
-	}
-
-	.preview-card {
-		width: calc(50% - 6px);
-		border: 1px solid var(--figma-color-border);
-		border-radius: 8px;
-		font-size: 12px;
-		display: flex;
-		align-items: center;
-		padding: 8px;
-		gap: 12px;
-	}
-
-	.preview-card-image {
-		width: 48px;
-		height: 48px;
-		border-radius: 6px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		box-shadow: 0px 0px 13.5155px rgba(0, 0, 0, 0.05);
-	}
-
-	.figma-dark .preview-card-image {
-		box-shadow: 0px 0px 13.5155px rgba(255, 255, 255, 0.1) !important;
-	}
-
-	.preview-card-content {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-	}
-
-	.preview-card-content h5 {
-		font-size: 12px;
-		font-weight: 700;
-		margin: 0 0 4px;
-	}
-
-	.preview-card-content p {
-		font-size: 10px;
-		font-weight: 400;
-		margin: 0;
-	}
-
-	.output-preview {
-		font-size: 12px;
-		display: flex;
-		flex-direction: column;
-		overflow-y: scroll;
-		height: 150px;
-		padding: 8px;
-		border: 1px solid lightgray;
-		border-radius: 4px;
-	}
-
-	.output-row {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: center;
-		gap: 16px;
-	}
-
-	.output-thumb {
-		width: 32px;
-		height: 32px;
-		box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.05);
-		border-radius: 4px;
-	}
-
-	.output-filename {
-		display: flex;
-		flex: 1;
-		white-space: nowrap;
-		overflow-x: hidden;
-	}
-
-	.output-placeholder {
-		color: #999;
-	}
-
-	input {
-		font-size: 12px;
-		height: 32px;
-		padding: 8px;
-	}
-
-	input {
-		border: 1px solid var(--figma-color-border);
-		background-color: var(--figma-color-bg);
-		border-radius: 1px;
-		color: var(--figma-color-text);
-	}
-
-	input:hover {
-		border: 1px solid var(--figma-color-border-strong);
-	}
-
-	input:focus {
-		outline: 1px solid var(--figma-color-border-selected);
-	}
-
-	input::placeholder {
-		color: var(--figma-color-text-tertiary);
-	}
-
-	.content button {
-		background-color: var(--figma-color-bg) !important;
-		border-radius: 1px !important;
-		height: 32px !important;
-		margin-top: 0 !important;
-	}
-
-	.content button:hover {
-		border: 1px solid var(--figma-color-border) !important;
-	}
-
-	.content button:focus {
-		outline: 1px solid var(--figma-color-border-selected);
-	}
-
-	.content button .label,
-	.content button .placeholder {
-		color: var(--figma-color-text) !important;
-		margin-top: 0 !important;
-	}
-
-	.content button .caret svg path {
-		fill: var(--figma-color-text-secondary) !important;
-	}
-
-	.content button:hover .caret svg path {
-		fill: var(--figma-color-text) !important;
-	}
-
-	.content ul li .label {
-		color: var(--figma-color-bg) !important;
-	}
-
-	.figma-dark .content ul li .label {
-		color: var(--figma-color-text) !important;
-	}
-
-	.switch-setting label:before {
-		background-color: var(--figma-color-bg) !important;
-		border: 1px solid var(--figma-color-border) !important;
-		height: 18px !important;
-		width: 32px !important;
-		border-radius: 10px !important;
-		transition: all;
-	}
-
-	.switch-setting:hover label:before {
-		border: 1px solid var(--figma-color-border-strong) !important;
-	}
-
-	.switch-setting label:after {
-		background-color: var(--figma-color-bg-secondary) !important;
-		border: none !important;
-		top: 14px !important;
-		left: 12px !important;
-		height: 12px !important;
-		width: 12px !important;
-	}
-
-	.switch-setting input:checked + label:before {
-		background-color: var(--figma-color-bg) !important;
-		border: 1px solid var(--figma-color-text) !important;
-	}
-
-	.switch-setting input:checked + label:after {
-		background-color: var(--figma-color-bg-success) !important;
-		border: none !important;
-		left: 14px !important;
-	}
-</style>
