@@ -20,7 +20,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 	const range = widthRange.ranges[widthRange.widths.indexOf(width)];
 	const height = node.height;
 	const aspectRatio = width / height;
-	const extension = config.extension.toLowerCase();
+	const extension = config.extension.value.toLowerCase();
 
 	frameContent.css += `\t${css.frame(id)}`;
 
@@ -39,8 +39,8 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 	// 	return pct.toFixed(2) + '%';
 	// };
 
-	// if fluid is false, set the width to the max width
-	if (!config.fluid) inlineStyle += `width: ${width}px;`;
+	// if responsiveness is fixed, set the width to the max width
+	if (config.responsiveness === 'Fixed') inlineStyle += `width: ${width}px;`;
 
 	frameContent.html += `\n\t<!-- Frame: ${filename
 		.split('/')
@@ -91,9 +91,8 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 		// add pStyle to css
 		if (config.styleTextSegments)
 			if (pStyle)
-				frameContent.css += `\n\t#${id} ${
-					pStyle.tag
-				} { ${pStyle.style.replaceAll('undefined', '')} }`;
+				frameContent.css += `\n\t#${id} ${pStyle.tag
+					} { ${pStyle.style.replaceAll('undefined', '')} }`;
 
 		textData.forEach((text) => {
 			let el = ``;
@@ -142,9 +141,9 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 					els.push({
 						tag:
 							config.applyHtags &&
-							['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(
-								trim(text.class)
-							)
+								['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(
+									trim(text.class)
+								)
 								? trim(text.class)
 								: 'p',
 						segments: [segment],
@@ -171,9 +170,8 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 
 			els.forEach((element) => {
 				el += `\n\t\t\t<${element.tag} ${stringify.attrs({
-					class: `${text.elId} ${text.class} ${
-						text.customClasses ? text.customClasses.join(' ') : ''
-					}`,
+					class: `${text.elId} ${text.class} ${text.customClasses ? text.customClasses.join(' ') : ''
+						}`,
 				})}>`;
 
 				element.segments.forEach((segment) => {
@@ -185,15 +183,14 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 				if (config.styleTextSegments) {
 					// if text.baseStyle is not the same as pStyle, append text.baseStyle to frameContent.css
 					if (text.baseStyle.style !== pStyle.style)
-						frameContent.css += `\n\t#${id} .${
-							text.elId
-						}${text.class.replaceAll(
-							' ',
-							'.'
-						)} { ${text.baseStyle.style.replaceAll(
-							'undefined',
-							''
-						)} }`;
+						frameContent.css += `\n\t#${id} .${text.elId
+							}${text.class.replaceAll(
+								' ',
+								'.'
+							)} { ${text.baseStyle.style.replaceAll(
+								'undefined',
+								''
+							)} }`;
 				}
 			});
 

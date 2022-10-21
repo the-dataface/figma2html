@@ -1,33 +1,26 @@
 <script lang="ts" type="module">
   import "./app.css";
 
-  import ExportIcon from "./img/icons/export.svg";
-  import HelpIcon from "./img/icons/help.svg";
-  import ImportIcon from "./img/icons/import.svg";
-  import TextIcon from "./img/icons/text.svg";
-
-  import {
-    Icon,
-    IconAdjust,
-    IconDraft,
-    IconEllipses,
-    IconImage,
-    IconLibrary,
-    IconSpinner,
-    IconSwap,
-    IconVisible,
-    IconWarning,
-    Section,
-    SelectMenu,
-    Switch,
-  } from "figma-plugin-ds-svelte";
   import { onMount } from "svelte";
-  import { slide, fade } from "svelte/transition";
   import JSZip from "../node_modules/jszip/dist/jszip.min.js";
-  import { Asset, Config, Extension, FileType, HTMLFile, Scale, Size } from "./types";
+  import { Asset, Config, Extension, FileType, HTMLFile, Loading, Scale, Responsiveness, Size, Views } from "./types";
 
-  let loading = false;
-  let menuOpen = false;
+  import Panel from "./lib/components/Layout/Panel.svelte";
+
+  import ErrorMessage from "./lib/components/ErrorMessage.svelte";
+  import Footer from "./lib/components/Footer.svelte";
+
+  import File from "./lib/components/Controls/File.svelte";
+  import Images from "./lib/components/Controls/Images.svelte";
+  import Page from "./lib/components/Controls/Page.svelte";
+  import Preview from "./lib/components/Controls/Preview.svelte";
+  import Text from "./lib/components/Controls/Text.svelte";
+
+  let errorMessage,
+    errorTimeout,
+    loading = false;
+
+  let views = {};
 
   interface FileTypeOption {
     value: FileType;
@@ -57,9 +50,9 @@
 
   let extension: Extension | undefined = undefined;
   let extensionOptions: ExtensionOption[] = [
-    { value: "PNG", label: "PNG", group: null, selected: false },
-    { value: "JPG", label: "JPG", group: null, selected: false },
-    { value: "SVG", label: "SVG", group: null, selected: false },
+    { value: "PNG", label: "png", group: null, selected: false },
+    { value: "JPG", label: "jpg", group: null, selected: false },
+    { value: "SVG", label: "svg", group: null, selected: false },
   ];
 
   $: {
@@ -87,7 +80,24 @@
     });
   }
 
-  let fluid = true;
+  interface ResponsivenessOption {
+    value: Responsiveness;
+    label: string;
+    selected: boolean;
+  }
+
+  let responsiveness: Responsiveness | undefined = undefined;
+  let responsivenessOptions: ResponsivenessOption[] = [
+    { value: "Dynamic", label: "Dynamic", selected: false },
+    { value: "Fixed", label: "Fixed", selected: false },
+  ];
+
+  $: {
+    responsivenessOptions.forEach((o, i) => {
+      responsivenessOptions[i].selected = o.value === responsiveness;
+    });
+  }
+
   let syntax: string | undefined = undefined;
   let includeResizer = true;
   let testingMode = false;
@@ -105,15 +115,9 @@
   let exampleAssets: Asset[] = [];
   let exampleFile: HTMLFile;
 
-  let showVariablesButton = false;
+  $: showLoader = false;
 
-  const displaySize = (size: Size): string => {
-    const rounded: Size = {
-      width: Math.round(size.width),
-      height: Math.round(size.height),
-    };
-    return `${rounded.width}x${rounded.height}`;
-  };
+  let showVariablesButton = false;
 
   const buildConfig = (): Config => {
     return {
@@ -139,48 +143,49 @@
   window.onmessage = async (event: MessageEvent) => {
     const message = event.data.pluginMessage;
 
-    switch (message.type) {
-      case "load":
-        const config = message.config as Config;
+    if (type === "load") {
+      const config = message.config as Config;
+      views = message.views as Views;
 
-        syntax = config.syntax;
-        extension = config.extension;
-        scale = config.scale;
-        fileType = config.fileType;
-        includeResizer = config.includeResizer;
-        testingMode = config.testingMode;
-        maxWidth = config.maxWidth;
-        fluid = config.fluid;
-        centerHtmlOutput = config.centerHtmlOutput;
-        clickableLink = config.clickableLink;
-        imagePath = config.imagePath;
-        altText = config.altText;
-        applyStyleNames = config.applyStyleNames;
-        applyHtags = config.applyHtags;
-        styleTextSegments = config.styleTextSegments;
-        includeGoogleFonts = config.includeGoogleFonts;
-        break;
-      case "preview":
-        const preview = message.preview;
-        nodeCount = preview.nodeCount;
-        exampleAssets = preview.exampleAssets;
-        exampleFile = preview.exampleFile;
-        exampleAssets = await buildPreviewImages(exampleAssets);
-        break;
-      case "export":
-        const url = await buildZipArchive(message.assets, message.file);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `${syntax}.zip`;
-        link.click();
+      syntax = config.syntax;
+      extension = config.extension;
+      scale = config.scale;
+      fileType = config.fileType;
+      includeResizer = config.includeResizer;
+      testingMode = config.testingMode;
+      maxWidth = config.maxWidth;
+      responsiveness = config.responsiveness;
+      centerHtmlOutput = config.centerHtmlOutput;
+      clickableLink = config.clickableLink;
+      imagePath = config.imagePath;
+      altText = config.altText;
+      applyStyleNames = config.applyStyleNames;
+      applyHtags = config.applyHtags;
+      styleTextSegments = config.styleTextSegments;
+      includeGoogleFonts = config.includeGoogleFonts;
+    } else if (type === "preview") {
+      const preview = message.preview;
+      nodeCount = preview.nodeCount;
+      exampleAssets = preview.exampleAssets;
+      exampleFile = preview.exampleFile;
+      exampleAssets = await buildPreviewImages(exampleAssets);
+      loading = message.loading as Loading;
+    } else if (type === "loading") {
+      loading = message.loading as Loading;
+    } else if (type === "export") {
+      const url = await buildZipArchive(message.assets, message.file);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${syntax}.zip`;
+      link.click();
 
-        setTimeout(() => {
-          loading = false;
-        }, 1500);
-        break;
-      case "variables":
-        showVariablesButton = message.variables === null;
-        break;
+      setTimeout(() => {
+        loading = false;
+      }, 1500);
+    } else if (type === "variables") {
+      showVariablesButton = message.variables === null;
+    } else if (type === "error") {
+      setErrorMessage(message.message);
     }
   };
 
@@ -195,7 +200,60 @@
 
   const onChangeConfig = () => postMessage({ type: "config", config: buildConfig() });
 
-  const onToggleMenu = () => (menuOpen = !menuOpen);
+  const onChangeView = () => {
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: "view",
+          views: views,
+        },
+      },
+      "*"
+    );
+  };
+
+  const onSaveSettings = () => {
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: "saveSettings",
+        },
+      },
+      "*"
+    );
+  };
+
+  const setErrorMessage = (message: string) => {
+    clearTimeout(errorTimeout);
+    errorMessage = message;
+
+    // clear error message after 5 seconds
+    errorTimeout = setTimeout(() => {
+      errorMessage = undefined;
+    }, 3000);
+  };
+
+  const onLoadSettings = () => {
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: "loadSettings",
+        },
+      },
+      "*"
+    );
+  };
+
+  const onWriteVariables = () => {
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: "writeVariables",
+        },
+      },
+      "*"
+    );
+  };
 
   const buildPreviewImages = async (assets: Asset[]): Promise<Asset[]> => {
     assets.forEach((asset) => {
@@ -211,7 +269,7 @@
     let zip = new JSZip();
 
     assets.forEach((asset) => {
-      const extensionLower = asset.extension.toLowerCase();
+      const extensionLower = asset.extension.value.toLowerCase();
       let blob = new Blob([asset.data], {
         type: `image/${extensionLower}`,
       });
@@ -221,7 +279,7 @@
     });
 
     let fileBlob = new Blob([file.data], { type: `string` });
-    zip.file(`${file.filename}.${file.extension.toLowerCase()}`, fileBlob, {
+    zip.file(`${file.filename}.${file.extension.value.toLowerCase()}`, fileBlob, {
       base64: true,
     });
 
@@ -230,259 +288,183 @@
 
     return url;
   };
+
+  let resizing = false;
+
+  const resizeWindow = (e) => {
+    if (!resizing) return;
+
+    const size = {
+      w: Math.max(50, Math.floor(e.clientX + 5)),
+      h: Math.max(50, Math.floor(e.clientY + 5)),
+    };
+
+    parent.postMessage({ pluginMessage: { type: "resize", size: size } }, "*");
+  };
+
+  const resizeDown = (e) => {
+    resizing = true;
+    // e.preventDefault();
+    window.addEventListener("mousemove", resizeWindow, true);
+    window.addEventListener("mouseup", resizeUp, true);
+  };
+
+  const resizeUp = () => {
+    resizing = false;
+    window.removeEventListener("mousemove", resizeWindow, true);
+    window.removeEventListener("mouseup", null);
+  };
+
+  $: console.log(views);
 </script>
 
-{#if loading}
-  <div class="overlay">
-    <div class="spinner">
-      <Icon iconName={IconSpinner} color="black" spin />
-    </div>
-  </div>
-{/if}
+<div
+  id="corner"
+  class="fixed bottom-0 right-0 cursor-se-resize w-4 h-4 z-[999] overflow-hidden"
+  on:mousedown={resizeDown}
+  on:mouseup={resizeUp}
+>
+  <i
+    class="ml-0.5 absolute text-xs text-gray-300 -rotate-45 -translate-x-1/4 -translate-y-1/4 fa-sharp fa-solid fa-grip-dots top-1/2 left-1/2"
+  />
+</div>
 
-<div class="content">
-  <div class="group">
-    <div class="header">
-      <div class="group-title">
-        <Icon iconName={IconDraft} color="black" />
-        <h3>File Output</h3>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="setting">
-        <Section>Filename</Section>
-        <input type="text" placeholder={syntax} bind:value={syntax} on:input={onChangeConfig} />
-      </div>
-      <div class="setting">
-        <Section>Filetype</Section>
-        <SelectMenu
-          bind:menuItems={fileTypeOptions}
-          on:change={(e) => {
-            fileType = e.detail.value;
-            onChangeConfig();
-          }}
+<div class="flex w-full overflow-hidden content">
+  <div class="flex flex-col w-1/3 min-h-full pb-12 control-panel">
+    {#if views}
+      <Panel title="File output" bind:expanded={views.file} on:changeView={onChangeView}>
+        <File bind:fileType bind:menuItems={fileTypeOptions} bind:syntax on:changeConfig={onChangeConfig} />
+      </Panel>
+      <Panel title="Image settings" bind:expanded={views.images} on:changeView={onChangeView}>
+        <Images
+          bind:scaleOptions
+          bind:scale
+          bind:extensionOptions
+          bind:extension
+          bind:imagePath
+          bind:altText
+          on:changeConfig={onChangeConfig}
         />
-      </div>
-    </div>
-  </div>
-
-  <div class="group">
-    <div class="header">
-      <div class="group-title">
-        <Icon iconName={IconImage} color="black" />
-        <h3>Image Settings</h3>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="setting">
-        <Section>Image Scale</Section>
-        <SelectMenu
-          bind:menuItems={scaleOptions}
-          disabled={!extension || extension === "SVG"}
-          on:change={(e) => {
-            scale = e.detail.value;
-            onChangeConfig();
-          }}
+      </Panel>
+      <Panel title="Page settings" bind:expanded={views.page} on:changeView={onChangeView}>
+        <Page
+          bind:includeResizer
+          bind:centerHtmlOutput
+          bind:responsiveness
+          bind:responsivenessOptions
+          bind:testingMode
+          bind:maxWidth
+          bind:clickableLink
+          on:changeConfig={onChangeConfig}
         />
-      </div>
-      <div class="setting">
-        <Section>Format</Section>
-        <SelectMenu
-          bind:menuItems={extensionOptions}
-          on:change={(e) => {
-            extension = e.detail.value;
-            onChangeConfig();
-          }}
+      </Panel>
+      <Panel title="Text settings" bind:expanded={views.text} on:changeView={onChangeView}>
+        <Text
+          bind:showVariablesButton
+          bind:styleTextSegments
+          bind:applyStyleNames
+          bind:applyHtags
+          bind:includeGoogleFonts
+          on:changeConfig={onChangeConfig}
+          on:writeVariables={onWriteVariables}
         />
-      </div>
-    </div>
-    <div class="row">
-      <div class="setting">
-        <Section>Path</Section>
-        <input type="text" placeholder="Image path" bind:value={imagePath} on:change={onChangeConfig} />
-      </div>
-      <div class="setting">
-        <Section>Alt Text</Section>
-        <input type="text" placeholder="Alt text" bind:value={altText} on:change={onChangeConfig} />
-      </div>
-    </div>
+      </Panel>
+    {/if}
   </div>
-
-  <div class="group">
-    <div class="header">
-      <div class="group-title">
-        <Icon iconName={IconAdjust} color="black" />
-        <h3>Page Settings</h3>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="setting switch-setting">
-        <div class="switch-title">
-          <Section>Include Resize Script?</Section>
-        </div>
-        <Switch value={includeResizer} bind:checked={includeResizer} on:change={onChangeConfig} />
-      </div>
-      <div class="setting switch-setting">
-        <div class="switch-title">
-          <Section>Center HTML Output?</Section>
-        </div>
-        <Switch value={centerHtmlOutput} bind:checked={centerHtmlOutput} on:change={onChangeConfig} />
-      </div>
-    </div>
-    <div class="row">
-      <div class="setting switch-setting">
-        <div class="switch-title">
-          <Section>Fluid-width container?</Section>
-        </div>
-        <Switch value={fluid} bind:checked={fluid} on:change={onChangeConfig} />
-      </div>
-      <div class="setting switch-setting">
-        <div class="switch-title">
-          <Section>Testing Mode?</Section>
-        </div>
-        <Switch value={testingMode} bind:checked={testingMode} on:change={onChangeConfig} />
-      </div>
-    </div>
-    <div class="row">
-      <div class="setting">
-        <Section>Add Max Container Width (px)</Section>
-        <input type="number" placeholder="1920" bind:value={maxWidth} on:input={onChangeConfig} />
-      </div>
-      <div class="setting">
-        <Section>Clickable Link</Section>
-        <input type="text" placeholder="Link image?" bind:value={clickableLink} on:change={onChangeConfig} />
-      </div>
-    </div>
-  </div>
-
-  <div class="group">
-    <div class="header">
-      <div class="group-title">
-        <Icon iconName={IconLibrary} color="black" />
-        <h3>Text Settings</h3>
-      </div>
-      {#if showVariablesButton}
-        <button class="generate" on:click={() => postMessage({ type: "writeVariables" })} out:fade>
-          <Icon iconName={TextIcon} color="#121212" />
-          <p>Generate Variable Text</p>
-        </button>
-      {/if}
-    </div>
-
-    <div class="row">
-      <div class="setting switch-setting">
-        <div class="switch-title">
-          <Section>Style Text Segments</Section>
-        </div>
-        <Switch value={styleTextSegments} bind:checked={styleTextSegments} on:change={onChangeConfig} />
-      </div>
-      <div class="setting switch-setting">
-        <div class="switch-title">
-          <Section>Include Figma Styles as Classes</Section>
-        </div>
-        <Switch value={applyStyleNames} bind:checked={applyStyleNames} on:change={onChangeConfig} />
-      </div>
-    </div>
-    <div class="row">
-      <div class="setting switch-setting">
-        <div class="switch-title">
-          <Section>Convert Header Styles to H Tags</Section>
-        </div>
-        <Switch value={applyHtags} bind:checked={applyHtags} on:change={onChangeConfig} />
-      </div>
-      <div class="setting switch-setting">
-        <div class="switch-title">
-          <Section>Include Google Fonts</Section>
-        </div>
-        <Switch value={includeGoogleFonts} bind:checked={includeGoogleFonts} on:change={onChangeConfig} />
-      </div>
-    </div>
-  </div>
-
-  <div class="group">
-    <div class="header">
-      <div class="group-title">
-        <Icon iconName={IconVisible} color="black" />
-        <h3>Output Preview</h3>
-      </div>
-    </div>
-
-    <div class="preview">
-      {#if exampleAssets.length > 0}
-        {#if exampleFile}
-          <div class="preview-card">
-            <div class="preview-card-image">
-              <Icon iconName={IconDraft} color="black" />
-            </div>
-            <div class="preview-card-content">
-              <h5>
-                {exampleFile.filename}.{exampleFile.extension.toLowerCase()}
-              </h5>
-            </div>
-          </div>
-        {/if}
-        {#each exampleAssets as asset, i}
-          <div class="preview-card">
-            <img class="preview-card-image" src={asset.url} alt="asset thumbnail" />
-            <div class="preview-card-content">
-              <h5>
-                {asset.filename}.{asset.extension.toLowerCase()}
-              </h5>
-              {#if asset.size}
-                {displaySize(asset.size)} ({scale}x)
-              {/if}
-            </div>
-          </div>
-        {/each}
-      {:else}
-        <div class="output-placeholder">Add a frame named #[size]px...</div>
-      {/if}
-    </div>
+  <div class="sticky w-2/3 h-full pb-12">
+    <Panel title="Preview" bind:expanded={views.preview} on:changeView={onChangeView}>
+      <Preview bind:exampleAssets bind:exampleFile bind:scale bind:showLoader />
+    </Panel>
   </div>
 </div>
 
-<div class="footer">
-  <div class="footer-inner">
-    <button
-      class="primary"
-      on:click={() => {
-        loading = true;
-        postMessage({ type: "export", config: buildConfig() });
-      }}
-      disabled={nodeCount === 0}>Export {nodeCount > 0 ? nodeCount + 1 : 0} Files</button
-    >
-    <button class="secondary" on:click={() => postMessage({ type: "reset" })}>
-      <Icon iconName={IconSwap} color="#121212" />
-      <p>Reset to Defaults</p>
-    </button>
-    <button class="secondary" on:click={() => postMessage({ type: "saveSettings" })}>
-      <Icon iconName={ImportIcon} color="#121212" />
-      <p>Save Settings</p>
-    </button>
-    <button class="secondary" on:click={() => postMessage({ type: "loadSettings" })}>
-      <Icon iconName={ExportIcon} color="#121212" />
-      <p>Load Settings</p>
-    </button>
-  </div>
-  <button class="ellipses" on:click={onToggleMenu}>
-    <Icon iconName={IconEllipses} color="#121212" />
-  </button>
-</div>
-
-{#if menuOpen}
-  <div class="menu-pane" transition:slide>
-    <a href="https://github.com/the-dataface/figma2html" target="_blank">
-      <div class="menu-row">
-        <Icon iconName={HelpIcon} /> About
-      </div>
-    </a>
-    <a href="https://github.com/the-dataface/figma2html/issues" target="_blank">
-      <div class="menu-row">
-        <Icon iconName={IconWarning} color="#121212" /> Report Issue
-      </div>
-    </a>
-  </div>
+{#if errorMessage}
+  <ErrorMessage {errorMessage} />
 {/if}
+
+<Footer
+  on:reset={onReset}
+  on:export={onSelectExport}
+  on:save={onSaveSettings}
+  on:load={onLoadSettings}
+  bind:nodeCount
+/>
+
+<style>
+  .content {
+    color: var(--figma-color-text);
+    min-height: calc(100% + 48px);
+  }
+
+  .control-panel {
+    border-right: 1px solid var(--figma-color-border);
+  }
+
+  .svg-wrapper {
+    display: none;
+  }
+
+  :global(.setting div) {
+    color: var(--figma-color-text) !important;
+  }
+
+  :global(input, textarea, .setting button) {
+    /* border: 1px solid var(--figma-color-border) !important; */
+    border: none !important;
+    background-color: var(--figma-color-bg-secondary) !important;
+    border-radius: 4px !important;
+    color: var(--figma-color-text) !important;
+  }
+
+  :global(.setting button) {
+    height: 36px !important;
+  }
+
+  :global(.input input, .setting button) {
+    height: 36px !important;
+  }
+
+  :global(svg) {
+    fill: var(--figma-color-text) !important;
+  }
+
+  :global(button svg) {
+    fill: var(--figma-color-text-secondary) !important;
+  }
+
+  :global(.content button) {
+    background-color: var(--figma-color-bg-secondary) !important;
+    border-radius: 4px !important;
+    height: 40px !important;
+    margin-top: 8px !important;
+  }
+
+  :global(.content button:hover) {
+    background-color: var(--figma-color-bg-tertiary) !important;
+  }
+
+  :global(.content button:focus) {
+    outline: 1px solid var(--figma-color-border-selected);
+  }
+
+  :global(.content button .label, .content button .placeholder) {
+    color: var(--figma-color-text) !important;
+    margin-top: 0 !important;
+  }
+
+  :global(.content button .caret svg path) {
+    fill: var(--figma-color-text-secondary) !important;
+  }
+
+  :global(.content button:hover .caret svg path) {
+    fill: var(--figma-color-text) !important;
+  }
+
+  :global(.content ul li .label) {
+    color: var(--figma-color-bg) !important;
+  }
+
+  :global(.figma-dark .content ul li .label) {
+    color: var(--figma-color-text) !important;
+  }
+</style>
