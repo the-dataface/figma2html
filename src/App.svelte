@@ -1,4 +1,6 @@
 <script lang="ts" type="module">
+  import "./app.css";
+
   import ExportIcon from "./img/icons/export.svg";
   import HelpIcon from "./img/icons/help.svg";
   import ImportIcon from "./img/icons/import.svg";

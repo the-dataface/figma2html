@@ -5,6 +5,8 @@ import commonjs from "@rollup/plugin-commonjs";
 import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
 import svg from "rollup-plugin-svg";
+import dsv from '@rollup/plugin-dsv';
+import json from '@rollup/plugin-json';
 import typescript from "@rollup/plugin-typescript";
 import sveltePreprocess from "svelte-preprocess";
 import htmlBundle from "rollup-plugin-html-bundle";
@@ -28,6 +30,7 @@ export default [
         dev: !production,
         preprocess: sveltePreprocess({
           sourceMap: !production,
+          postcss: true,
         }),
         compilerOptions: {
           dev: !production,
@@ -42,6 +45,8 @@ export default [
       typescript(),
       commonjs(),
       svg(),
+      dsv(),
+      json(),
       postcss({
         extensions: [".css"],
         plugins: [cssnano()],
@@ -66,7 +71,7 @@ export default [
       format: "cjs",
       name: "main",
     },
-    plugins: [typescript(), commonjs(), production && terser()],
+    plugins: [typescript(), commonjs(), json(), production && terser()],
   },
 ];
 
