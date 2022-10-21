@@ -30,7 +30,8 @@ export default (textFrames, frameWidth, frameHeight) => {
 
 		let segments = textFrame.getStyledTextSegments(props);
 		const styleId = textFrame.textStyleId;
-		const styleObject = figma.getStyleById(styleId);
+		// const styleObject = figma.getStyleById(styleId);
+		const styleObject = false;
 
 		segments.forEach((seg, i) => {
 			// get styles object from included props
