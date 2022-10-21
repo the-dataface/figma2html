@@ -20,7 +20,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 	const range = widthRange.ranges[widthRange.widths.indexOf(width)];
 	const height = node.height;
 	const aspectRatio = width / height;
-	const extension = config.extension.toLowerCase();
+	const extension = config.extension.value.toLowerCase();
 
 	frameContent.css += `\t${css.frame(id)}`;
 
@@ -40,7 +40,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 	// };
 
 	// if responsiveness is fixed, set the width to the max width
-	if (config.responsiveness === 'FIXED') inlineStyle += `width: ${width}px;`;
+	if (config.responsiveness === 'Fixed') inlineStyle += `width: ${width}px;`;
 
 	frameContent.html += `\n\t<!-- Frame: ${filename.split('/').slice(-1)} -->\n`;
 	frameContent.html += `\t<div ${stringify.attrs({

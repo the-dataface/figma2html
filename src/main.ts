@@ -5,6 +5,7 @@ import {
 	HTMLFile,
 	PreviewSettings,
 	Variable,
+	Views,
 } from './types';
 
 import yaml from 'js-yaml';
@@ -24,6 +25,51 @@ figma.showUI(__html__, { width: 560, height: 500, themeColors: true });
 const defaultVariables = {
 	hed: 'This is the headline',
 };
+
+class StoredViews {
+	static get = async (): Promise<Views> => {
+		const _views = await figma.clientStorage.getAsync('views');
+
+		if (!_views) {
+			return {
+				file: true,
+				images: false,
+				page: false,
+				text: false,
+				preview: true
+			};
+		} else return _views;
+	};
+
+	static set = async (_views: Views): Promise<Views> => {
+		await figma.clientStorage.setAsync('views', _views);
+		return _views;
+	}
+
+	static clear = async (): Promise<void> => {
+		await figma.clientStorage.deleteAsync('views');
+	}
+}
+
+class StoredSize {
+	static get = async () => {
+		const _size = await figma.clientStorage.getAsync('size');
+		if (!_size) {
+			return { w: 960, h: 500 };
+		} else {
+			return _size;
+		}
+	}
+
+	static set = async (_size: { w: number, h: number }) => {
+		await figma.clientStorage.setAsync('size', _size);
+		return _size;
+	}
+
+	static clear = async (): Promise<void> => {
+		await figma.clientStorage.deleteAsync('size');
+	};
+}
 
 class StoredVariables {
 	static get = async (): Promise<Variable> => {
@@ -121,13 +167,13 @@ class StoredConfig {
 		if (!_config) {
 			return {
 				syntax: camelize(figma.currentPage.name),
-				scale: 2,
-				extension: 'PNG',
-				fileType: 'HTML',
+				scale: { value: 2, label: "2x", selected: true },
+				extension: { value: 'PNG', label: 'png', selected: true },
+				fileType: { value: 'html', label: 'html', selected: true },
 				includeResizer: true,
 				testingMode: false,
 				maxWidth: null,
-				responsiveness: 'DYNAMIC',
+				responsiveness: { value: "Dynamic", label: "Dynamic", selected: true },
 				centerHtmlOutput: false,
 				clickableLink: null,
 				imagePath: 'img',
@@ -190,7 +236,7 @@ class StoredConfig {
 
 			// create the node
 			let textNode = figma.createText();
-			textNode.characters = yaml.dump(config);
+			textNode.characters = yaml.dump(formatConfig(config));
 			textNode.x = xPos || maxRight + 100;
 			textNode.y = minTop;
 			textNode.name = 'f2h-settings';
@@ -206,10 +252,28 @@ class StoredConfig {
 		log('settingsNode', settingsNode);
 
 		if (!!settingsNode?.characters) {
-			const config = yaml.load(settingsNode.characters);
+			const config = parseConfig(yaml.load(settingsNode.characters));
 			await StoredConfig.set(config);
 		}
 	};
+}
+
+const formatConfig = (__config) => {
+	__config.extension = __config.extension.value;
+	__config.fileType = __config.fileType.value;
+	__config.responsiveness = __config.responsiveness.value;
+	__config.scale = __config.scale.value;
+
+	return __config;
+}
+
+const parseConfig = (__config) => {
+	__config.extension = { value: __config.extension, label: __config.extension.toLowerCase(), selected: true };
+	__config.fileType = { value: __config.fileType, label: __config.fileType, selected: true };
+	__config.responsiveness = { value: __config.responsiveness, label: __config.responsiveness, selected: true };
+	__config.scale = { value: __config.scale, label: `${__config.scale}x`, selected: true };
+
+	return __config;
 }
 
 class TempFrame {
@@ -318,8 +382,8 @@ const getAssets = async (
 			previewSettings.isFinal
 				? baseExportConfig
 				: {
-					extension: 'JPG',
-					scale: 1,
+					extension: { value: 'JPG', label: 'jpg', selected: false },
+					scale: { value: 1, label: '1x', selected: false },
 					srcSize: previewSettings.thumbSize,
 				}
 		);
@@ -394,6 +458,7 @@ const refreshPreview = async (
 			nodeCount: exportables.length,
 			exampleAssets,
 			exampleFile,
+			loading: false,
 		},
 	});
 };
@@ -420,25 +485,53 @@ figma.ui.onmessage = async (message) => {
 	const type = message.type;
 	log('Message:', type);
 
-	let storedConfig;
-	let storedVariables;
+	let storedConfig, storedVariables, storedViews, storedSize;
 
 	switch (type) {
 		case 'init':
+			figma.ui.postMessage({
+				type: 'loading',
+				loading: true
+			});
+
+			storedSize = await StoredSize.get();
+			figma.ui.resize(storedSize.w, storedSize.h);
+
 			storedConfig = await StoredConfig.get();
 			storedVariables = await StoredVariables.get();
+			storedViews = await StoredViews.get();
+
 			log('Loaded stored config:', storedConfig);
 			log('Loaded stored variables:', storedVariables);
+
 			figma.ui.postMessage({
 				type: 'load',
 				config: storedConfig,
 				variables: storedVariables,
+				views: storedViews,
 			});
+
 			await refreshPreview(storedConfig, storedVariables);
 			break;
+		case 'view':
+			if (message.views) storedViews = await StoredViews.set(message.views);
+
+			break;
+		case 'resize':
+			if (message.size) storedSize = await StoredSize.set(message.size);
+			figma.ui.resize(storedSize.w, storedSize.h);
+			break;
 		case 'config':
+			figma.ui.postMessage({
+				type: 'loading',
+				loading: true
+			});
+
 			storedConfig = await StoredConfig.set(message.config);
 			storedVariables = await StoredVariables.get();
+
+			if (message.views) storedViews = await StoredViews.set(message.views);
+
 			await refreshPreview(storedConfig, storedVariables);
 			break;
 		case 'export':
@@ -447,15 +540,26 @@ figma.ui.onmessage = async (message) => {
 			break;
 		case 'reset':
 			await StoredConfig.clear();
+			await StoredSize.clear();
+			await StoredViews.clear();
+
 			storedConfig = await StoredConfig.get();
 			storedVariables = await StoredVariables.get();
-			log('Loaded stored config:', storedConfig);
-			log('Loaded stored variables:', storedVariables);
+			storedViews = await StoredViews.get();
+			storedSize = await StoredSize.get();
+
+			console.log(storedViews);
+
+			figma.ui.resize(storedSize.w, storedSize.h);
+
 			figma.ui.postMessage({
 				type: 'load',
 				config: storedConfig,
 				variables: storedVariables,
+				views: storedViews,
+				size: storedSize,
 			});
+
 			await refreshPreview(storedConfig, storedVariables);
 			break;
 		case 'saveSettings':
@@ -467,11 +571,13 @@ figma.ui.onmessage = async (message) => {
 			await StoredConfig.loadSettings();
 			storedConfig = await StoredConfig.get();
 			storedVariables = await StoredVariables.get();
+			storedViews = await StoredViews.get();
 			log('Loaded stored config:', storedConfig);
 			figma.ui.postMessage({
 				type: 'load',
 				config: storedConfig,
 				variables: storedVariables,
+				views: storedViews,
 			});
 			await refreshPreview(storedConfig, storedVariables);
 			break;

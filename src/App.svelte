@@ -1,33 +1,26 @@
 <script lang="ts" type="module">
   import "./app.css";
 
-  import ExportIcon from "./img/icons/export.svg";
-  import HelpIcon from "./img/icons/help.svg";
-  import ImportIcon from "./img/icons/import.svg";
-  import TextIcon from "./img/icons/text.svg";
-
-  import {
-    Icon,
-    IconAdjust,
-    IconDraft,
-    IconEllipses,
-    IconImage,
-    IconLibrary,
-    IconSpinner,
-    IconSwap,
-    IconVisible,
-    IconWarning,
-    Section,
-    SelectMenu,
-    Switch,
-  } from "figma-plugin-ds-svelte";
   import { onMount } from "svelte";
-  import { slide, fade } from "svelte/transition";
   import JSZip from "../node_modules/jszip/dist/jszip.min.js";
-  import { Asset, Config, Extension, FileType, HTMLFile, Scale, Responsiveness, Size } from "./types";
+  import { Asset, Config, Extension, FileType, HTMLFile, Loading, Scale, Responsiveness, Size, Views } from "./types";
 
-  let loading = false,
-    menuOpen = false;
+  import Panel from "./lib/components/Layout/Panel.svelte";
+
+  import ErrorMessage from "./lib/components/ErrorMessage.svelte";
+  import Footer from "./lib/components/Footer.svelte";
+
+  import File from "./lib/components/Controls/File.svelte";
+  import Images from "./lib/components/Controls/Images.svelte";
+  import Page from "./lib/components/Controls/Page.svelte";
+  import Preview from "./lib/components/Controls/Preview.svelte";
+  import Text from "./lib/components/Controls/Text.svelte";
+
+  let errorMessage,
+    errorTimeout,
+    loading = false;
+
+  let views = {};
 
   interface FileTypeOption {
     value: FileType;
@@ -38,8 +31,8 @@
 
   let fileType: FileType | undefined = undefined;
   let fileTypeOptions: FileTypeOption[] = [
-    { value: "HTML", label: "HTML", group: null, selected: false },
-    { value: "SVELTE", label: "SVELTE", group: null, selected: false }, // TO DO
+    { value: "html", label: "html", group: null, selected: false },
+    { value: "svelte", label: "svelte", group: null, selected: false }, // TO DO
   ];
 
   $: {
@@ -57,9 +50,9 @@
 
   let extension: Extension | undefined = undefined;
   let extensionOptions: ExtensionOption[] = [
-    { value: "PNG", label: "PNG", group: null, selected: false },
-    { value: "JPG", label: "JPG", group: null, selected: false },
-    { value: "SVG", label: "SVG", group: null, selected: false },
+    { value: "PNG", label: "png", group: null, selected: false },
+    { value: "JPG", label: "jpg", group: null, selected: false },
+    { value: "SVG", label: "svg", group: null, selected: false },
   ];
 
   $: {
@@ -95,8 +88,8 @@
 
   let responsiveness: Responsiveness | undefined = undefined;
   let responsivenessOptions: ResponsivenessOption[] = [
-    { value: "DYNAMIC", label: "DYNAMIC", selected: false },
-    { value: "FIXED", label: "FIXED", selected: false },
+    { value: "Dynamic", label: "Dynamic", selected: false },
+    { value: "Fixed", label: "Fixed", selected: false },
   ];
 
   $: {
@@ -122,15 +115,9 @@
   let exampleAssets: Asset[] = [];
   let exampleFile: HTMLFile;
 
-  let showVariablesButton = false;
+  $: showLoader = false;
 
-  const displaySize = (size: Size): string => {
-    const rounded: Size = {
-      width: Math.round(size.width),
-      height: Math.round(size.height),
-    };
-    return `${rounded.width}x${rounded.height}`;
-  };
+  let showVariablesButton = false;
 
   const buildConfig = (): Config => {
     return {
@@ -159,6 +146,7 @@
 
     if (type === "load") {
       const config = message.config as Config;
+      views = message.views as Views;
 
       syntax = config.syntax;
       extension = config.extension;
@@ -182,6 +170,9 @@
       exampleAssets = preview.exampleAssets;
       exampleFile = preview.exampleFile;
       exampleAssets = await buildPreviewImages(exampleAssets);
+      loading = message.loading as Loading;
+    } else if (type === "loading") {
+      loading = message.loading as Loading;
     } else if (type === "export") {
       const url = await buildZipArchive(message.assets, message.file);
       const link = document.createElement("a");
@@ -194,6 +185,8 @@
       }, 1500);
     } else if (type === "variables") {
       showVariablesButton = message.variables === null;
+    } else if (type === "error") {
+      setErrorMessage(message.message);
     }
   };
 
@@ -244,6 +237,18 @@
     );
   };
 
+  const onChangeView = () => {
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: "view",
+          views: views,
+        },
+      },
+      "*"
+    );
+  };
+
   const onSaveSettings = () => {
     parent.postMessage(
       {
@@ -253,6 +258,16 @@
       },
       "*"
     );
+  };
+
+  const setErrorMessage = (message: string) => {
+    clearTimeout(errorTimeout);
+    errorMessage = message;
+
+    // clear error message after 5 seconds
+    errorTimeout = setTimeout(() => {
+      errorMessage = undefined;
+    }, 3000);
   };
 
   const onLoadSettings = () => {
@@ -277,10 +292,6 @@
     );
   };
 
-  const onToggleMenu = () => {
-    menuOpen = !menuOpen;
-  };
-
   const buildPreviewImages = async (assets: Asset[]): Promise<Asset[]> => {
     assets.forEach((asset) => {
       let blob = new Blob([asset.data], { type: `image/png` });
@@ -295,7 +306,7 @@
     let zip = new JSZip();
 
     assets.forEach((asset) => {
-      const extensionLower = asset.extension.toLowerCase();
+      const extensionLower = asset.extension.value.toLowerCase();
       let blob = new Blob([asset.data], {
         type: `image/${extensionLower}`,
       });
@@ -305,7 +316,7 @@
     });
 
     let fileBlob = new Blob([file.data], { type: `string` });
-    zip.file(`${file.filename}.${file.extension.toLowerCase()}`, fileBlob, {
+    zip.file(`${file.filename}.${file.extension.value.toLowerCase()}`, fileBlob, {
       base64: true,
     });
 
@@ -314,357 +325,140 @@
 
     return url;
   };
+
+  let resizing = false;
+
+  const resizeWindow = (e) => {
+    if (!resizing) return;
+
+    const size = {
+      w: Math.max(50, Math.floor(e.clientX + 5)),
+      h: Math.max(50, Math.floor(e.clientY + 5)),
+    };
+
+    parent.postMessage({ pluginMessage: { type: "resize", size: size } }, "*");
+  };
+
+  const resizeDown = (e) => {
+    resizing = true;
+    // e.preventDefault();
+    window.addEventListener("mousemove", resizeWindow, true);
+    window.addEventListener("mouseup", resizeUp, true);
+  };
+
+  const resizeUp = () => {
+    resizing = false;
+    window.removeEventListener("mousemove", resizeWindow, true);
+    window.removeEventListener("mouseup", null);
+  };
+
+  $: console.log(views);
 </script>
 
-{#if loading}
-  <div class="overlay">
-    <div class="spinner">
-      <Icon iconName={IconSpinner} color="black" spin />
-    </div>
-  </div>
-{/if}
+<div
+  id="corner"
+  class="fixed bottom-0 right-0 cursor-se-resize w-4 h-4 z-[999] overflow-hidden"
+  on:mousedown={resizeDown}
+  on:mouseup={resizeUp}
+>
+  <i
+    class="ml-0.5 absolute text-xs text-gray-300 -rotate-45 -translate-x-1/4 -translate-y-1/4 fa-sharp fa-solid fa-grip-dots top-1/2 left-1/2"
+  />
+</div>
 
-<div class="content">
-  <div class="group">
-    <div class="header">
-      <div class="group-title">
-        <Icon iconName={IconDraft} color="black" />
-        <h3>File Output</h3>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="setting">
-        <Section>Filename</Section>
-        <input type="text" placeholder={syntax} bind:value={syntax} on:input={onChangeConfig} />
-      </div>
-      <div class="setting">
-        <Section>Filetype</Section>
-        <SelectMenu
-          bind:menuItems={fileTypeOptions}
-          on:change={(e) => {
-            fileType = e.detail.value;
-            onChangeConfig();
-          }}
+<div class="flex w-full overflow-hidden content">
+  <div class="flex flex-col w-1/3 min-h-full pb-12 control-panel">
+    {#if views}
+      <Panel title="File output" bind:expanded={views.file} on:changeView={onChangeView}>
+        <File bind:fileType bind:menuItems={fileTypeOptions} bind:syntax on:changeConfig={onChangeConfig} />
+      </Panel>
+      <Panel title="Image settings" bind:expanded={views.images} on:changeView={onChangeView}>
+        <Images
+          bind:scaleOptions
+          bind:scale
+          bind:extensionOptions
+          bind:extension
+          bind:imagePath
+          bind:altText
+          on:changeConfig={onChangeConfig}
         />
-      </div>
-    </div>
-  </div>
-
-  <div class="group">
-    <div class="header">
-      <div class="group-title">
-        <Icon iconName={IconImage} color="black" />
-        <h3>Image Settings</h3>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="setting">
-        <Section>Image Scale</Section>
-        <SelectMenu
-          bind:menuItems={scaleOptions}
-          disabled={!extension || extension === "SVG"}
-          on:change={(e) => {
-            scale = e.detail.value;
-            onChangeConfig();
-          }}
+      </Panel>
+      <Panel title="Page settings" bind:expanded={views.page} on:changeView={onChangeView}>
+        <Page
+          bind:includeResizer
+          bind:centerHtmlOutput
+          bind:responsiveness
+          bind:responsivenessOptions
+          bind:testingMode
+          bind:maxWidth
+          bind:clickableLink
+          on:changeConfig={onChangeConfig}
         />
-      </div>
-      <div class="setting">
-        <Section>Format</Section>
-        <SelectMenu
-          bind:menuItems={extensionOptions}
-          on:change={(e) => {
-            extension = e.detail.value;
-            onChangeConfig();
-          }}
+      </Panel>
+      <Panel title="Text settings" bind:expanded={views.text} on:changeView={onChangeView}>
+        <Text
+          bind:showVariablesButton
+          bind:styleTextSegments
+          bind:applyStyleNames
+          bind:applyHtags
+          bind:includeGoogleFonts
+          on:changeConfig={onChangeConfig}
+          on:writeVariables={onWriteVariables}
         />
-      </div>
-    </div>
-    <div class="row">
-      <div class="setting">
-        <Section>Path</Section>
-        <input type="text" placeholder="Image path" bind:value={imagePath} on:change={onChangeConfig} />
-      </div>
-      <div class="setting">
-        <Section>Alt Text</Section>
-        <input type="text" placeholder="Alt text" bind:value={altText} on:change={onChangeConfig} />
-      </div>
-    </div>
+      </Panel>
+    {/if}
   </div>
-
-  <div class="group">
-    <div class="header">
-      <div class="group-title">
-        <Icon iconName={IconAdjust} color="black" />
-        <h3>Page Settings</h3>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="setting switch-setting">
-        <div class="switch-title">
-          <Section>Include Resize Script</Section>
-        </div>
-        <Switch value={includeResizer} bind:checked={includeResizer} on:change={onChangeConfig} />
-      </div>
-      <div class="setting switch-setting">
-        <div class="switch-title">
-          <Section>Center HTML Output</Section>
-        </div>
-        <Switch value={centerHtmlOutput} bind:checked={centerHtmlOutput} on:change={onChangeConfig} />
-      </div>
-    </div>
-    <div class="row">
-      <div class="setting">
-        <Section>Responsiveness</Section>
-        <SelectMenu
-          bind:menuItems={responsivenessOptions}
-          on:change={(e) => {
-            responsiveness = e.detail.value;
-            onChangeConfig();
-          }}
-        />
-      </div>
-      <div class="setting switch-setting">
-        <div class="switch-title">
-          <Section>Testing Mode</Section>
-        </div>
-        <Switch value={testingMode} bind:checked={testingMode} on:change={onChangeConfig} />
-      </div>
-    </div>
-    <div class="row">
-      <div class="setting">
-        <Section>Add Max Container Width (px)</Section>
-        <input type="number" placeholder="1920" bind:value={maxWidth} on:input={onChangeConfig} />
-      </div>
-      <div class="setting">
-        <Section>Clickable Link</Section>
-        <input type="text" placeholder="Link image?" bind:value={clickableLink} on:change={onChangeConfig} />
-      </div>
-    </div>
-  </div>
-
-  <div class="group">
-    <div class="header">
-      <div class="group-title">
-        <Icon iconName={IconLibrary} color="black" />
-        <h3>Text Settings</h3>
-      </div>
-      {#if showVariablesButton}
-        <button class="generate" on:click={onWriteVariables} out:fade>
-          <Icon iconName={TextIcon} color="#121212" />
-          <p>Generate Variable Text</p>
-        </button>
-      {/if}
-    </div>
-
-    <div class="row">
-      <div class="setting switch-setting">
-        <div class="switch-title">
-          <Section>Style Text Segments</Section>
-        </div>
-        <Switch value={styleTextSegments} bind:checked={styleTextSegments} on:change={onChangeConfig} />
-      </div>
-      <div class="setting switch-setting">
-        <div class="switch-title">
-          <Section>Include Figma Styles as Classes</Section>
-        </div>
-        <Switch value={applyStyleNames} bind:checked={applyStyleNames} on:change={onChangeConfig} />
-      </div>
-    </div>
-    <div class="row">
-      <div class="setting switch-setting">
-        <div class="switch-title">
-          <Section>Convert Header Styles to H Tags</Section>
-        </div>
-        <Switch value={applyHtags} bind:checked={applyHtags} on:change={onChangeConfig} />
-      </div>
-      <div class="setting switch-setting">
-        <div class="switch-title">
-          <Section>Include Google Fonts</Section>
-        </div>
-        <Switch value={includeGoogleFonts} bind:checked={includeGoogleFonts} on:change={onChangeConfig} />
-      </div>
-    </div>
-  </div>
-
-  <div class="group">
-    <div class="header">
-      <div class="group-title">
-        <Icon iconName={IconVisible} color="black" />
-        <h3>Output Preview</h3>
-      </div>
-    </div>
-
-    <div class="preview">
-      {#if exampleAssets.length > 0}
-        {#if exampleFile}
-          <div class="preview-card">
-            <div class="preview-card-image">
-              <Icon iconName={IconDraft} color="black" />
-            </div>
-            <div class="preview-card-content">
-              <h5>{exampleFile.filename}.{exampleFile.extension.toLowerCase()}</h5>
-            </div>
-          </div>
-        {/if}
-        {#each exampleAssets as asset, i}
-          <div class="preview-card">
-            <img class="preview-card-image" src={asset.url} alt="asset thumbnail" />
-            <div class="preview-card-content">
-              <h5>{asset.filename}.{asset.extension.toLowerCase()}</h5>
-              {#if asset.size}
-                {displaySize(asset.size)} ({scale}x)
-              {/if}
-            </div>
-          </div>
-        {/each}
-      {:else}
-        <div class="output-placeholder">Add a frame named #[size]px...</div>
-      {/if}
-    </div>
+  <div class="sticky w-2/3 h-full pb-12">
+    <Panel title="Preview" bind:expanded={views.preview} on:changeView={onChangeView}>
+      <Preview bind:exampleAssets bind:exampleFile bind:scale bind:showLoader />
+    </Panel>
   </div>
 </div>
 
-<div class="footer">
-  <div class="footer-inner">
-    <button class="primary" on:click={onSelectExport} disabled={nodeCount === 0}
-      >Export {nodeCount > 0 ? nodeCount + 1 : 0} Files</button
-    >
-    <button class="secondary" on:click={onReset}>
-      <Icon iconName={IconSwap} color="#121212" />
-      <p>Reset to Defaults</p>
-    </button>
-    <button class="secondary" on:click={onSaveSettings}>
-      <Icon iconName={ImportIcon} color="#121212" />
-      <p>Save Settings</p>
-    </button>
-    <button class="secondary" on:click={onLoadSettings}>
-      <Icon iconName={ExportIcon} color="#121212" />
-      <p>Load Settings</p>
-    </button>
-  </div>
-  <button class="ellipses" on:click={onToggleMenu}>
-    <Icon iconName={IconEllipses} color="#121212" />
-  </button>
-</div>
-
-{#if menuOpen}
-  <div class="menu-pane" transition:slide>
-    <a href="https://github.com/the-dataface/figma2html" target="_blank">
-      <div class="menu-row">
-        <Icon iconName={HelpIcon} /> About
-      </div>
-    </a>
-    <a href="https://github.com/the-dataface/figma2html/issues" target="_blank">
-      <div class="menu-row">
-        <Icon iconName={IconWarning} color="#121212" /> Report Issue
-      </div>
-    </a>
-  </div>
+{#if errorMessage}
+  <ErrorMessage {errorMessage} />
 {/if}
+
+<Footer
+  on:reset={onReset}
+  on:export={onSelectExport}
+  on:save={onSaveSettings}
+  on:load={onLoadSettings}
+  bind:nodeCount
+/>
 
 <style>
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.9);
-    z-index: 999;
-  }
-
-  :global(.figma-dark .overlay) {
-    background-color: rgba(0, 0, 0, 0.9) !important;
-  }
-
-  .overlay .spinner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  h3 {
-    margin: 0;
-  }
-
-  p {
-    margin: 8px;
-  }
-
-  .link {
-    text-decoration: underline;
-    margin: 0;
-  }
-
   .content {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    /* gap: 12px; */
-    /* padding: 12px; */
-    font-size: small;
-    margin-bottom: 72px;
     color: var(--figma-color-text);
+    min-height: calc(100% + 48px);
   }
 
-  .group {
-    padding: 16px;
+  .control-panel {
+    border-right: 1px solid var(--figma-color-border);
   }
 
-  .group:not(:last-of-type) {
-    border-bottom: 1px solid var(--figma-color-border);
+  .svg-wrapper {
+    display: none;
   }
 
-  .footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 48px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    /* border-top: 1px solid lightgray; */
-    border-top: 1px solid var(--figma-color-border);
-    background: var(--figma-color-bg);
+  :global(.setting div) {
+    color: var(--figma-color-text) !important;
   }
 
-  .footer-inner {
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
+  :global(input, textarea, .setting button) {
+    /* border: 1px solid var(--figma-color-border) !important; */
+    border: none !important;
+    background-color: var(--figma-color-bg-secondary) !important;
+    border-radius: 4px !important;
+    color: var(--figma-color-text) !important;
   }
 
-  .menu-pane {
-    position: fixed;
-    bottom: 52px;
-    right: 8px;
-    display: flex;
-    flex-direction: column;
-    /* border: 1px solid var(--figma-color-text-secondary); */
-    border: 1px solid var(--figma-color-border);
-    border-radius: 8px;
-    background-color: var(--figma-color-bg);
+  :global(.setting button) {
+    height: 36px !important;
   }
 
-  .menu-row {
-    display: flex;
-    align-items: center;
-    padding: 8px;
-    font-size: 14px;
-    color: var(--figma-color-text);
-  }
-
-  .menu-row:hover {
-    color: var(--figma-color-text-secondary);
+  :global(.input input, .setting button) {
+    height: 36px !important;
   }
 
   :global(svg) {
@@ -675,242 +469,15 @@
     fill: var(--figma-color-text-secondary) !important;
   }
 
-  button.generate {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    border: none;
-    background: none;
-    color: var(--figma-color-text-secondary);
-    cursor: pointer;
-    font-size: 11px;
-  }
-
-  button.generate p {
-    margin-left: -4px;
-  }
-  button.generate:hover {
-    color: var(--figma-color-text) !important;
-    border: none !important;
-    background: none !important;
-  }
-
-  button.generate svg {
-    fill: var(--figma-color-text);
-  }
-
-  button.generate:hover svg {
-    fill: var(--figma-color-text-secondary);
-  }
-
-  .footer button {
-    height: 100%;
-    color: var(--figma-color-text);
-    padding: 0;
-    display: flex;
-    align-items: center;
-    flex-wrap: none;
-    cursor: pointer;
-    background: none;
-    border-radius: 0;
-    border: none;
-  }
-
-  .footer button:hover {
-    opacity: 0.8;
-  }
-
-  .footer button.primary {
-    padding: 8px 16px;
-    background: var(--figma-color-bg-success);
-    color: var(--figma-color-bg);
-    font-weight: bold;
-  }
-
-  :global(.figma-dark .footer button.primary) {
-    color: var(--figma-color-text) !important;
-  }
-
-  .footer button.primary:disabled {
-    cursor: not-allowed;
-    background: var(--figma-color-bg-secondary) !important;
-  }
-
-  .footer button.secondary {
-    font-size: 11px;
-    color: var(--figma-color-text-secondary);
-  }
-
-  .footer button.secondary p {
-    margin-left: -4px;
-  }
-
-  .footer button.secondary:hover {
-    opacity: 0.8;
-  }
-
-  .footer button.ellipses {
-    padding: 8px 8px;
-    border-left: 1px solid var(--figma-color-border);
-  }
-
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .group-title {
-    display: flex;
-    align-items: center;
-  }
-
-  .row {
-    display: flex;
-    flex: 1;
-    flex-direction: row;
-    gap: 8px;
-  }
-
-  .setting {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-  }
-
-  :global(.setting div) {
-    color: var(--figma-color-text) !important;
-  }
-
-  .switch-setting {
-    margin-bottom: 16px;
-  }
-
-  .switch-title {
-    margin-bottom: -12px;
-  }
-
-  .preview {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .preview-card {
-    width: calc(50% - 6px);
-    border: 1px solid var(--figma-color-border);
-    border-radius: 8px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    padding: 8px;
-    gap: 12px;
-  }
-
-  .preview-card-image {
-    width: 48px;
-    height: 48px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0px 0px 13.5155px rgba(0, 0, 0, 0.05);
-  }
-
-  :global(.figma-dark .preview-card-image) {
-    box-shadow: 0px 0px 13.5155px rgba(255, 255, 255, 0.1) !important;
-  }
-
-  .preview-card-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .preview-card-content h5 {
-    font-size: 12px;
-    font-weight: 700;
-    margin: 0 0 4px;
-  }
-
-  .preview-card-content p {
-    font-size: 10px;
-    font-weight: 400;
-    margin: 0;
-  }
-
-  .output-preview {
-    font-size: 12px;
-    display: flex;
-    flex-direction: column;
-    overflow-y: scroll;
-    height: 150px;
-    padding: 8px;
-    border: 1px solid lightgray;
-    border-radius: 4px;
-  }
-
-  .output-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .output-thumb {
-    width: 32px;
-    height: 32px;
-    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
-  }
-
-  .output-filename {
-    display: flex;
-    flex: 1;
-    white-space: nowrap;
-    overflow-x: hidden;
-  }
-
-  .output-placeholder {
-    color: #999;
-  }
-
-  input {
-    font-size: 12px;
-    height: 32px;
-    padding: 8px;
-  }
-
-  :global(input) {
-    border: 1px solid var(--figma-color-border);
-    background-color: var(--figma-color-bg);
-    border-radius: 1px;
-    color: var(--figma-color-text);
-  }
-
-  :global(input:hover) {
-    border: 1px solid var(--figma-color-border-strong);
-  }
-
-  :global(input:focus) {
-    outline: 1px solid var(--figma-color-border-selected);
-  }
-
-  :global(input::placeholder) {
-    color: var(--figma-color-text-tertiary);
-  }
-
   :global(.content button) {
-    background-color: var(--figma-color-bg) !important;
-    border-radius: 1px !important;
-    height: 32px !important;
-    margin-top: 0 !important;
+    background-color: var(--figma-color-bg-secondary) !important;
+    border-radius: 4px !important;
+    height: 40px !important;
+    margin-top: 8px !important;
   }
 
   :global(.content button:hover) {
-    border: 1px solid var(--figma-color-border) !important;
+    background-color: var(--figma-color-bg-tertiary) !important;
   }
 
   :global(.content button:focus) {
@@ -936,38 +503,5 @@
 
   :global(.figma-dark .content ul li .label) {
     color: var(--figma-color-text) !important;
-  }
-
-  :global(.switch-setting label:before) {
-    background-color: var(--figma-color-bg) !important;
-    border: 1px solid var(--figma-color-border) !important;
-    height: 18px !important;
-    width: 32px !important;
-    border-radius: 10px !important;
-    transition: all;
-  }
-
-  :global(.switch-setting:hover label:before) {
-    border: 1px solid var(--figma-color-border-strong) !important;
-  }
-
-  :global(.switch-setting label:after) {
-    background-color: var(--figma-color-bg-secondary) !important;
-    border: none !important;
-    top: 14px !important;
-    left: 12px !important;
-    height: 12px !important;
-    width: 12px !important;
-  }
-
-  :global(.switch-setting input:checked + label:before) {
-    background-color: var(--figma-color-bg) !important;
-    border: 1px solid var(--figma-color-text) !important;
-  }
-
-  :global(.switch-setting input:checked + label:after) {
-    background-color: var(--figma-color-bg-success) !important;
-    border: none !important;
-    left: 14px !important;
   }
 </style>

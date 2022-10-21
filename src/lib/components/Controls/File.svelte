@@ -1,0 +1,57 @@
+<script>
+  import { createEventDispatcher } from "svelte";
+
+  import Input from "../Inputs/Input.svelte"
+  import SelectMenu from "../Inputs/SelectMenu.svelte";
+
+  const dispatch = createEventDispatcher();
+
+  export let fileType = undefined;
+  export let menuItems = [];
+  export let syntax = undefined;
+</script>
+
+<div class="w-full flex flex-col gap-2">
+    <div>
+        <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+            <h5 class="m-0 text-xs">File name</h5>
+        </div>
+        <div class="input-row">
+            <div class="w-full">
+                <Input bind:value={syntax} placeholder={syntax} on:change={() => dispatch("changeConfig")} />
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+            <h5 class="m-0 text-xs">File type</h5>
+        </div>
+        <div class="input-row">
+            <div class="w-full">
+                    <SelectMenu
+                        bind:menuItems
+                        bind:value={fileType}
+                        on:change={() => dispatch("changeConfig")} />
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+  .input-row {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .toggle-button {
+    border: none !important;
+    background-color: var(--figma-color-bg-secondary) !important;
+    color: var(--figma-color-text) !important;
+  }
+
+  .toggle-button.active {
+    border: 2px solid var(--figma-color-bg-success) !important;
+  }
+</style>

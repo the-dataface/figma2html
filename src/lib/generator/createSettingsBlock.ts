@@ -7,11 +7,11 @@ export default (config: {
 }): { settings: ExportSettings; destSize?: Size } => {
 	const { extension, scale, srcSize } = config;
 
-	if (scale && extension !== 'SVG') {
-		const value = scale;
+	if (scale && extension.value !== 'SVG') {
+		const value = scale.value;
 		return {
 			settings: {
-				format: extension,
+				format: extension.value,
 				constraint: { type: 'SCALE', value },
 			},
 			destSize: {
@@ -22,7 +22,7 @@ export default (config: {
 	} else {
 		return {
 			settings: {
-				format: extension,
+				format: extension.value,
 			},
 			destSize: srcSize,
 		};
