@@ -12,6 +12,7 @@
     "paths": {
       "*": ["./src/*"],
     },
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
   }
 }
