@@ -172,7 +172,7 @@ class StoredConfig {
 				includeResizer: true,
 				testingMode: false,
 				maxWidth: null,
-				responsiveness: { value: "Dynamic", label: "Dynamic", selected: true },
+				fluid: true,
 				centerHtmlOutput: false,
 				clickableLink: null,
 				imagePath: 'img',
