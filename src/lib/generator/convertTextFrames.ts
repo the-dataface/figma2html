@@ -39,24 +39,40 @@ export default (textFrames, frameWidth, frameHeight) => {
 				styleString = styleProps.styles(seg, props).styleString;
 
 			// is this segment's style the same as the first segment's style, except for font weight and font style?
-			const isBaseStyle = i === 0 ? true :
-				stylesObject["font-family"] === textSegments[0].stylesObject["font-family"] &&
-				stylesObject["font-size"] === textSegments[0].stylesObject["font-size"] &&
-				stylesObject["letter-spacing"] === textSegments[0].stylesObject["letter-spacing"] &&
-				stylesObject["color"] === textSegments[0].stylesObject["color"] &&
-				stylesObject["line-height"] === textSegments[0].stylesObject["line-height"] &&
-				stylesObject["mix-blend-mode"] === textSegments[0].stylesObject["mix-blend-mode"] &&
-				stylesObject["text-decoration"] === textSegments[0].stylesObject["text-decoration"] &&
-				stylesObject["text-transform"] === textSegments[0].stylesObject["text-transform"];
+			const isBaseStyle =
+				i === 0
+					? true
+					: stylesObject['font-family'] ===
+							textSegments[0].stylesObject['font-family'] &&
+					  stylesObject['font-size'] ===
+							textSegments[0].stylesObject['font-size'] &&
+					  stylesObject['letter-spacing'] ===
+							textSegments[0].stylesObject['letter-spacing'] &&
+					  stylesObject['color'] ===
+							textSegments[0].stylesObject['color'] &&
+					  stylesObject['line-height'] ===
+							textSegments[0].stylesObject['line-height'] &&
+					  stylesObject['mix-blend-mode'] ===
+							textSegments[0].stylesObject['mix-blend-mode'] &&
+					  stylesObject['text-decoration'] ===
+							textSegments[0].stylesObject['text-decoration'] &&
+					  stylesObject['text-transform'] ===
+							textSegments[0].stylesObject['text-transform'];
 
 			// is this segment's font-weight 700 (bold) (only if isBaseStyle is false)?
-			const isBold = isBaseStyle && stylesObject["font-weight"] === 700;
+			const isBold = isBaseStyle && stylesObject['font-weight'] === 700;
 
 			// is this segment's font-weight neither 400 or 700 (only if isBaseStyle is false)?
-			const isOtherWeight = isBaseStyle && stylesObject["font-weight"] !== 400 && stylesObject["font-weight"] !== 700 ? stylesObject["font-weight"] : false;
+			const isOtherWeight =
+				isBaseStyle &&
+				stylesObject['font-weight'] !== 400 &&
+				stylesObject['font-weight'] !== 700
+					? stylesObject['font-weight']
+					: false;
 
 			// is this segment's font-style italic (only if isBaseStyle is false)?
-			const isItalic = isBaseStyle && stylesObject["font-style"] === "italic";
+			const isItalic =
+				isBaseStyle && stylesObject['font-style'] === 'italic';
 
 			textSegments.push({
 				characters: seg.characters,
@@ -69,55 +85,67 @@ export default (textFrames, frameWidth, frameHeight) => {
 				isBaseStyle,
 				isBold,
 				isOtherWeight,
-				isItalic
+				isItalic,
 			});
 		});
 
 		if (styleId && typeof styleId !== 'symbol' && styleObject)
-			elClass += ` ${dashify(styleObject.name.split('/')[styleObject.name.split('/').length - 1])}`
+			elClass += ` ${dashify(
+				styleObject.name.split('/')[
+					styleObject.name.split('/').length - 1
+				]
+			)}`;
 
 		// get base style and change font-weight to 400 and style to normal
-		const tag = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(
-			trim(elClass)
-		) ? trim(elClass) : 'p';
-		const baseStyle = { tag, style: textSegments[0].styleString.replace('font-weight: 700', 'font-weight: 400').replace('font-style: italic', 'font-style: normal'); }
+		const tag = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(trim(elClass))
+			? trim(elClass)
+			: 'p';
+		const baseStyle = {
+			tag,
+			style: textSegments[0].styleString
+				.replace('font-weight: 700', 'font-weight: 400')
+				.replace('font-style: italic', 'font-style: normal'),
+		};
 
 		// turn layer name into custom attributes if it starts with [f2h]
 		if (textFrame.name.startsWith('[f2h]')) {
 			let layerName = textFrame.name.replace('[f2h]', '');
 			let attributes = layerName.split(';');
 
-			attributes.forEach(attr => {
+			attributes.forEach((attr) => {
 				customAttributes.push({
 					key: attr.split(':')[0],
-					value: attr.split(':')[1].split(',').map(v => v.trim())
+					value: attr
+						.split(':')[1]
+						.split(',')
+						.map((v) => v.trim()),
 				});
 			});
 		}
 
 		// get x positioning based on horizontal alignment
-		if (textFrame.textAlignHorizontal === "LEFT") {
+		if (textFrame.textAlignHorizontal === 'LEFT') {
 			x = (textFrame.x / frameWidth) * 100;
 			translateX = 0;
-		} else if (textFrame.textAlignHorizontal === "CENTER") {
+		} else if (textFrame.textAlignHorizontal === 'CENTER') {
 			x = ((textFrame.x + textFrame.width / 2) / frameWidth) * 100;
 			translateX = -50;
-		} else if (textFrame.textAlignHorizontal === "RIGHT") {
+		} else if (textFrame.textAlignHorizontal === 'RIGHT') {
 			x = ((textFrame.x + textFrame.width) / frameWidth) * 100;
 			translateX = -100;
-		} else if (textFrame.textAlignHorizontal === "JUSTIFIED") {
+		} else if (textFrame.textAlignHorizontal === 'JUSTIFIED') {
 			x = (textFrame.x / frameWidth) * 100;
 			translateX = 0;
 		}
 
 		// get y positioning based on vertical alignment
-		if (textFrame.textAlignVertical === "TOP") {
+		if (textFrame.textAlignVertical === 'TOP') {
 			y = (textFrame.y / frameHeight) * 100;
 			translateY = 0;
-		} else if (textFrame.textAlignVertical === "CENTER") {
+		} else if (textFrame.textAlignVertical === 'CENTER') {
 			y = ((textFrame.y + textFrame.height / 2) / frameHeight) * 100;
 			translateY = -50;
-		} else if (textFrame.textAlignVertical === "BOTTOM") {
+		} else if (textFrame.textAlignVertical === 'BOTTOM') {
 			y = ((textFrame.y + textFrame.height) / frameHeight) * 100;
 			translateY = -100;
 		}

@@ -42,7 +42,9 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 	// if responsiveness is fixed, set the width to the max width
 	if (config.responsiveness === 'Fixed') inlineStyle += `width: ${width}px;`;
 
-	frameContent.html += `\n\t<!-- Frame: ${filename.split('/').slice(-1)} -->\n`;
+	frameContent.html += `\n\t<!-- Frame: ${filename
+		.split('/')
+		.slice(-1)} -->\n`;
 	frameContent.html += `\t<div ${stringify.attrs({
 		id: id,
 		class: `${frameClass.replace(':', '-')} frame artboard`,
@@ -78,16 +80,24 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 		const baseStyles = textData.map((text) => text.baseStyle);
 
 		// get the most frequent value in baseStyles and make pStyle equal to it
-		pStyle = baseStyles.sort((a, b) => baseStyles.filter((v) => v === a).length - baseStyles.filter((v) => v === b).length).pop();
+		pStyle = baseStyles
+			.sort(
+				(a, b) =>
+					baseStyles.filter((v) => v === a).length -
+					baseStyles.filter((v) => v === b).length
+			)
+			.pop();
 
 		// add pStyle to css
 		if (config.styleTextSegments)
-			if (pStyle) frameContent.css += `\n\t#${id} ${pStyle.tag} { ${pStyle.style.replaceAll('undefined', '')} }`;
+			if (pStyle)
+				frameContent.css += `\n\t#${id} ${pStyle.tag
+					} { ${pStyle.style.replaceAll('undefined', '')} }`;
 
 		textData.forEach((text) => {
 			let el = ``;
-			let elClass = "f2h-text";
-			let elAttributes = "";
+			let elClass = 'f2h-text';
+			let elAttributes = '';
 
 			let effect = '';
 			if (!!text.effect.length) effect = css.textEffect(text.effect);
@@ -101,7 +111,9 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 			};
 
 			// if (text.rotation !== 0) {
-			style['transform'] = `translate(${text.translate}) rotate(${text.rotation}deg)`;
+			style[
+				'transform'
+			] = `translate(${text.translate}) rotate(${text.rotation}deg)`;
 			style['transform-origin'] = 'left top';
 			style['text-align'] = text.horizontalAlignment.toLowerCase();
 			// }
@@ -146,7 +158,8 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 			// if text.customAttributes array contains an object with key 'class', add it to the class
 			if (text.customAttributes.length) {
 				text.customAttributes.forEach((attr) => {
-					if (attr.key === 'class') elClass += ` ${attr.value.join(" ")}`;
+					if (attr.key === 'class')
+						elClass += ` ${attr.value.join(' ')}`;
 					else elAttributes += ` ${attr.key}="${attr.value}"`;
 				});
 			}
@@ -155,9 +168,10 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 				style
 			)} ${effect}">`;
 
-			els.forEach(element => {
+			els.forEach((element) => {
 				el += `\n\t\t\t<${element.tag} ${stringify.attrs({
-					class: `${text.elId} ${text.class} ${text.customClasses ? text.customClasses.join(' ') : ''}`
+					class: `${text.elId} ${text.class} ${text.customClasses ? text.customClasses.join(' ') : ''
+						}`,
 				})}>`;
 
 				element.segments.forEach((segment) => {
@@ -168,7 +182,15 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 
 				if (config.styleTextSegments) {
 					// if text.baseStyle is not the same as pStyle, append text.baseStyle to frameContent.css
-					if (text.baseStyle.style !== pStyle.style) frameContent.css += `\n\t#${id} .${text.elId}${text.class.replaceAll(' ', '.')} { ${text.baseStyle.style.replaceAll('undefined', '')} }`;
+					if (text.baseStyle.style !== pStyle.style)
+						frameContent.css += `\n\t#${id} .${text.elId
+							}${text.class.replaceAll(
+								' ',
+								'.'
+							)} { ${text.baseStyle.style.replaceAll(
+								'undefined',
+								''
+							)} }`;
 				}
 			});
 

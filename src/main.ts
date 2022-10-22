@@ -1,3 +1,12 @@
+import yaml from 'js-yaml';
+
+import createSettingsBlock from 'lib/generator/createSettingsBlock';
+import { createGroupsFromFrames } from 'lib/generator/group';
+import html from 'lib/generator/html/wrapper';
+import { fontList } from 'lib/generator/styleProps';
+import camelize from 'lib/utils/camelize';
+import log from 'lib/utils/log';
+
 import {
 	Asset,
 	Config,
@@ -7,16 +16,6 @@ import {
 	Variable,
 	Views,
 } from './types';
-
-import yaml from 'js-yaml';
-
-import camelize from 'lib/utils/camelize';
-import log from 'lib/utils/log';
-
-import createSettingsBlock from 'lib/generator/createSettingsBlock';
-import { fontList } from 'lib/generator/styleProps';
-import html from 'lib/generator/html/wrapper';
-import { createGroupsFromFrames } from 'lib/generator/group';
 
 log(fontList);
 
@@ -86,14 +85,14 @@ class StoredVariables {
 
 			figma.ui.postMessage({
 				type: 'variables',
-				variables: variables
+				variables: variables,
 			});
 
 			return variables;
 		} else {
 			figma.ui.postMessage({
 				type: 'variables',
-				variables: null
+				variables: null,
 			});
 
 			return defaultVariables;
@@ -152,7 +151,7 @@ class StoredVariables {
 
 			figma.ui.postMessage({
 				type: 'variables',
-				variables: storedVariables || defaultVariables
+				variables: storedVariables || defaultVariables,
 			});
 		});
 	};
@@ -364,7 +363,10 @@ const getAssets = async (
 		asset.node = grouplessNode;
 		// asset.node = originalNode;
 
-		const filename = `${config.imagePath}/${exportable.parentName.replace('#', '')}`;
+		const filename = `${config.imagePath}/${exportable.parentName.replace(
+			'#',
+			''
+		)}`;
 		asset.filename = filename;
 
 		// generate image data
@@ -409,7 +411,9 @@ const withModificationsForText = (node: FrameNode): FrameNode => {
 	const allNodes = node.findAll((node) => node.type === 'FRAME');
 
 	// find all frame nodes within the frame with a child node of type TEXT
-	const allTextNodes = allNodes.filter((node) => node.children.find((child) => child.type === 'TEXT'));
+	const allTextNodes = allNodes.filter((node) =>
+		node.children.find((child) => child.type === 'TEXT')
+	);
 
 	// convert all frames to groups for positioning
 	const groups: GroupNode[] = createGroupsFromFrames(allTextNodes);
@@ -417,8 +421,10 @@ const withModificationsForText = (node: FrameNode): FrameNode => {
 	return node;
 };
 
-const withModificationsForExport = (node: FrameNode, config: Config): FrameNode => {
-
+const withModificationsForExport = (
+	node: FrameNode,
+	config: Config
+): FrameNode => {
 	const textNodes = node.findAll((c) => c.type === 'TEXT');
 
 	if (!config.testingMode) {
@@ -482,7 +488,7 @@ const generateExport = async (config: Config, variables: Variable) => {
 };
 
 figma.ui.onmessage = async (message) => {
-	const type = message.type;
+	const { type } = message;
 	log('Message:', type);
 
 	let storedConfig, storedVariables, storedViews, storedSize;

@@ -142,7 +142,6 @@
 
   window.onmessage = async (event: MessageEvent) => {
     const message = event.data.pluginMessage;
-    const type = message.type;
 
     if (type === "load") {
       const config = message.config as Config;
@@ -190,52 +189,16 @@
     }
   };
 
-  onMount(() => {
-    parent.postMessage(
-      {
-        pluginMessage: {
-          type: "init",
-        },
-      },
-      "*"
-    );
-  });
+  interface PostMessage {
+    type: "init" | "load" | "config" | "export" | "reset" | "saveSettings" | "loadSettings" | "writeVariables";
+    config?: Config | null;
+  }
 
-  const onChangeConfig = () => {
-    parent.postMessage(
-      {
-        pluginMessage: {
-          type: "config",
-          config: buildConfig(),
-        },
-      },
-      "*"
-    );
-  };
+  const postMessage = (message: PostMessage) => parent.postMessage({ pluginMessage: message }, "*");
 
-  const onSelectExport = () => {
-    loading = true;
-    parent.postMessage(
-      {
-        pluginMessage: {
-          type: "export",
-          config: buildConfig(),
-        },
-      },
-      "*"
-    );
-  };
+  onMount(() => postMessage({ type: "init" }));
 
-  const onReset = () => {
-    parent.postMessage(
-      {
-        pluginMessage: {
-          type: "reset",
-        },
-      },
-      "*"
-    );
-  };
+  const onChangeConfig = () => postMessage({ type: "config", config: buildConfig() });
 
   const onChangeView = () => {
     parent.postMessage(
