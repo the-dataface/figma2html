@@ -3,7 +3,7 @@
 
   import { onMount } from "svelte";
   import JSZip from "../node_modules/jszip/dist/jszip.min.js";
-  import { Asset, Config, Extension, FileType, HTMLFile, Loading, Scale, Responsiveness, Size, Views } from "./types";
+  import { Asset, Config, Extension, FileType, HTMLFile, Loading, Scale, Size, Views } from "./types";
 
   import Panel from "./lib/components/Layout/Panel.svelte";
 
@@ -80,26 +80,9 @@
     });
   }
 
-  interface ResponsivenessOption {
-    value: Responsiveness;
-    label: string;
-    selected: boolean;
-  }
-
-  let responsiveness: Responsiveness | undefined = undefined;
-  let responsivenessOptions: ResponsivenessOption[] = [
-    { value: "Dynamic", label: "Dynamic", selected: false },
-    { value: "Fixed", label: "Fixed", selected: false },
-  ];
-
-  $: {
-    responsivenessOptions.forEach((o, i) => {
-      responsivenessOptions[i].selected = o.value === responsiveness;
-    });
-  }
-
   let syntax: string | undefined = undefined;
   let includeResizer = true;
+  let fluid = true;
   let testingMode = false;
   let centerHtmlOutput = false;
   let applyStyleNames = false;
@@ -142,6 +125,7 @@
 
   window.onmessage = async (event: MessageEvent) => {
     const message = event.data.pluginMessage;
+    const type = message.type;
 
     if (type === "load") {
       const config = message.config as Config;
@@ -154,7 +138,7 @@
       includeResizer = config.includeResizer;
       testingMode = config.testingMode;
       maxWidth = config.maxWidth;
-      responsiveness = config.responsiveness;
+      fluid = config.fluid;
       centerHtmlOutput = config.centerHtmlOutput;
       clickableLink = config.clickableLink;
       imagePath = config.imagePath;
@@ -199,6 +183,11 @@
   onMount(() => postMessage({ type: "init" }));
 
   const onChangeConfig = () => postMessage({ type: "config", config: buildConfig() });
+  const onSelectExport = () => {
+    loading = true;
+    postMessage({ type: "export", config: buildConfig() });
+  };
+  const onReset = () => postMessage({ type: "reset" });
 
   const onChangeView = () => {
     parent.postMessage(
@@ -350,8 +339,7 @@
         <Page
           bind:includeResizer
           bind:centerHtmlOutput
-          bind:responsiveness
-          bind:responsivenessOptions
+          bind:fluid
           bind:testingMode
           bind:maxWidth
           bind:clickableLink

@@ -40,7 +40,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 	// };
 
 	// if responsiveness is fixed, set the width to the max width
-	if (config.responsiveness === 'Fixed') inlineStyle += `width: ${width}px;`;
+	if (!config.fluid) inlineStyle += `width: ${width}px;`;
 
 	frameContent.html += `\n\t<!-- Frame: ${filename
 		.split('/')
