@@ -1,7 +1,6 @@
 export type Extension = { value: 'PNG', label: 'png', selected: false } | { value: 'JPG', label: 'jpg', selected: false } | { value: 'SVG', label: 'svg', selected: false };
 export type FileType = { value: 'html', label: 'html', selected: false } | { value: 'svelte', label: 'svelte', selected: false };
 export type Scale = { value: 1, label: "1x", selected: false } | { value: 2, label: "2x", selected: false } | { value: 4, label: "4x", selected: false };
-export type Responsiveness = { value: "Dynamic", label: "Dynamic", selected: false } | { value: "Fixed", label: "Fixed", selected: false };
 export type Loading = boolean;
 
 export interface Config {

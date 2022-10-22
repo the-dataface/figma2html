@@ -172,7 +172,7 @@ class StoredConfig {
 				includeResizer: true,
 				testingMode: false,
 				maxWidth: null,
-				responsiveness: { value: "Dynamic", label: "Dynamic", selected: true },
+				fluid: true,
 				centerHtmlOutput: false,
 				clickableLink: null,
 				imagePath: 'img',
@@ -260,7 +260,6 @@ class StoredConfig {
 const formatConfig = (__config) => {
 	__config.extension = __config.extension.value;
 	__config.fileType = __config.fileType.value;
-	__config.responsiveness = __config.responsiveness.value;
 	__config.scale = __config.scale.value;
 
 	return __config;
@@ -269,7 +268,6 @@ const formatConfig = (__config) => {
 const parseConfig = (__config) => {
 	__config.extension = { value: __config.extension, label: __config.extension.toLowerCase(), selected: true };
 	__config.fileType = { value: __config.fileType, label: __config.fileType, selected: true };
-	__config.responsiveness = { value: __config.responsiveness, label: __config.responsiveness, selected: true };
 	__config.scale = { value: __config.scale, label: `${__config.scale}x`, selected: true };
 
 	return __config;
