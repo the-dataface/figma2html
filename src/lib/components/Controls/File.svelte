@@ -1,7 +1,8 @@
 <script>
   import { createEventDispatcher } from "svelte";
 
-  import Input from "../Inputs/Input.svelte"
+  import Checkbox from "../Inputs/Checkbox.svelte";
+  import Input from "../Inputs/Input.svelte";
   import SelectMenu from "../Inputs/SelectMenu.svelte";
 
   const dispatch = createEventDispatcher();
@@ -9,33 +10,40 @@
   export let fileType = undefined;
   export let menuItems = [];
   export let syntax = undefined;
+  export let testingMode = false;
 </script>
 
 <div class="w-full flex flex-col gap-2">
-    <div>
-        <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
-            <h5 class="m-0 text-xs">File name</h5>
-        </div>
-        <div class="input-row">
-            <div class="w-full">
-                <Input bind:value={syntax} placeholder={syntax} on:change={() => dispatch("changeConfig")} />
-            </div>
-        </div>
+  <div>
+    <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+      <h5 class="m-0 text-xs">File name</h5>
     </div>
+    <div class="input-row">
+      <div class="w-full">
+        <Input bind:value={syntax} placeholder={syntax} on:change={() => dispatch("changeConfig")} />
+      </div>
+    </div>
+  </div>
 
-    <div>
-        <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
-            <h5 class="m-0 text-xs">File type</h5>
-        </div>
-        <div class="input-row">
-            <div class="w-full">
-                    <SelectMenu
-                        bind:menuItems
-                        bind:value={fileType}
-                        on:change={() => dispatch("changeConfig")} />
-            </div>
-        </div>
+  <div>
+    <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+      <h5 class="m-0 text-xs">File type</h5>
     </div>
+    <div class="input-row">
+      <div class="w-full">
+        <SelectMenu bind:menuItems bind:value={fileType} on:change={() => dispatch("changeConfig")} />
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-2">
+    <Checkbox
+      bind:value={testingMode}
+      bind:checked={testingMode}
+      label="Testing mode"
+      on:change={() => dispatch("changeConfig")}
+    />
+  </div>
 </div>
 
 <style>

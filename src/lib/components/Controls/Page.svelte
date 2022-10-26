@@ -3,14 +3,12 @@
 
   import Checkbox from "../Inputs/Checkbox.svelte";
   import Input from "../Inputs/Input.svelte";
-  import SelectMenu from "../Inputs/SelectMenu.svelte";
 
   const dispatch = createEventDispatcher();
 
   export let includeResizer = false;
   export let centerHtmlOutput = false;
   export let fluid = false;
-  export let testingMode = false;
   export let maxWidth = undefined;
   export let clickableLink = undefined;
 </script>
@@ -26,12 +24,6 @@
     bind:value={centerHtmlOutput}
     bind:checked={centerHtmlOutput}
     label="Center HTML output"
-    on:change={() => dispatch("changeConfig")}
-  />
-  <Checkbox
-    bind:value={testingMode}
-    bind:checked={testingMode}
-    label="Testing mode"
     on:change={() => dispatch("changeConfig")}
   />
   <Checkbox

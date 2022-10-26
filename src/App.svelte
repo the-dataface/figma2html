@@ -321,8 +321,14 @@
 <div class="flex w-full overflow-hidden content">
   <div class="flex flex-col w-1/3 min-h-full pb-12 control-panel">
     {#if views}
-      <Panel title="File output" bind:expanded={views.file} on:changeView={onChangeView}>
-        <File bind:fileType bind:menuItems={fileTypeOptions} bind:syntax on:changeConfig={onChangeConfig} />
+      <Panel title="File settings" bind:expanded={views.file} on:changeView={onChangeView}>
+        <File
+          bind:fileType
+          bind:testingMode
+          bind:menuItems={fileTypeOptions}
+          bind:syntax
+          on:changeConfig={onChangeConfig}
+        />
       </Panel>
       <Panel title="Image settings" bind:expanded={views.images} on:changeView={onChangeView}>
         <Images
@@ -340,7 +346,6 @@
           bind:includeResizer
           bind:centerHtmlOutput
           bind:fluid
-          bind:testingMode
           bind:maxWidth
           bind:clickableLink
           on:changeConfig={onChangeConfig}
@@ -360,7 +365,7 @@
     {/if}
   </div>
   <div class="sticky w-2/3 h-full pb-12">
-    <Panel title="Preview" bind:expanded={views.preview} on:changeView={onChangeView}>
+    <Panel title="Output" bind:expanded={views.preview} on:changeView={onChangeView}>
       <Preview bind:exampleAssets bind:exampleFile bind:scale bind:showLoader />
     </Panel>
   </div>
