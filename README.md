@@ -33,7 +33,7 @@ Export Figma frames as responsive images with text elements rendered as HTML. A 
 ### Options + Features
 **File settings**
 - The inputted Filename will be the name of the outputted zipped folder and HTML file. You can customize this, but will default to the current page name in Figma.
-- Filetype options include `html` and `html`, but note that the `svelte` option hasn't been fully tested.
+- Filetype option so far is just `html`. `svelte` is coming soon!
 
 **Image settings**
 - Input an `Image Scale` to export images at a specified scale.
