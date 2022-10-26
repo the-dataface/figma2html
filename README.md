@@ -1,6 +1,14 @@
 ## figma2html
 
-Export Figma frames as responsive images with text elements rendered as HTML. A Figma version of [ai2html](http://ai2html.org), with some extra features. Uses [Figma Plugin DS Svelte](https://github.com/thomas-lowry/figma-plugin-ds-svelte).
+Export Figma frames as responsive images with text elements rendered as HTML. A Figma version of [ai2html](http://ai2html.org), with some extra features.
+
+### Development Instructions
+
+1. Pull down this repo
+2. `npm run build`
+3. `npm run dev`
+4. Open Figma, go to `Plugins` > `Development` > `Import plugin from manifest`, then navigate to this repo's `manifest.json` file.
+5. In Figma, hit `cmd + /`, type "Figmaps" and hit enter
 
 ### Instructions
 
@@ -23,17 +31,17 @@ Export Figma frames as responsive images with text elements rendered as HTML. A 
 - If `Include Resizer Script` is turned on, the outputted HTML will include JS to show and hide the correct image at the appropriate size, based on the named width of the frame.
 
 ### Options + Features
-**File Output**
+**File settings**
 - The inputted Filename will be the name of the outputted zipped folder and HTML file. You can customize this, but will default to the current page name in Figma.
 - Filetype options include `html` and `html`, but note that the `svelte` option hasn't been fully tested.
 
-**Image Settings**
+**Image settings**
 - Input an `Image Scale` to export images at a specified scale.
 - `Image Format` options include `PNG`, `JPG`, and `SVG`.
 - The `Path` field allows you to specify an image path, which will be referenced in the image paths in the outputted HTML. Useful if you will be dropping your outputted files into a larger codebase.
 - `Alt Text` allows you to add an alt text tag to images in your outputted HTML.
 
-**Page Settings**
+**Page settings**
 - Turn on `Include Resizer Script` to include JS in your outputted file which will show and hide the appropriate image at the appropriate size.
 - Turn on `Center HTML Output` to center your page content in the outputted HTML.
 - Turn on `Fluid` to have the f2h containers fill the width of the screen. If off, f2h containers will maintain the widths at which they were designed in Figma.
@@ -41,7 +49,7 @@ Export Figma frames as responsive images with text elements rendered as HTML. A 
 - Input a `Max Width` in pixels to apply a max width to your page content.
 - Include a `Clickable Link` to wrap your output in an `<a>` tag.
 
-**Text Styles**
+**Text settings**
 - Turn on `Style Text Elements` to include inline styles to match the text styles you see in Figma.
 - Turn on `Include Figma Styles` as Classes to include any named styles in Figma as classes on your text elements. Ex. `Desktop/Utility Sans` will be included as `class="utility-sans"`.
 - Turn on `Convert Header Styles to H tags` to render text elements containing a header class in Figma (`h1`, `h2`, `h3`, etc.) with the appropriate H tag in the outputted HTML, instead of as a `<p>` element.
@@ -62,7 +70,7 @@ Note that it does not replace the text in your artwork, just in the exported htm
 We really hope you find this plugin as useful as we do and we're always open to feedback, bug reports, and feature suggestions. Feel free to comment on the Figma plugin community page, add an issue to this repo, or shoot us an email at sam@thedataface.com.
 
 ### Thanks
-Many thanks to the [ai2html](http://ai2html.org) team at the New York Times, both for inspiration and the code on which this plugin is based. Contributors from the DataFace team include Sam Vickars and Sawyer Click.
+Many thanks to the [ai2html](http://ai2html.org) team at the New York Times, both for inspiration and the code on which this plugin is based. Contributors from the DataFace team include Sam Vickars,  Sawyer Click, and Michael Hester.
 
 
 
