@@ -1,3 +1,4 @@
+![Cover Art](/https://github.com/the-dataface/figma2html/blob/main/src/img/coverArt.png?raw=true)
 ## figma2html
 
 Export Figma frames as responsive images with text elements rendered as HTML. A Figma version of [ai2html](http://ai2html.org), with some extra features.
@@ -71,16 +72,3 @@ We really hope you find this plugin as useful as we do and we're always open to 
 
 ### Thanks
 Many thanks to the [ai2html](http://ai2html.org) team at the New York Times, both for inspiration and the code on which this plugin is based. Contributors from the DataFace team include Sam Vickars,  Sawyer Click, and Michael Hester.
-
-
-
-## To do
-
-- [x] Export to Svelte file
-- [ ] ~~Allow lists within text nodes~~
-- [x] Use variables within text nodes
-- [x] Allow hyperlinks within text nodes
-- [ ] Tailwind classes?
-- [ ] CSS vs inline
-- [x] Account for linebreaks within text frames
-- [x] Option to include Google Fonts tags
