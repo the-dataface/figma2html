@@ -8,10 +8,19 @@ export default ({ containerId, config, frameCss }) => {
 		margin: config.centerHtmlOutput ? '0 auto' : '0',
 	};
 
+	// center content
+	if (config.centerHtmlOutput) {
+		selectors[`${id} .f2h-frame`] = {
+			margin: '0 auto',
+		};
+	}
+
 	// add clickable link base styles
 	if (config.clickableLink !== '')
 		selectors[`${id} .f2h-link`] = {
 			cursor: 'pointer',
+			'text-decoration': 'none',
+			color: 'inherit',
 		};
 
 	// default <p> styles
