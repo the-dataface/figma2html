@@ -849,7 +849,7 @@ var ui = (function () {
       }
     }
 
-    var css_248z$h = "/*! tailwindcss v3.2.0 | MIT License | https://tailwindcss.com*/*,:after,:before{border:0 solid #e5e7eb;box-sizing:border-box}:after,:before{--tw-content:\"\"}html{-webkit-text-size-adjust:100%;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4}body{line-height:inherit;margin:0}hr{border-top-width:1px;color:inherit;height:0}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{border-collapse:collapse;border-color:inherit;text-indent:0}button,input,optgroup,select,textarea{color:inherit;font-family:inherit;font-size:100%;font-weight:inherit;line-height:inherit;margin:0;padding:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}textarea{resize:vertical}input::-moz-placeholder, textarea::-moz-placeholder{color:#9ca3af;opacity:1}input::placeholder,textarea::placeholder{color:#9ca3af;opacity:1}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{height:auto;max-width:100%}[hidden]{display:none}*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }.container{width:100%}@media (min-width:640px){.container{max-width:640px}}@media (min-width:768px){.container{max-width:768px}}@media (min-width:1024px){.container{max-width:1024px}}@media (min-width:1280px){.container{max-width:1280px}}@media (min-width:1536px){.container{max-width:1536px}}.pointer-events-none{pointer-events:none}.visible{visibility:visible}.static{position:static}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.bottom-0{bottom:0}.right-0{right:0}.top-1\\/2{top:50%}.left-1\\/2{left:50%}.left-0{left:0}.top-0{top:0}.z-\\[999\\]{z-index:999}.z-20{z-index:20}.m-0{margin:0}.mx-2{margin-left:.5rem;margin-right:.5rem}.ml-0\\.5{margin-left:.125rem}.ml-0{margin-left:0}.mr-2{margin-right:.5rem}.mt-2{margin-top:.5rem}.mb-2\\.5{margin-bottom:.625rem}.mb-2{margin-bottom:.5rem}.ml-1{margin-left:.25rem}.mr-0{margin-right:0}.mt-4{margin-top:1rem}.block{display:block}.inline{display:inline}.flex{display:flex}.hidden{display:none}.aspect-square{aspect-ratio:1/1}.h-4{height:1rem}.h-full{height:100%}.h-12{height:3rem}.h-6{height:1.5rem}.h-16{height:4rem}.min-h-full{min-height:100%}.min-h-\\[200px\\]{min-height:200px}.w-4{width:1rem}.w-full{width:100%}.w-1\\/3{width:33.333333%}.w-2\\/3{width:66.666667%}.w-6{width:1.5rem}.w-16{width:4rem}.flex-grow{flex-grow:1}.-translate-x-1\\/4{--tw-translate-x:-25%}.-translate-x-1\\/4,.-translate-y-1\\/4{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\\/4{--tw-translate-y:-25%}.-translate-x-1\\/2{--tw-translate-x:-50%}.-translate-x-1\\/2,.-translate-y-1\\/2{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\\/2{--tw-translate-y:-50%}.-rotate-45{--tw-rotate:-45deg}.-rotate-45,.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-se-resize{cursor:se-resize}.cursor-pointer{cursor:pointer}.resize{resize:both}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:.5rem}.gap-1{gap:.25rem}.gap-4{gap:1rem}.overflow-hidden{overflow:hidden}.rounded-full{border-radius:9999px}.rounded{border-radius:.25rem}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.border{border-width:1px}.border-red-600{--tw-border-opacity:1;border-color:rgb(220 38 38/var(--tw-border-opacity))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity))}.p-4{padding:1rem}.p-2{padding:.5rem}.py-4{padding-bottom:1rem;padding-top:1rem}.px-\\[11px\\]{padding-left:11px;padding-right:11px}.pb-12{padding-bottom:3rem}.text-xs{font-size:.75rem;line-height:1rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-\\[10px\\]{font-size:10px}.text-base{font-size:1rem;line-height:1.5rem}.font-bold{font-weight:700}.italic{font-style:italic}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219/var(--tw-text-opacity))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38/var(--tw-text-opacity))}.opacity-0{opacity:0}.outline{outline-style:solid}.blur{--tw-blur:blur(8px)}.blur,.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.transition-all{transition-duration:.15s;transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1)}.transition{transition-duration:.15s;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1)}.hover\\:opacity-80:hover{opacity:.8}";
+    var css_248z$h = "/*! tailwindcss v3.2.0 | MIT License | https://tailwindcss.com*/*,:after,:before{border:0 solid #e5e7eb;box-sizing:border-box}:after,:before{--tw-content:\"\"}html{-webkit-text-size-adjust:100%;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4}body{line-height:inherit;margin:0}hr{border-top-width:1px;color:inherit;height:0}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{border-collapse:collapse;border-color:inherit;text-indent:0}button,input,optgroup,select,textarea{color:inherit;font-family:inherit;font-size:100%;font-weight:inherit;line-height:inherit;margin:0;padding:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}textarea{resize:vertical}input::-moz-placeholder, textarea::-moz-placeholder{color:#9ca3af;opacity:1}input::placeholder,textarea::placeholder{color:#9ca3af;opacity:1}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{height:auto;max-width:100%}[hidden]{display:none}*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }.container{width:100%}@media (min-width:640px){.container{max-width:640px}}@media (min-width:768px){.container{max-width:768px}}@media (min-width:1024px){.container{max-width:1024px}}@media (min-width:1280px){.container{max-width:1280px}}@media (min-width:1536px){.container{max-width:1536px}}.pointer-events-none{pointer-events:none}.visible{visibility:visible}.static{position:static}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.bottom-0{bottom:0}.right-0{right:0}.top-1\\/2{top:50%}.left-1\\/2{left:50%}.left-0{left:0}.top-0{top:0}.z-\\[999\\]{z-index:999}.z-20{z-index:20}.m-0{margin:0}.mx-2{margin-left:.5rem;margin-right:.5rem}.ml-0\\.5{margin-left:.125rem}.ml-0{margin-left:0}.mr-2{margin-right:.5rem}.mt-2{margin-top:.5rem}.mb-2\\.5{margin-bottom:.625rem}.mb-2{margin-bottom:.5rem}.ml-1{margin-left:.25rem}.mr-0{margin-right:0}.mt-4{margin-top:1rem}.block{display:block}.inline{display:inline}.flex{display:flex}.hidden{display:none}.aspect-square{aspect-ratio:1/1}.h-4{height:1rem}.h-full{height:100%}.h-12{height:3rem}.h-6{height:1.5rem}.h-16{height:4rem}.min-h-full{min-height:100%}.min-h-\\[200px\\]{min-height:200px}.w-4{width:1rem}.w-full{width:100%}.w-1\\/3{width:33.333333%}.w-2\\/3{width:66.666667%}.w-6{width:1.5rem}.w-16{width:4rem}.flex-grow{flex-grow:1}.-translate-x-1\\/4{--tw-translate-x:-25%}.-translate-x-1\\/4,.-translate-y-1\\/4{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\\/4{--tw-translate-y:-25%}.-translate-x-1\\/2{--tw-translate-x:-50%}.-translate-x-1\\/2,.-translate-y-1\\/2{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\\/2{--tw-translate-y:-50%}.-rotate-45{--tw-rotate:-45deg}.-rotate-45,.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-se-resize{cursor:se-resize}.cursor-pointer{cursor:pointer}.resize{resize:both}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:.5rem}.gap-1{gap:.25rem}.gap-4{gap:1rem}.overflow-hidden{overflow:hidden}.rounded-full{border-radius:9999px}.rounded{border-radius:.25rem}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.border{border-width:1px}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity))}.p-4{padding:1rem}.p-2{padding:.5rem}.py-4{padding-bottom:1rem;padding-top:1rem}.px-\\[11px\\]{padding-left:11px;padding-right:11px}.pb-12{padding-bottom:3rem}.text-xs{font-size:.75rem;line-height:1rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-\\[10px\\]{font-size:10px}.text-base{font-size:1rem;line-height:1.5rem}.font-bold{font-weight:700}.italic{font-style:italic}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219/var(--tw-text-opacity))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38/var(--tw-text-opacity))}.opacity-0{opacity:0}.outline{outline-style:solid}.blur{--tw-blur:blur(8px)}.blur,.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.transition-all{transition-duration:.15s;transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1)}.transition{transition-duration:.15s;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1)}.hover\\:opacity-80:hover{opacity:.8}";
     styleInject(css_248z$h);
 
     var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -6494,7 +6494,7 @@ var ui = (function () {
     const file$5 = "src/lib/components/Controls/Page.svelte";
 
     function create_fragment$5(ctx) {
-    	let div13;
+    	let div9;
     	let checkbox0;
     	let updating_value;
     	let updating_checked;
@@ -6514,7 +6514,7 @@ var ui = (function () {
     	let t4;
     	let div2;
     	let div1;
-    	let input0;
+    	let input;
     	let updating_value_3;
     	let t5;
     	let div8;
@@ -6523,48 +6523,39 @@ var ui = (function () {
     	let t7;
     	let div7;
     	let div6;
-    	let input1;
-    	let updating_value_4;
-    	let t8;
-    	let div12;
-    	let div9;
-    	let h52;
-    	let t10;
-    	let div11;
-    	let div10;
     	let textarea;
-    	let updating_value_5;
+    	let updating_value_4;
     	let current;
 
     	function checkbox0_value_binding(value) {
-    		/*checkbox0_value_binding*/ ctx[7](value);
+    		/*checkbox0_value_binding*/ ctx[6](value);
     	}
 
     	function checkbox0_checked_binding(value) {
-    		/*checkbox0_checked_binding*/ ctx[8](value);
+    		/*checkbox0_checked_binding*/ ctx[7](value);
     	}
 
     	let checkbox0_props = { label: "Include resizer script" };
 
-    	if (/*includeResizer*/ ctx[4] !== void 0) {
-    		checkbox0_props.value = /*includeResizer*/ ctx[4];
+    	if (/*includeResizer*/ ctx[3] !== void 0) {
+    		checkbox0_props.value = /*includeResizer*/ ctx[3];
     	}
 
-    	if (/*includeResizer*/ ctx[4] !== void 0) {
-    		checkbox0_props.checked = /*includeResizer*/ ctx[4];
+    	if (/*includeResizer*/ ctx[3] !== void 0) {
+    		checkbox0_props.checked = /*includeResizer*/ ctx[3];
     	}
 
     	checkbox0 = new Checkbox({ props: checkbox0_props, $$inline: true });
     	binding_callbacks.push(() => bind(checkbox0, 'value', checkbox0_value_binding));
     	binding_callbacks.push(() => bind(checkbox0, 'checked', checkbox0_checked_binding));
-    	checkbox0.$on("change", /*change_handler*/ ctx[9]);
+    	checkbox0.$on("change", /*change_handler*/ ctx[8]);
 
     	function checkbox1_value_binding(value) {
-    		/*checkbox1_value_binding*/ ctx[10](value);
+    		/*checkbox1_value_binding*/ ctx[9](value);
     	}
 
     	function checkbox1_checked_binding(value) {
-    		/*checkbox1_checked_binding*/ ctx[11](value);
+    		/*checkbox1_checked_binding*/ ctx[10](value);
     	}
 
     	let checkbox1_props = { label: "Center HTML output" };
@@ -6580,65 +6571,49 @@ var ui = (function () {
     	checkbox1 = new Checkbox({ props: checkbox1_props, $$inline: true });
     	binding_callbacks.push(() => bind(checkbox1, 'value', checkbox1_value_binding));
     	binding_callbacks.push(() => bind(checkbox1, 'checked', checkbox1_checked_binding));
-    	checkbox1.$on("change", /*change_handler_1*/ ctx[12]);
+    	checkbox1.$on("change", /*change_handler_1*/ ctx[11]);
 
     	function checkbox2_value_binding(value) {
-    		/*checkbox2_value_binding*/ ctx[13](value);
+    		/*checkbox2_value_binding*/ ctx[12](value);
     	}
 
     	function checkbox2_checked_binding(value) {
-    		/*checkbox2_checked_binding*/ ctx[14](value);
+    		/*checkbox2_checked_binding*/ ctx[13](value);
     	}
 
     	let checkbox2_props = { label: "Fluid container width" };
 
-    	if (/*fluid*/ ctx[3] !== void 0) {
-    		checkbox2_props.value = /*fluid*/ ctx[3];
+    	if (/*fluid*/ ctx[2] !== void 0) {
+    		checkbox2_props.value = /*fluid*/ ctx[2];
     	}
 
-    	if (/*fluid*/ ctx[3] !== void 0) {
-    		checkbox2_props.checked = /*fluid*/ ctx[3];
+    	if (/*fluid*/ ctx[2] !== void 0) {
+    		checkbox2_props.checked = /*fluid*/ ctx[2];
     	}
 
     	checkbox2 = new Checkbox({ props: checkbox2_props, $$inline: true });
     	binding_callbacks.push(() => bind(checkbox2, 'value', checkbox2_value_binding));
     	binding_callbacks.push(() => bind(checkbox2, 'checked', checkbox2_checked_binding));
-    	checkbox2.$on("change", /*change_handler_2*/ ctx[15]);
+    	checkbox2.$on("change", /*change_handler_2*/ ctx[14]);
 
-    	function input0_value_binding(value) {
-    		/*input0_value_binding*/ ctx[16](value);
+    	function input_value_binding(value) {
+    		/*input_value_binding*/ ctx[15](value);
     	}
 
-    	let input0_props = {
+    	let input_props = {
     		placeholder: "Enter a max width for the images."
     	};
 
-    	if (/*maxWidth*/ ctx[5] !== void 0) {
-    		input0_props.value = /*maxWidth*/ ctx[5];
+    	if (/*maxWidth*/ ctx[4] !== void 0) {
+    		input_props.value = /*maxWidth*/ ctx[4];
     	}
 
-    	input0 = new Input({ props: input0_props, $$inline: true });
-    	binding_callbacks.push(() => bind(input0, 'value', input0_value_binding));
-    	input0.$on("change", /*change_handler_3*/ ctx[17]);
-
-    	function input1_value_binding(value) {
-    		/*input1_value_binding*/ ctx[18](value);
-    	}
-
-    	let input1_props = {
-    		placeholder: "Enter a link to apply to the full image."
-    	};
-
-    	if (/*clickableLink*/ ctx[2] !== void 0) {
-    		input1_props.value = /*clickableLink*/ ctx[2];
-    	}
-
-    	input1 = new Input({ props: input1_props, $$inline: true });
-    	binding_callbacks.push(() => bind(input1, 'value', input1_value_binding));
-    	input1.$on("change", /*change_handler_4*/ ctx[19]);
+    	input = new Input({ props: input_props, $$inline: true });
+    	binding_callbacks.push(() => bind(input, 'value', input_value_binding));
+    	input.$on("change", /*change_handler_3*/ ctx[16]);
 
     	function textarea_value_binding(value) {
-    		/*textarea_value_binding*/ ctx[20](value);
+    		/*textarea_value_binding*/ ctx[17](value);
     	}
 
     	let textarea_props = {
@@ -6651,11 +6626,11 @@ var ui = (function () {
 
     	textarea = new TextArea({ props: textarea_props, $$inline: true });
     	binding_callbacks.push(() => bind(textarea, 'value', textarea_value_binding));
-    	textarea.$on("change", /*change_handler_5*/ ctx[21]);
+    	textarea.$on("change", /*change_handler_4*/ ctx[18]);
 
     	const block = {
     		c: function create() {
-    			div13 = element("div");
+    			div9 = element("div");
     			create_component(checkbox0.$$.fragment);
     			t0 = space();
     			create_component(checkbox1.$$.fragment);
@@ -6670,107 +6645,81 @@ var ui = (function () {
     			t4 = space();
     			div2 = element("div");
     			div1 = element("div");
-    			create_component(input0.$$.fragment);
+    			create_component(input.$$.fragment);
     			t5 = space();
     			div8 = element("div");
     			div5 = element("div");
     			h51 = element("h5");
-    			h51.textContent = "Clickable link";
+    			h51.textContent = "Custom script";
     			t7 = space();
     			div7 = element("div");
     			div6 = element("div");
-    			create_component(input1.$$.fragment);
-    			t8 = space();
-    			div12 = element("div");
-    			div9 = element("div");
-    			h52 = element("h5");
-    			h52.textContent = "Custom script";
-    			t10 = space();
-    			div11 = element("div");
-    			div10 = element("div");
     			create_component(textarea.$$.fragment);
     			attr_dev(h50, "class", "m-0 text-xs");
-    			add_location(h50, file$5, 42, 8, 1177);
+    			add_location(h50, file$5, 41, 8, 1137);
     			attr_dev(div0, "class", "flex justify-between items-center text-[10px] mt-2 mb-2.5");
-    			add_location(div0, file$5, 41, 6, 1097);
+    			add_location(div0, file$5, 40, 6, 1057);
     			attr_dev(div1, "class", "w-full");
-    			add_location(div1, file$5, 45, 8, 1276);
+    			add_location(div1, file$5, 44, 8, 1236);
     			attr_dev(div2, "class", "input-row svelte-1vju4z");
-    			add_location(div2, file$5, 44, 6, 1244);
+    			add_location(div2, file$5, 43, 6, 1204);
     			attr_dev(div3, "class", "flex-grow");
-    			add_location(div3, file$5, 40, 4, 1067);
+    			add_location(div3, file$5, 39, 4, 1027);
     			attr_dev(div4, "class", "flex gap-2");
-    			add_location(div4, file$5, 39, 2, 1038);
+    			add_location(div4, file$5, 38, 2, 998);
     			attr_dev(h51, "class", "m-0 text-xs");
-    			add_location(h51, file$5, 58, 6, 1615);
+    			add_location(h51, file$5, 57, 6, 1575);
     			attr_dev(div5, "class", "flex justify-between items-center text-[10px] mt-2 mb-2.5");
-    			add_location(div5, file$5, 57, 4, 1537);
+    			add_location(div5, file$5, 56, 4, 1497);
     			attr_dev(div6, "class", "w-full");
-    			add_location(div6, file$5, 61, 6, 1704);
+    			add_location(div6, file$5, 60, 6, 1663);
     			attr_dev(div7, "class", "input-row svelte-1vju4z");
-    			add_location(div7, file$5, 60, 4, 1674);
-    			add_location(div8, file$5, 56, 2, 1527);
-    			attr_dev(h52, "class", "m-0 text-xs");
-    			add_location(h52, file$5, 73, 6, 2030);
-    			attr_dev(div9, "class", "flex justify-between items-center text-[10px] mt-2 mb-2.5");
-    			add_location(div9, file$5, 72, 4, 1952);
-    			attr_dev(div10, "class", "w-full");
-    			add_location(div10, file$5, 76, 6, 2118);
-    			attr_dev(div11, "class", "input-row svelte-1vju4z");
-    			add_location(div11, file$5, 75, 4, 2088);
-    			add_location(div12, file$5, 71, 2, 1942);
-    			attr_dev(div13, "class", "w-full flex flex-col gap-2");
-    			add_location(div13, file$5, 19, 0, 518);
+    			add_location(div7, file$5, 59, 4, 1633);
+    			add_location(div8, file$5, 55, 2, 1487);
+    			attr_dev(div9, "class", "w-full flex flex-col gap-2");
+    			add_location(div9, file$5, 18, 0, 478);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div13, anchor);
-    			mount_component(checkbox0, div13, null);
-    			append_dev(div13, t0);
-    			mount_component(checkbox1, div13, null);
-    			append_dev(div13, t1);
-    			mount_component(checkbox2, div13, null);
-    			append_dev(div13, t2);
-    			append_dev(div13, div4);
+    			insert_dev(target, div9, anchor);
+    			mount_component(checkbox0, div9, null);
+    			append_dev(div9, t0);
+    			mount_component(checkbox1, div9, null);
+    			append_dev(div9, t1);
+    			mount_component(checkbox2, div9, null);
+    			append_dev(div9, t2);
+    			append_dev(div9, div4);
     			append_dev(div4, div3);
     			append_dev(div3, div0);
     			append_dev(div0, h50);
     			append_dev(div3, t4);
     			append_dev(div3, div2);
     			append_dev(div2, div1);
-    			mount_component(input0, div1, null);
-    			append_dev(div13, t5);
-    			append_dev(div13, div8);
+    			mount_component(input, div1, null);
+    			append_dev(div9, t5);
+    			append_dev(div9, div8);
     			append_dev(div8, div5);
     			append_dev(div5, h51);
     			append_dev(div8, t7);
     			append_dev(div8, div7);
     			append_dev(div7, div6);
-    			mount_component(input1, div6, null);
-    			append_dev(div13, t8);
-    			append_dev(div13, div12);
-    			append_dev(div12, div9);
-    			append_dev(div9, h52);
-    			append_dev(div12, t10);
-    			append_dev(div12, div11);
-    			append_dev(div11, div10);
-    			mount_component(textarea, div10, null);
+    			mount_component(textarea, div6, null);
     			current = true;
     		},
     		p: function update(ctx, [dirty]) {
     			const checkbox0_changes = {};
 
-    			if (!updating_value && dirty & /*includeResizer*/ 16) {
+    			if (!updating_value && dirty & /*includeResizer*/ 8) {
     				updating_value = true;
-    				checkbox0_changes.value = /*includeResizer*/ ctx[4];
+    				checkbox0_changes.value = /*includeResizer*/ ctx[3];
     				add_flush_callback(() => updating_value = false);
     			}
 
-    			if (!updating_checked && dirty & /*includeResizer*/ 16) {
+    			if (!updating_checked && dirty & /*includeResizer*/ 8) {
     				updating_checked = true;
-    				checkbox0_changes.checked = /*includeResizer*/ ctx[4];
+    				checkbox0_changes.checked = /*includeResizer*/ ctx[3];
     				add_flush_callback(() => updating_checked = false);
     			}
 
@@ -6792,43 +6741,34 @@ var ui = (function () {
     			checkbox1.$set(checkbox1_changes);
     			const checkbox2_changes = {};
 
-    			if (!updating_value_2 && dirty & /*fluid*/ 8) {
+    			if (!updating_value_2 && dirty & /*fluid*/ 4) {
     				updating_value_2 = true;
-    				checkbox2_changes.value = /*fluid*/ ctx[3];
+    				checkbox2_changes.value = /*fluid*/ ctx[2];
     				add_flush_callback(() => updating_value_2 = false);
     			}
 
-    			if (!updating_checked_2 && dirty & /*fluid*/ 8) {
+    			if (!updating_checked_2 && dirty & /*fluid*/ 4) {
     				updating_checked_2 = true;
-    				checkbox2_changes.checked = /*fluid*/ ctx[3];
+    				checkbox2_changes.checked = /*fluid*/ ctx[2];
     				add_flush_callback(() => updating_checked_2 = false);
     			}
 
     			checkbox2.$set(checkbox2_changes);
-    			const input0_changes = {};
+    			const input_changes = {};
 
-    			if (!updating_value_3 && dirty & /*maxWidth*/ 32) {
+    			if (!updating_value_3 && dirty & /*maxWidth*/ 16) {
     				updating_value_3 = true;
-    				input0_changes.value = /*maxWidth*/ ctx[5];
+    				input_changes.value = /*maxWidth*/ ctx[4];
     				add_flush_callback(() => updating_value_3 = false);
     			}
 
-    			input0.$set(input0_changes);
-    			const input1_changes = {};
-
-    			if (!updating_value_4 && dirty & /*clickableLink*/ 4) {
-    				updating_value_4 = true;
-    				input1_changes.value = /*clickableLink*/ ctx[2];
-    				add_flush_callback(() => updating_value_4 = false);
-    			}
-
-    			input1.$set(input1_changes);
+    			input.$set(input_changes);
     			const textarea_changes = {};
 
-    			if (!updating_value_5 && dirty & /*customScript*/ 1) {
-    				updating_value_5 = true;
+    			if (!updating_value_4 && dirty & /*customScript*/ 1) {
+    				updating_value_4 = true;
     				textarea_changes.value = /*customScript*/ ctx[0];
-    				add_flush_callback(() => updating_value_5 = false);
+    				add_flush_callback(() => updating_value_4 = false);
     			}
 
     			textarea.$set(textarea_changes);
@@ -6838,8 +6778,7 @@ var ui = (function () {
     			transition_in(checkbox0.$$.fragment, local);
     			transition_in(checkbox1.$$.fragment, local);
     			transition_in(checkbox2.$$.fragment, local);
-    			transition_in(input0.$$.fragment, local);
-    			transition_in(input1.$$.fragment, local);
+    			transition_in(input.$$.fragment, local);
     			transition_in(textarea.$$.fragment, local);
     			current = true;
     		},
@@ -6847,18 +6786,16 @@ var ui = (function () {
     			transition_out(checkbox0.$$.fragment, local);
     			transition_out(checkbox1.$$.fragment, local);
     			transition_out(checkbox2.$$.fragment, local);
-    			transition_out(input0.$$.fragment, local);
-    			transition_out(input1.$$.fragment, local);
+    			transition_out(input.$$.fragment, local);
     			transition_out(textarea.$$.fragment, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div13);
+    			if (detaching) detach_dev(div9);
     			destroy_component(checkbox0);
     			destroy_component(checkbox1);
     			destroy_component(checkbox2);
-    			destroy_component(input0);
-    			destroy_component(input1);
+    			destroy_component(input);
     			destroy_component(textarea);
     		}
     	};
@@ -6879,20 +6816,11 @@ var ui = (function () {
     	validate_slots('Page', slots, []);
     	const dispatch = createEventDispatcher();
     	let { centerHtmlOutput = false } = $$props;
-    	let { clickableLink = undefined } = $$props;
     	let { customScript = undefined } = $$props;
     	let { fluid = false } = $$props;
     	let { includeResizer = false } = $$props;
     	let { maxWidth = undefined } = $$props;
-
-    	const writable_props = [
-    		'centerHtmlOutput',
-    		'clickableLink',
-    		'customScript',
-    		'fluid',
-    		'includeResizer',
-    		'maxWidth'
-    	];
+    	const writable_props = ['centerHtmlOutput', 'customScript', 'fluid', 'includeResizer', 'maxWidth'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn(`<Page> was created with unknown prop '${key}'`);
@@ -6900,12 +6828,12 @@ var ui = (function () {
 
     	function checkbox0_value_binding(value) {
     		includeResizer = value;
-    		$$invalidate(4, includeResizer);
+    		$$invalidate(3, includeResizer);
     	}
 
     	function checkbox0_checked_binding(value) {
     		includeResizer = value;
-    		$$invalidate(4, includeResizer);
+    		$$invalidate(3, includeResizer);
     	}
 
     	const change_handler = () => dispatch("changeConfig");
@@ -6924,44 +6852,36 @@ var ui = (function () {
 
     	function checkbox2_value_binding(value) {
     		fluid = value;
-    		$$invalidate(3, fluid);
+    		$$invalidate(2, fluid);
     	}
 
     	function checkbox2_checked_binding(value) {
     		fluid = value;
-    		$$invalidate(3, fluid);
+    		$$invalidate(2, fluid);
     	}
 
     	const change_handler_2 = () => dispatch("changeConfig");
 
-    	function input0_value_binding(value) {
+    	function input_value_binding(value) {
     		maxWidth = value;
-    		$$invalidate(5, maxWidth);
+    		$$invalidate(4, maxWidth);
     	}
 
     	const change_handler_3 = () => dispatch("changeConfig");
-
-    	function input1_value_binding(value) {
-    		clickableLink = value;
-    		$$invalidate(2, clickableLink);
-    	}
-
-    	const change_handler_4 = () => dispatch("changeConfig");
 
     	function textarea_value_binding(value) {
     		customScript = value;
     		$$invalidate(0, customScript);
     	}
 
-    	const change_handler_5 = () => dispatch("changeConfig");
+    	const change_handler_4 = () => dispatch("changeConfig");
 
     	$$self.$$set = $$props => {
     		if ('centerHtmlOutput' in $$props) $$invalidate(1, centerHtmlOutput = $$props.centerHtmlOutput);
-    		if ('clickableLink' in $$props) $$invalidate(2, clickableLink = $$props.clickableLink);
     		if ('customScript' in $$props) $$invalidate(0, customScript = $$props.customScript);
-    		if ('fluid' in $$props) $$invalidate(3, fluid = $$props.fluid);
-    		if ('includeResizer' in $$props) $$invalidate(4, includeResizer = $$props.includeResizer);
-    		if ('maxWidth' in $$props) $$invalidate(5, maxWidth = $$props.maxWidth);
+    		if ('fluid' in $$props) $$invalidate(2, fluid = $$props.fluid);
+    		if ('includeResizer' in $$props) $$invalidate(3, includeResizer = $$props.includeResizer);
+    		if ('maxWidth' in $$props) $$invalidate(4, maxWidth = $$props.maxWidth);
     	};
 
     	$$self.$capture_state = () => ({
@@ -6971,7 +6891,6 @@ var ui = (function () {
     		TextArea,
     		dispatch,
     		centerHtmlOutput,
-    		clickableLink,
     		customScript,
     		fluid,
     		includeResizer,
@@ -6980,11 +6899,10 @@ var ui = (function () {
 
     	$$self.$inject_state = $$props => {
     		if ('centerHtmlOutput' in $$props) $$invalidate(1, centerHtmlOutput = $$props.centerHtmlOutput);
-    		if ('clickableLink' in $$props) $$invalidate(2, clickableLink = $$props.clickableLink);
     		if ('customScript' in $$props) $$invalidate(0, customScript = $$props.customScript);
-    		if ('fluid' in $$props) $$invalidate(3, fluid = $$props.fluid);
-    		if ('includeResizer' in $$props) $$invalidate(4, includeResizer = $$props.includeResizer);
-    		if ('maxWidth' in $$props) $$invalidate(5, maxWidth = $$props.maxWidth);
+    		if ('fluid' in $$props) $$invalidate(2, fluid = $$props.fluid);
+    		if ('includeResizer' in $$props) $$invalidate(3, includeResizer = $$props.includeResizer);
+    		if ('maxWidth' in $$props) $$invalidate(4, maxWidth = $$props.maxWidth);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -7000,7 +6918,6 @@ var ui = (function () {
     	return [
     		customScript,
     		centerHtmlOutput,
-    		clickableLink,
     		fluid,
     		includeResizer,
     		maxWidth,
@@ -7014,12 +6931,10 @@ var ui = (function () {
     		checkbox2_value_binding,
     		checkbox2_checked_binding,
     		change_handler_2,
-    		input0_value_binding,
+    		input_value_binding,
     		change_handler_3,
-    		input1_value_binding,
-    		change_handler_4,
     		textarea_value_binding,
-    		change_handler_5
+    		change_handler_4
     	];
     }
 
@@ -7029,11 +6944,10 @@ var ui = (function () {
 
     		init(this, options, instance$5, create_fragment$5, safe_not_equal, {
     			centerHtmlOutput: 1,
-    			clickableLink: 2,
     			customScript: 0,
-    			fluid: 3,
-    			includeResizer: 4,
-    			maxWidth: 5
+    			fluid: 2,
+    			includeResizer: 3,
+    			maxWidth: 4
     		});
 
     		dispatch_dev("SvelteRegisterComponent", {
@@ -7049,14 +6963,6 @@ var ui = (function () {
     	}
 
     	set centerHtmlOutput(value) {
-    		throw new Error("<Page>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
-
-    	get clickableLink() {
-    		throw new Error("<Page>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-    	}
-
-    	set clickableLink(value) {
     		throw new Error("<Page>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
@@ -8660,7 +8566,7 @@ var ui = (function () {
     /* src/App.svelte generated by Svelte v3.48.0 */
     const file = "src/App.svelte";
 
-    // (256:4) {#if views}
+    // (253:4) {#if views}
     function create_if_block_1(ctx) {
     	let panel0;
     	let updating_expanded;
@@ -8676,7 +8582,7 @@ var ui = (function () {
     	let current;
 
     	function panel0_expanded_binding(value) {
-    		/*panel0_expanded_binding*/ ctx[43](value);
+    		/*panel0_expanded_binding*/ ctx[42](value);
     	}
 
     	let panel0_props = {
@@ -8691,10 +8597,10 @@ var ui = (function () {
 
     	panel0 = new Panel({ props: panel0_props, $$inline: true });
     	binding_callbacks.push(() => bind(panel0, 'expanded', panel0_expanded_binding));
-    	panel0.$on("changeView", /*onChangeView*/ ctx[30]);
+    	panel0.$on("changeView", /*onChangeView*/ ctx[29]);
 
     	function panel1_expanded_binding(value) {
-    		/*panel1_expanded_binding*/ ctx[50](value);
+    		/*panel1_expanded_binding*/ ctx[49](value);
     	}
 
     	let panel1_props = {
@@ -8709,10 +8615,10 @@ var ui = (function () {
 
     	panel1 = new Panel({ props: panel1_props, $$inline: true });
     	binding_callbacks.push(() => bind(panel1, 'expanded', panel1_expanded_binding));
-    	panel1.$on("changeView", /*onChangeView*/ ctx[30]);
+    	panel1.$on("changeView", /*onChangeView*/ ctx[29]);
 
     	function panel2_expanded_binding(value) {
-    		/*panel2_expanded_binding*/ ctx[57](value);
+    		/*panel2_expanded_binding*/ ctx[55](value);
     	}
 
     	let panel2_props = {
@@ -8727,10 +8633,10 @@ var ui = (function () {
 
     	panel2 = new Panel({ props: panel2_props, $$inline: true });
     	binding_callbacks.push(() => bind(panel2, 'expanded', panel2_expanded_binding));
-    	panel2.$on("changeView", /*onChangeView*/ ctx[30]);
+    	panel2.$on("changeView", /*onChangeView*/ ctx[29]);
 
     	function panel3_expanded_binding(value) {
-    		/*panel3_expanded_binding*/ ctx[63](value);
+    		/*panel3_expanded_binding*/ ctx[61](value);
     	}
 
     	let panel3_props = {
@@ -8745,7 +8651,7 @@ var ui = (function () {
 
     	panel3 = new Panel({ props: panel3_props, $$inline: true });
     	binding_callbacks.push(() => bind(panel3, 'expanded', panel3_expanded_binding));
-    	panel3.$on("changeView", /*onChangeView*/ ctx[30]);
+    	panel3.$on("changeView", /*onChangeView*/ ctx[29]);
 
     	const block = {
     		c: function create() {
@@ -8770,7 +8676,7 @@ var ui = (function () {
     		p: function update(ctx, dirty) {
     			const panel0_changes = {};
 
-    			if (dirty[0] & /*fileType, testingMode, fileTypeOptions, syntax, errorMessage*/ 2371 | dirty[2] & /*$$scope*/ 65536) {
+    			if (dirty[0] & /*fileType, testingMode, fileTypeOptions, syntax, errorMessage*/ 2371 | dirty[2] & /*$$scope*/ 16384) {
     				panel0_changes.$$scope = { dirty, ctx };
     			}
 
@@ -8783,7 +8689,7 @@ var ui = (function () {
     			panel0.$set(panel0_changes);
     			const panel1_changes = {};
 
-    			if (dirty[0] & /*scaleOptions, scale, extensionOptions, extension, imagePath, altText*/ 1572924 | dirty[2] & /*$$scope*/ 65536) {
+    			if (dirty[0] & /*scaleOptions, scale, extensionOptions, extension, imagePath, altText*/ 786492 | dirty[2] & /*$$scope*/ 16384) {
     				panel1_changes.$$scope = { dirty, ctx };
     			}
 
@@ -8796,7 +8702,7 @@ var ui = (function () {
     			panel1.$set(panel1_changes);
     			const panel2_changes = {};
 
-    			if (dirty[0] & /*includeResizer, centerHtmlOutput, fluid, maxWidth, customScript, clickableLink*/ 2496000 | dirty[2] & /*$$scope*/ 65536) {
+    			if (dirty[0] & /*includeResizer, centerHtmlOutput, fluid, maxWidth, customScript*/ 1185280 | dirty[2] & /*$$scope*/ 16384) {
     				panel2_changes.$$scope = { dirty, ctx };
     			}
 
@@ -8809,7 +8715,7 @@ var ui = (function () {
     			panel2.$set(panel2_changes);
     			const panel3_changes = {};
 
-    			if (dirty[0] & /*showVariablesButton, styleTextSegments, applyStyleNames, applyHtags, includeGoogleFonts*/ 33677312 | dirty[2] & /*$$scope*/ 65536) {
+    			if (dirty[0] & /*showVariablesButton, styleTextSegments, applyStyleNames, applyHtags, includeGoogleFonts*/ 16900096 | dirty[2] & /*$$scope*/ 16384) {
     				panel3_changes.$$scope = { dirty, ctx };
     			}
 
@@ -8851,14 +8757,14 @@ var ui = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(256:4) {#if views}",
+    		source: "(253:4) {#if views}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (257:6) <Panel title="File settings" bind:expanded={views.file} on:changeView={onChangeView}>
+    // (254:6) <Panel title="File settings" bind:expanded={views.file} on:changeView={onChangeView}>
     function create_default_slot_4(ctx) {
     	let file_1;
     	let updating_fileType;
@@ -8869,23 +8775,23 @@ var ui = (function () {
     	let current;
 
     	function file_1_fileType_binding(value) {
-    		/*file_1_fileType_binding*/ ctx[37](value);
+    		/*file_1_fileType_binding*/ ctx[36](value);
     	}
 
     	function file_1_testingMode_binding(value) {
-    		/*file_1_testingMode_binding*/ ctx[38](value);
+    		/*file_1_testingMode_binding*/ ctx[37](value);
     	}
 
     	function file_1_menuItems_binding(value) {
-    		/*file_1_menuItems_binding*/ ctx[39](value);
+    		/*file_1_menuItems_binding*/ ctx[38](value);
     	}
 
     	function file_1_syntax_binding(value) {
-    		/*file_1_syntax_binding*/ ctx[40](value);
+    		/*file_1_syntax_binding*/ ctx[39](value);
     	}
 
     	function file_1_errorMessage_binding(value) {
-    		/*file_1_errorMessage_binding*/ ctx[41](value);
+    		/*file_1_errorMessage_binding*/ ctx[40](value);
     	}
 
     	let file_1_props = {};
@@ -8916,8 +8822,8 @@ var ui = (function () {
     	binding_callbacks.push(() => bind(file_1, 'menuItems', file_1_menuItems_binding));
     	binding_callbacks.push(() => bind(file_1, 'syntax', file_1_syntax_binding));
     	binding_callbacks.push(() => bind(file_1, 'errorMessage', file_1_errorMessage_binding));
-    	file_1.$on("changeConfig", /*onChangeConfig*/ ctx[27]);
-    	file_1.$on("sendError", /*sendError_handler*/ ctx[42]);
+    	file_1.$on("changeConfig", /*onChangeConfig*/ ctx[26]);
+    	file_1.$on("sendError", /*sendError_handler*/ ctx[41]);
 
     	const block = {
     		c: function create() {
@@ -8980,14 +8886,14 @@ var ui = (function () {
     		block,
     		id: create_default_slot_4.name,
     		type: "slot",
-    		source: "(257:6) <Panel title=\\\"File settings\\\" bind:expanded={views.file} on:changeView={onChangeView}>",
+    		source: "(254:6) <Panel title=\\\"File settings\\\" bind:expanded={views.file} on:changeView={onChangeView}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (268:6) <Panel title="Image settings" bind:expanded={views.images} on:changeView={onChangeView}>
+    // (265:6) <Panel title="Image settings" bind:expanded={views.images} on:changeView={onChangeView}>
     function create_default_slot_3(ctx) {
     	let images;
     	let updating_scaleOptions;
@@ -8999,27 +8905,27 @@ var ui = (function () {
     	let current;
 
     	function images_scaleOptions_binding(value) {
-    		/*images_scaleOptions_binding*/ ctx[44](value);
+    		/*images_scaleOptions_binding*/ ctx[43](value);
     	}
 
     	function images_scale_binding(value) {
-    		/*images_scale_binding*/ ctx[45](value);
+    		/*images_scale_binding*/ ctx[44](value);
     	}
 
     	function images_extensionOptions_binding(value) {
-    		/*images_extensionOptions_binding*/ ctx[46](value);
+    		/*images_extensionOptions_binding*/ ctx[45](value);
     	}
 
     	function images_extension_binding(value) {
-    		/*images_extension_binding*/ ctx[47](value);
+    		/*images_extension_binding*/ ctx[46](value);
     	}
 
     	function images_imagePath_binding(value) {
-    		/*images_imagePath_binding*/ ctx[48](value);
+    		/*images_imagePath_binding*/ ctx[47](value);
     	}
 
     	function images_altText_binding(value) {
-    		/*images_altText_binding*/ ctx[49](value);
+    		/*images_altText_binding*/ ctx[48](value);
     	}
 
     	let images_props = {};
@@ -9040,12 +8946,12 @@ var ui = (function () {
     		images_props.extension = /*extension*/ ctx[2];
     	}
 
-    	if (/*imagePath*/ ctx[19] !== void 0) {
-    		images_props.imagePath = /*imagePath*/ ctx[19];
+    	if (/*imagePath*/ ctx[18] !== void 0) {
+    		images_props.imagePath = /*imagePath*/ ctx[18];
     	}
 
-    	if (/*altText*/ ctx[20] !== void 0) {
-    		images_props.altText = /*altText*/ ctx[20];
+    	if (/*altText*/ ctx[19] !== void 0) {
+    		images_props.altText = /*altText*/ ctx[19];
     	}
 
     	images = new Images({ props: images_props, $$inline: true });
@@ -9055,7 +8961,7 @@ var ui = (function () {
     	binding_callbacks.push(() => bind(images, 'extension', images_extension_binding));
     	binding_callbacks.push(() => bind(images, 'imagePath', images_imagePath_binding));
     	binding_callbacks.push(() => bind(images, 'altText', images_altText_binding));
-    	images.$on("changeConfig", /*onChangeConfig*/ ctx[27]);
+    	images.$on("changeConfig", /*onChangeConfig*/ ctx[26]);
 
     	const block = {
     		c: function create() {
@@ -9092,15 +8998,15 @@ var ui = (function () {
     				add_flush_callback(() => updating_extension = false);
     			}
 
-    			if (!updating_imagePath && dirty[0] & /*imagePath*/ 524288) {
+    			if (!updating_imagePath && dirty[0] & /*imagePath*/ 262144) {
     				updating_imagePath = true;
-    				images_changes.imagePath = /*imagePath*/ ctx[19];
+    				images_changes.imagePath = /*imagePath*/ ctx[18];
     				add_flush_callback(() => updating_imagePath = false);
     			}
 
-    			if (!updating_altText && dirty[0] & /*altText*/ 1048576) {
+    			if (!updating_altText && dirty[0] & /*altText*/ 524288) {
     				updating_altText = true;
-    				images_changes.altText = /*altText*/ ctx[20];
+    				images_changes.altText = /*altText*/ ctx[19];
     				add_flush_callback(() => updating_altText = false);
     			}
 
@@ -9124,14 +9030,14 @@ var ui = (function () {
     		block,
     		id: create_default_slot_3.name,
     		type: "slot",
-    		source: "(268:6) <Panel title=\\\"Image settings\\\" bind:expanded={views.images} on:changeView={onChangeView}>",
+    		source: "(265:6) <Panel title=\\\"Image settings\\\" bind:expanded={views.images} on:changeView={onChangeView}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (279:6) <Panel title="Page settings" bind:expanded={views.page} on:changeView={onChangeView}>
+    // (276:6) <Panel title="Page settings" bind:expanded={views.page} on:changeView={onChangeView}>
     function create_default_slot_2(ctx) {
     	let page;
     	let updating_includeResizer;
@@ -9139,31 +9045,26 @@ var ui = (function () {
     	let updating_fluid;
     	let updating_maxWidth;
     	let updating_customScript;
-    	let updating_clickableLink;
     	let current;
 
     	function page_includeResizer_binding(value) {
-    		/*page_includeResizer_binding*/ ctx[51](value);
+    		/*page_includeResizer_binding*/ ctx[50](value);
     	}
 
     	function page_centerHtmlOutput_binding(value) {
-    		/*page_centerHtmlOutput_binding*/ ctx[52](value);
+    		/*page_centerHtmlOutput_binding*/ ctx[51](value);
     	}
 
     	function page_fluid_binding(value) {
-    		/*page_fluid_binding*/ ctx[53](value);
+    		/*page_fluid_binding*/ ctx[52](value);
     	}
 
     	function page_maxWidth_binding(value) {
-    		/*page_maxWidth_binding*/ ctx[54](value);
+    		/*page_maxWidth_binding*/ ctx[53](value);
     	}
 
     	function page_customScript_binding(value) {
-    		/*page_customScript_binding*/ ctx[55](value);
-    	}
-
-    	function page_clickableLink_binding(value) {
-    		/*page_clickableLink_binding*/ ctx[56](value);
+    		/*page_customScript_binding*/ ctx[54](value);
     	}
 
     	let page_props = {};
@@ -9180,16 +9081,12 @@ var ui = (function () {
     		page_props.fluid = /*fluid*/ ctx[10];
     	}
 
-    	if (/*maxWidth*/ ctx[18] !== void 0) {
-    		page_props.maxWidth = /*maxWidth*/ ctx[18];
+    	if (/*maxWidth*/ ctx[17] !== void 0) {
+    		page_props.maxWidth = /*maxWidth*/ ctx[17];
     	}
 
-    	if (/*customScript*/ ctx[21] !== void 0) {
-    		page_props.customScript = /*customScript*/ ctx[21];
-    	}
-
-    	if (/*clickableLink*/ ctx[17] !== void 0) {
-    		page_props.clickableLink = /*clickableLink*/ ctx[17];
+    	if (/*customScript*/ ctx[20] !== void 0) {
+    		page_props.customScript = /*customScript*/ ctx[20];
     	}
 
     	page = new Page({ props: page_props, $$inline: true });
@@ -9198,8 +9095,7 @@ var ui = (function () {
     	binding_callbacks.push(() => bind(page, 'fluid', page_fluid_binding));
     	binding_callbacks.push(() => bind(page, 'maxWidth', page_maxWidth_binding));
     	binding_callbacks.push(() => bind(page, 'customScript', page_customScript_binding));
-    	binding_callbacks.push(() => bind(page, 'clickableLink', page_clickableLink_binding));
-    	page.$on("changeConfig", /*onChangeConfig*/ ctx[27]);
+    	page.$on("changeConfig", /*onChangeConfig*/ ctx[26]);
 
     	const block = {
     		c: function create() {
@@ -9230,22 +9126,16 @@ var ui = (function () {
     				add_flush_callback(() => updating_fluid = false);
     			}
 
-    			if (!updating_maxWidth && dirty[0] & /*maxWidth*/ 262144) {
+    			if (!updating_maxWidth && dirty[0] & /*maxWidth*/ 131072) {
     				updating_maxWidth = true;
-    				page_changes.maxWidth = /*maxWidth*/ ctx[18];
+    				page_changes.maxWidth = /*maxWidth*/ ctx[17];
     				add_flush_callback(() => updating_maxWidth = false);
     			}
 
-    			if (!updating_customScript && dirty[0] & /*customScript*/ 2097152) {
+    			if (!updating_customScript && dirty[0] & /*customScript*/ 1048576) {
     				updating_customScript = true;
-    				page_changes.customScript = /*customScript*/ ctx[21];
+    				page_changes.customScript = /*customScript*/ ctx[20];
     				add_flush_callback(() => updating_customScript = false);
-    			}
-
-    			if (!updating_clickableLink && dirty[0] & /*clickableLink*/ 131072) {
-    				updating_clickableLink = true;
-    				page_changes.clickableLink = /*clickableLink*/ ctx[17];
-    				add_flush_callback(() => updating_clickableLink = false);
     			}
 
     			page.$set(page_changes);
@@ -9268,14 +9158,14 @@ var ui = (function () {
     		block,
     		id: create_default_slot_2.name,
     		type: "slot",
-    		source: "(279:6) <Panel title=\\\"Page settings\\\" bind:expanded={views.page} on:changeView={onChangeView}>",
+    		source: "(276:6) <Panel title=\\\"Page settings\\\" bind:expanded={views.page} on:changeView={onChangeView}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (290:6) <Panel title="Text settings" bind:expanded={views.text} on:changeView={onChangeView}>
+    // (286:6) <Panel title="Text settings" bind:expanded={views.text} on:changeView={onChangeView}>
     function create_default_slot_1(ctx) {
     	let text_1;
     	let updating_showVariablesButton;
@@ -9286,29 +9176,29 @@ var ui = (function () {
     	let current;
 
     	function text_1_showVariablesButton_binding(value) {
-    		/*text_1_showVariablesButton_binding*/ ctx[58](value);
+    		/*text_1_showVariablesButton_binding*/ ctx[56](value);
     	}
 
     	function text_1_styleTextSegments_binding(value) {
-    		/*text_1_styleTextSegments_binding*/ ctx[59](value);
+    		/*text_1_styleTextSegments_binding*/ ctx[57](value);
     	}
 
     	function text_1_applyStyleNames_binding(value) {
-    		/*text_1_applyStyleNames_binding*/ ctx[60](value);
+    		/*text_1_applyStyleNames_binding*/ ctx[58](value);
     	}
 
     	function text_1_applyHtags_binding(value) {
-    		/*text_1_applyHtags_binding*/ ctx[61](value);
+    		/*text_1_applyHtags_binding*/ ctx[59](value);
     	}
 
     	function text_1_includeGoogleFonts_binding(value) {
-    		/*text_1_includeGoogleFonts_binding*/ ctx[62](value);
+    		/*text_1_includeGoogleFonts_binding*/ ctx[60](value);
     	}
 
     	let text_1_props = {};
 
-    	if (/*showVariablesButton*/ ctx[25] !== void 0) {
-    		text_1_props.showVariablesButton = /*showVariablesButton*/ ctx[25];
+    	if (/*showVariablesButton*/ ctx[24] !== void 0) {
+    		text_1_props.showVariablesButton = /*showVariablesButton*/ ctx[24];
     	}
 
     	if (/*styleTextSegments*/ ctx[15] !== void 0) {
@@ -9333,8 +9223,8 @@ var ui = (function () {
     	binding_callbacks.push(() => bind(text_1, 'applyStyleNames', text_1_applyStyleNames_binding));
     	binding_callbacks.push(() => bind(text_1, 'applyHtags', text_1_applyHtags_binding));
     	binding_callbacks.push(() => bind(text_1, 'includeGoogleFonts', text_1_includeGoogleFonts_binding));
-    	text_1.$on("changeConfig", /*onChangeConfig*/ ctx[27]);
-    	text_1.$on("writeVariables", /*onWriteVariables*/ ctx[34]);
+    	text_1.$on("changeConfig", /*onChangeConfig*/ ctx[26]);
+    	text_1.$on("writeVariables", /*onWriteVariables*/ ctx[33]);
 
     	const block = {
     		c: function create() {
@@ -9347,9 +9237,9 @@ var ui = (function () {
     		p: function update(ctx, dirty) {
     			const text_1_changes = {};
 
-    			if (!updating_showVariablesButton && dirty[0] & /*showVariablesButton*/ 33554432) {
+    			if (!updating_showVariablesButton && dirty[0] & /*showVariablesButton*/ 16777216) {
     				updating_showVariablesButton = true;
-    				text_1_changes.showVariablesButton = /*showVariablesButton*/ ctx[25];
+    				text_1_changes.showVariablesButton = /*showVariablesButton*/ ctx[24];
     				add_flush_callback(() => updating_showVariablesButton = false);
     			}
 
@@ -9397,14 +9287,14 @@ var ui = (function () {
     		block,
     		id: create_default_slot_1.name,
     		type: "slot",
-    		source: "(290:6) <Panel title=\\\"Text settings\\\" bind:expanded={views.text} on:changeView={onChangeView}>",
+    		source: "(286:6) <Panel title=\\\"Text settings\\\" bind:expanded={views.text} on:changeView={onChangeView}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (304:4) <Panel title="Output" bind:expanded={views.preview} on:changeView={onChangeView}>
+    // (300:4) <Panel title="Output" bind:expanded={views.preview} on:changeView={onChangeView}>
     function create_default_slot(ctx) {
     	let preview;
     	let updating_exampleAssets;
@@ -9414,37 +9304,37 @@ var ui = (function () {
     	let current;
 
     	function preview_exampleAssets_binding(value) {
-    		/*preview_exampleAssets_binding*/ ctx[64](value);
+    		/*preview_exampleAssets_binding*/ ctx[62](value);
     	}
 
     	function preview_exampleFile_binding(value) {
-    		/*preview_exampleFile_binding*/ ctx[65](value);
+    		/*preview_exampleFile_binding*/ ctx[63](value);
     	}
 
     	function preview_scale_binding(value) {
-    		/*preview_scale_binding*/ ctx[66](value);
+    		/*preview_scale_binding*/ ctx[64](value);
     	}
 
     	function preview_showLoader_binding(value) {
-    		/*preview_showLoader_binding*/ ctx[67](value);
+    		/*preview_showLoader_binding*/ ctx[65](value);
     	}
 
     	let preview_props = {};
 
-    	if (/*exampleAssets*/ ctx[23] !== void 0) {
-    		preview_props.exampleAssets = /*exampleAssets*/ ctx[23];
+    	if (/*exampleAssets*/ ctx[22] !== void 0) {
+    		preview_props.exampleAssets = /*exampleAssets*/ ctx[22];
     	}
 
-    	if (/*exampleFile*/ ctx[24] !== void 0) {
-    		preview_props.exampleFile = /*exampleFile*/ ctx[24];
+    	if (/*exampleFile*/ ctx[23] !== void 0) {
+    		preview_props.exampleFile = /*exampleFile*/ ctx[23];
     	}
 
     	if (/*scale*/ ctx[4] !== void 0) {
     		preview_props.scale = /*scale*/ ctx[4];
     	}
 
-    	if (/*showLoader*/ ctx[26] !== void 0) {
-    		preview_props.showLoader = /*showLoader*/ ctx[26];
+    	if (/*showLoader*/ ctx[25] !== void 0) {
+    		preview_props.showLoader = /*showLoader*/ ctx[25];
     	}
 
     	preview = new Preview({ props: preview_props, $$inline: true });
@@ -9464,15 +9354,15 @@ var ui = (function () {
     		p: function update(ctx, dirty) {
     			const preview_changes = {};
 
-    			if (!updating_exampleAssets && dirty[0] & /*exampleAssets*/ 8388608) {
+    			if (!updating_exampleAssets && dirty[0] & /*exampleAssets*/ 4194304) {
     				updating_exampleAssets = true;
-    				preview_changes.exampleAssets = /*exampleAssets*/ ctx[23];
+    				preview_changes.exampleAssets = /*exampleAssets*/ ctx[22];
     				add_flush_callback(() => updating_exampleAssets = false);
     			}
 
-    			if (!updating_exampleFile && dirty[0] & /*exampleFile*/ 16777216) {
+    			if (!updating_exampleFile && dirty[0] & /*exampleFile*/ 8388608) {
     				updating_exampleFile = true;
-    				preview_changes.exampleFile = /*exampleFile*/ ctx[24];
+    				preview_changes.exampleFile = /*exampleFile*/ ctx[23];
     				add_flush_callback(() => updating_exampleFile = false);
     			}
 
@@ -9482,9 +9372,9 @@ var ui = (function () {
     				add_flush_callback(() => updating_scale = false);
     			}
 
-    			if (!updating_showLoader && dirty[0] & /*showLoader*/ 67108864) {
+    			if (!updating_showLoader && dirty[0] & /*showLoader*/ 33554432) {
     				updating_showLoader = true;
-    				preview_changes.showLoader = /*showLoader*/ ctx[26];
+    				preview_changes.showLoader = /*showLoader*/ ctx[25];
     				add_flush_callback(() => updating_showLoader = false);
     			}
 
@@ -9508,14 +9398,14 @@ var ui = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(304:4) <Panel title=\\\"Output\\\" bind:expanded={views.preview} on:changeView={onChangeView}>",
+    		source: "(300:4) <Panel title=\\\"Output\\\" bind:expanded={views.preview} on:changeView={onChangeView}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (310:0) {#if errorMessage}
+    // (306:0) {#if errorMessage}
     function create_if_block(ctx) {
     	let errormessage;
     	let current;
@@ -9556,7 +9446,7 @@ var ui = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(310:0) {#if errorMessage}",
+    		source: "(306:0) {#if errorMessage}",
     		ctx
     	});
 
@@ -9583,7 +9473,7 @@ var ui = (function () {
     	let if_block0 = /*views*/ ctx[7] && create_if_block_1(ctx);
 
     	function panel_expanded_binding(value) {
-    		/*panel_expanded_binding*/ ctx[68](value);
+    		/*panel_expanded_binding*/ ctx[66](value);
     	}
 
     	let panel_props = {
@@ -9598,25 +9488,25 @@ var ui = (function () {
 
     	panel = new Panel({ props: panel_props, $$inline: true });
     	binding_callbacks.push(() => bind(panel, 'expanded', panel_expanded_binding));
-    	panel.$on("changeView", /*onChangeView*/ ctx[30]);
+    	panel.$on("changeView", /*onChangeView*/ ctx[29]);
     	let if_block1 = /*errorMessage*/ ctx[6] && create_if_block(ctx);
 
     	function footer_nodeCount_binding(value) {
-    		/*footer_nodeCount_binding*/ ctx[69](value);
+    		/*footer_nodeCount_binding*/ ctx[67](value);
     	}
 
     	let footer_props = {};
 
-    	if (/*nodeCount*/ ctx[22] !== void 0) {
-    		footer_props.nodeCount = /*nodeCount*/ ctx[22];
+    	if (/*nodeCount*/ ctx[21] !== void 0) {
+    		footer_props.nodeCount = /*nodeCount*/ ctx[21];
     	}
 
     	footer = new Footer({ props: footer_props, $$inline: true });
     	binding_callbacks.push(() => bind(footer, 'nodeCount', footer_nodeCount_binding));
-    	footer.$on("reset", /*onReset*/ ctx[29]);
-    	footer.$on("export", /*onSelectExport*/ ctx[28]);
-    	footer.$on("save", /*onSaveSettings*/ ctx[31]);
-    	footer.$on("load", /*onLoadSettings*/ ctx[33]);
+    	footer.$on("reset", /*onReset*/ ctx[28]);
+    	footer.$on("export", /*onSelectExport*/ ctx[27]);
+    	footer.$on("save", /*onSaveSettings*/ ctx[30]);
+    	footer.$on("load", /*onLoadSettings*/ ctx[32]);
 
     	const block = {
     		c: function create() {
@@ -9634,16 +9524,16 @@ var ui = (function () {
     			t3 = space();
     			create_component(footer.$$.fragment);
     			attr_dev(i, "class", "ml-0.5 absolute text-xs text-gray-300 -rotate-45 -translate-x-1/4 -translate-y-1/4 fa-sharp fa-solid fa-grip-dots top-1/2 left-1/2");
-    			add_location(i, file, 248, 2, 7645);
+    			add_location(i, file, 245, 2, 7545);
     			attr_dev(div0, "id", "corner");
     			attr_dev(div0, "class", "fixed bottom-0 right-0 cursor-se-resize w-4 h-4 z-[999] overflow-hidden");
-    			add_location(div0, file, 242, 0, 7488);
+    			add_location(div0, file, 239, 0, 7388);
     			attr_dev(div1, "class", "flex flex-col w-1/3 min-h-full pb-12 control-panel svelte-1sr9svg");
-    			add_location(div1, file, 254, 2, 7856);
+    			add_location(div1, file, 251, 2, 7756);
     			attr_dev(div2, "class", "sticky w-2/3 h-full pb-12");
-    			add_location(div2, file, 302, 2, 9392);
+    			add_location(div2, file, 298, 2, 9263);
     			attr_dev(div3, "class", "flex w-full overflow-hidden content svelte-1sr9svg");
-    			add_location(div3, file, 253, 0, 7804);
+    			add_location(div3, file, 250, 0, 7704);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -9666,8 +9556,8 @@ var ui = (function () {
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(div0, "mousedown", /*resizeDown*/ ctx[35], false, false, false),
-    					listen_dev(div0, "mouseup", /*resizeUp*/ ctx[36], false, false, false)
+    					listen_dev(div0, "mousedown", /*resizeDown*/ ctx[34], false, false, false),
+    					listen_dev(div0, "mouseup", /*resizeUp*/ ctx[35], false, false, false)
     				];
 
     				mounted = true;
@@ -9699,7 +9589,7 @@ var ui = (function () {
 
     			const panel_changes = {};
 
-    			if (dirty[0] & /*exampleAssets, exampleFile, scale, showLoader*/ 92274704 | dirty[2] & /*$$scope*/ 65536) {
+    			if (dirty[0] & /*exampleAssets, exampleFile, scale, showLoader*/ 46137360 | dirty[2] & /*$$scope*/ 16384) {
     				panel_changes.$$scope = { dirty, ctx };
     			}
 
@@ -9736,9 +9626,9 @@ var ui = (function () {
 
     			const footer_changes = {};
 
-    			if (!updating_nodeCount && dirty[0] & /*nodeCount*/ 4194304) {
+    			if (!updating_nodeCount && dirty[0] & /*nodeCount*/ 2097152) {
     				updating_nodeCount = true;
-    				footer_changes.nodeCount = /*nodeCount*/ ctx[22];
+    				footer_changes.nodeCount = /*nodeCount*/ ctx[21];
     				add_flush_callback(() => updating_nodeCount = false);
     			}
 
@@ -9842,7 +9732,6 @@ var ui = (function () {
     	let applyHtags = false;
     	let styleTextSegments = true;
     	let includeGoogleFonts = true;
-    	let clickableLink = undefined;
     	let maxWidth = undefined;
     	let imagePath = undefined;
     	let altText = undefined;
@@ -9863,7 +9752,6 @@ var ui = (function () {
     			maxWidth,
     			fluid,
     			centerHtmlOutput,
-    			clickableLink,
     			imagePath,
     			altText,
     			applyStyleNames,
@@ -9887,23 +9775,22 @@ var ui = (function () {
     			$$invalidate(0, fileType = config.fileType);
     			$$invalidate(9, includeResizer = config.includeResizer);
     			$$invalidate(11, testingMode = config.testingMode);
-    			$$invalidate(18, maxWidth = config.maxWidth);
+    			$$invalidate(17, maxWidth = config.maxWidth);
     			$$invalidate(10, fluid = config.fluid);
     			$$invalidate(12, centerHtmlOutput = config.centerHtmlOutput);
-    			$$invalidate(17, clickableLink = config.clickableLink);
-    			$$invalidate(19, imagePath = config.imagePath);
-    			$$invalidate(20, altText = config.altText);
+    			$$invalidate(18, imagePath = config.imagePath);
+    			$$invalidate(19, altText = config.altText);
     			$$invalidate(13, applyStyleNames = config.applyStyleNames);
     			$$invalidate(14, applyHtags = config.applyHtags);
     			$$invalidate(15, styleTextSegments = config.styleTextSegments);
     			$$invalidate(16, includeGoogleFonts = config.includeGoogleFonts);
-    			$$invalidate(21, customScript = config.customScript);
+    			$$invalidate(20, customScript = config.customScript);
     		} else if (type === "preview") {
     			const preview = message.preview;
-    			$$invalidate(22, nodeCount = preview.nodeCount);
-    			$$invalidate(23, exampleAssets = preview.exampleAssets);
-    			$$invalidate(24, exampleFile = preview.exampleFile);
-    			$$invalidate(23, exampleAssets = await buildPreviewImages(exampleAssets));
+    			$$invalidate(21, nodeCount = preview.nodeCount);
+    			$$invalidate(22, exampleAssets = preview.exampleAssets);
+    			$$invalidate(23, exampleFile = preview.exampleFile);
+    			$$invalidate(22, exampleAssets = await buildPreviewImages(exampleAssets));
     			loading = message.loading;
     		} else if (type === "loading") {
     			loading = message.loading;
@@ -9921,7 +9808,7 @@ var ui = (function () {
     				1500
     			);
     		} else if (type === "variables") {
-    			$$invalidate(25, showVariablesButton = message.variables === null);
+    			$$invalidate(24, showVariablesButton = message.variables === null);
     		} else if (type === "error") {
     			setErrorMessage(message.message);
     		}
@@ -10099,12 +9986,12 @@ var ui = (function () {
 
     	function images_imagePath_binding(value) {
     		imagePath = value;
-    		$$invalidate(19, imagePath);
+    		$$invalidate(18, imagePath);
     	}
 
     	function images_altText_binding(value) {
     		altText = value;
-    		$$invalidate(20, altText);
+    		$$invalidate(19, altText);
     	}
 
     	function panel1_expanded_binding(value) {
@@ -10131,17 +10018,12 @@ var ui = (function () {
 
     	function page_maxWidth_binding(value) {
     		maxWidth = value;
-    		$$invalidate(18, maxWidth);
+    		$$invalidate(17, maxWidth);
     	}
 
     	function page_customScript_binding(value) {
     		customScript = value;
-    		$$invalidate(21, customScript);
-    	}
-
-    	function page_clickableLink_binding(value) {
-    		clickableLink = value;
-    		$$invalidate(17, clickableLink);
+    		$$invalidate(20, customScript);
     	}
 
     	function panel2_expanded_binding(value) {
@@ -10153,7 +10035,7 @@ var ui = (function () {
 
     	function text_1_showVariablesButton_binding(value) {
     		showVariablesButton = value;
-    		$$invalidate(25, showVariablesButton);
+    		$$invalidate(24, showVariablesButton);
     	}
 
     	function text_1_styleTextSegments_binding(value) {
@@ -10185,12 +10067,12 @@ var ui = (function () {
 
     	function preview_exampleAssets_binding(value) {
     		exampleAssets = value;
-    		$$invalidate(23, exampleAssets);
+    		$$invalidate(22, exampleAssets);
     	}
 
     	function preview_exampleFile_binding(value) {
     		exampleFile = value;
-    		$$invalidate(24, exampleFile);
+    		$$invalidate(23, exampleFile);
     	}
 
     	function preview_scale_binding(value) {
@@ -10200,7 +10082,7 @@ var ui = (function () {
 
     	function preview_showLoader_binding(value) {
     		showLoader = value;
-    		$$invalidate(26, showLoader);
+    		$$invalidate(25, showLoader);
     	}
 
     	function panel_expanded_binding(value) {
@@ -10212,7 +10094,7 @@ var ui = (function () {
 
     	function footer_nodeCount_binding(value) {
     		nodeCount = value;
-    		$$invalidate(22, nodeCount);
+    		$$invalidate(21, nodeCount);
     	}
 
     	$$self.$capture_state = () => ({
@@ -10245,7 +10127,6 @@ var ui = (function () {
     		applyHtags,
     		styleTextSegments,
     		includeGoogleFonts,
-    		clickableLink,
     		maxWidth,
     		imagePath,
     		altText,
@@ -10293,17 +10174,16 @@ var ui = (function () {
     		if ('applyHtags' in $$props) $$invalidate(14, applyHtags = $$props.applyHtags);
     		if ('styleTextSegments' in $$props) $$invalidate(15, styleTextSegments = $$props.styleTextSegments);
     		if ('includeGoogleFonts' in $$props) $$invalidate(16, includeGoogleFonts = $$props.includeGoogleFonts);
-    		if ('clickableLink' in $$props) $$invalidate(17, clickableLink = $$props.clickableLink);
-    		if ('maxWidth' in $$props) $$invalidate(18, maxWidth = $$props.maxWidth);
-    		if ('imagePath' in $$props) $$invalidate(19, imagePath = $$props.imagePath);
-    		if ('altText' in $$props) $$invalidate(20, altText = $$props.altText);
-    		if ('customScript' in $$props) $$invalidate(21, customScript = $$props.customScript);
-    		if ('nodeCount' in $$props) $$invalidate(22, nodeCount = $$props.nodeCount);
-    		if ('exampleAssets' in $$props) $$invalidate(23, exampleAssets = $$props.exampleAssets);
-    		if ('exampleFile' in $$props) $$invalidate(24, exampleFile = $$props.exampleFile);
-    		if ('showVariablesButton' in $$props) $$invalidate(25, showVariablesButton = $$props.showVariablesButton);
+    		if ('maxWidth' in $$props) $$invalidate(17, maxWidth = $$props.maxWidth);
+    		if ('imagePath' in $$props) $$invalidate(18, imagePath = $$props.imagePath);
+    		if ('altText' in $$props) $$invalidate(19, altText = $$props.altText);
+    		if ('customScript' in $$props) $$invalidate(20, customScript = $$props.customScript);
+    		if ('nodeCount' in $$props) $$invalidate(21, nodeCount = $$props.nodeCount);
+    		if ('exampleAssets' in $$props) $$invalidate(22, exampleAssets = $$props.exampleAssets);
+    		if ('exampleFile' in $$props) $$invalidate(23, exampleFile = $$props.exampleFile);
+    		if ('showVariablesButton' in $$props) $$invalidate(24, showVariablesButton = $$props.showVariablesButton);
     		if ('resizing' in $$props) resizing = $$props.resizing;
-    		if ('showLoader' in $$props) $$invalidate(26, showLoader = $$props.showLoader);
+    		if ('showLoader' in $$props) $$invalidate(25, showLoader = $$props.showLoader);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -10336,7 +10216,7 @@ var ui = (function () {
     		}
     	};
 
-    	$$invalidate(26, showLoader = false);
+    	$$invalidate(25, showLoader = false);
 
     	return [
     		fileType,
@@ -10356,7 +10236,6 @@ var ui = (function () {
     		applyHtags,
     		styleTextSegments,
     		includeGoogleFonts,
-    		clickableLink,
     		maxWidth,
     		imagePath,
     		altText,
@@ -10395,7 +10274,6 @@ var ui = (function () {
     		page_fluid_binding,
     		page_maxWidth_binding,
     		page_customScript_binding,
-    		page_clickableLink_binding,
     		panel2_expanded_binding,
     		text_1_showVariablesButton_binding,
     		text_1_styleTextSegments_binding,

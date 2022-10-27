@@ -3992,13 +3992,6 @@ var page = ({ containerId, config, frameCss }) => {
             margin: '0 auto',
         };
     }
-    // add clickable link base styles
-    if (config.clickableLink !== '')
-        selectors[`${id} .f2h-link`] = {
-            cursor: 'pointer',
-            'text-decoration': 'none',
-            color: 'inherit',
-        };
     // default <p> styles
     selectors[`${id} p, ${id} .body`] = { margin: '0' };
     // image placement
@@ -4618,9 +4611,7 @@ var html = ({ config, assets, variables }) => {
         frameCss
     })}\n</style>`;
     html += `\n\n<div id="${containerId}" class="figma2html">`;
-    if (config.clickableLink)
-        html += `\n\t<a class="f2h-link" href="${config.clickableLink}">`;
-    html += `\n${config.clickableLink ? '\t\t' : '\t'}${assets
+    html += `\n\t${assets
         .map(({ node, filename }) => frame({
         node,
         filename,
@@ -4630,8 +4621,6 @@ var html = ({ config, assets, variables }) => {
         variables,
     }).html)
         .join('\n\n')}`;
-    if (config.clickableLink)
-        html += `\n\t</a>`;
     if (config.includeResizer)
         html += `\n\n${js.resizer(containerId, false)}`;
     if (config.includeGoogleFonts && !!fontList.length)
@@ -4765,7 +4754,6 @@ StoredConfig.get = async () => {
             maxWidth: null,
             fluid: true,
             centerHtmlOutput: false,
-            clickableLink: null,
             imagePath: 'img',
             altText: null,
             applyStyleNames: true,
