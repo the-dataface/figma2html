@@ -28,14 +28,20 @@ In a terminal, run `npm run build` to create a build of the project, which is re
 
 #### Run plugin
 
-From searchbar:
+From the quick actions bar:
 
-1. `cmd + /` to open the searchbar
-2. typing `figma2html` and hit enter on the plugin
+1. `cmd + /` to open the quick actions bar
+2. Type `figma2html` and hit enter on the plugin
 
 From menu: 
 
 1. From Figma's top menu: `Plugins` > `Development` > `figma2html`
+
+From resources:
+
+1. `shift + I` top open the resources panel
+2. Click `Plugins`
+3. Search for `figma2html` and click run
 
 ## Instructions
 
@@ -62,7 +68,7 @@ From menu:
 
 ### File settings
 
-- The inputted Filename will be the name of the outputted zipped folder and HTML file. You can customize this, but will default to the current page name in Figma.
+- The inputted Filename will be the name of the outputted zipped folder and HTML file. You can customize this, but will default to the current page name in Figma. This field is required to export.
 - Filetype option so far is just `html`. `svelte` is coming soon!
 - Turn on `Testing Mode` to keep text visible on exported images. Useful for comparing layouts in the exported HTML vs the designs in Figma.
 
@@ -71,7 +77,7 @@ From menu:
 - Input an `Image scale` to export images at a specified scale.
 - `Image format` options include `PNG`, `JPG`, and `SVG`.
 - The `Path` field allows you to specify an image path, which will be referenced in the image paths in the outputted HTML. Useful if you will be dropping your outputted files into a larger codebase.
-- `Alt text` allows you to add an alt text tag to images in your outputted HTML.
+- `Alt text` allows you to add an alt text tag to images in your outputted HTML. This field is required to export.
 
 ### Page settings
 
@@ -79,7 +85,6 @@ From menu:
 - Turn on `Center HTML output` to center your page content in the outputted HTML.
 - Turn on `Fluid` to have the f2h containers fill the width of the screen. If off, f2h containers will maintain the widths at which they were designed in Figma.
 - Input a `Max width` in pixels to apply a max width to your page content.
-- Include a `Clickable link` to wrap your output in an `<a>` tag.
 - Include `Custom scripts`, like Typekit tags, to your outputted HTML.
 
 ### Text settings
