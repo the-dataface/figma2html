@@ -10,7 +10,7 @@ Export Figma frames as responsive images with text elements rendered as HTML. A 
 3. `npm run build`
 4. `npm run dev`
 5. Open Figma, go to `Plugins` > `Development` > `Import plugin from manifest`, then navigate to this repo's `manifest.json` file.
-6. In Figma, hit `cmd + /`, type "Figmaps" and hit enter
+6. In Figma, hit `cmd + /`, type "figma2html" and hit enter
 
 ### Instructions
 
