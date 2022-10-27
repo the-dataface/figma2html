@@ -187,6 +187,17 @@
 
   const onChangeConfig = () => postMessage({ type: "config", config: buildConfig() });
   const onSelectExport = () => {
+    if (!altText || altText === "") {
+      setErrorMessage("Please enter an alt text");
+      views.images = true;
+      return;
+    }
+
+    if (!syntax || syntax === "") {
+      setErrorMessage("File name cannot be empty");
+      return;
+    }
+
     loading = true;
     postMessage({ type: "export", config: buildConfig() });
   };

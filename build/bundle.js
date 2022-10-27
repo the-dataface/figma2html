@@ -898,7 +898,7 @@ var ui = (function () {
       }
     }
 
-    var css_248z$z = "/*! tailwindcss v3.2.0 | MIT License | https://tailwindcss.com*/*,:after,:before{border:0 solid #e5e7eb;box-sizing:border-box}:after,:before{--tw-content:\"\"}html{-webkit-text-size-adjust:100%;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4}body{line-height:inherit;margin:0}hr{border-top-width:1px;color:inherit;height:0}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{border-collapse:collapse;border-color:inherit;text-indent:0}button,input,optgroup,select,textarea{color:inherit;font-family:inherit;font-size:100%;font-weight:inherit;line-height:inherit;margin:0;padding:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}textarea{resize:vertical}input::-moz-placeholder, textarea::-moz-placeholder{color:#9ca3af;opacity:1}input::placeholder,textarea::placeholder{color:#9ca3af;opacity:1}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{height:auto;max-width:100%}[hidden]{display:none}*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }.container{width:100%}@media (min-width:640px){.container{max-width:640px}}@media (min-width:768px){.container{max-width:768px}}@media (min-width:1024px){.container{max-width:1024px}}@media (min-width:1280px){.container{max-width:1280px}}@media (min-width:1536px){.container{max-width:1536px}}.pointer-events-none{pointer-events:none}.visible{visibility:visible}.static{position:static}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.bottom-0{bottom:0}.right-0{right:0}.top-1\\/2{top:50%}.left-1\\/2{left:50%}.left-0{left:0}.top-0{top:0}.z-\\[999\\]{z-index:999}.z-20{z-index:20}.m-0{margin:0}.mx-2{margin-left:.5rem;margin-right:.5rem}.ml-0\\.5{margin-left:.125rem}.ml-0{margin-left:0}.mr-2{margin-right:.5rem}.mt-2{margin-top:.5rem}.mb-2\\.5{margin-bottom:.625rem}.mb-2{margin-bottom:.5rem}.ml-1{margin-left:.25rem}.mr-0{margin-right:0}.mt-4{margin-top:1rem}.block{display:block}.inline{display:inline}.flex{display:flex}.hidden{display:none}.aspect-square{aspect-ratio:1/1}.h-4{height:1rem}.h-full{height:100%}.h-12{height:3rem}.h-6{height:1.5rem}.h-16{height:4rem}.min-h-full{min-height:100%}.min-h-\\[200px\\]{min-height:200px}.w-4{width:1rem}.w-full{width:100%}.w-1\\/3{width:33.333333%}.w-2\\/3{width:66.666667%}.w-6{width:1.5rem}.w-16{width:4rem}.flex-grow{flex-grow:1}.-translate-x-1\\/4{--tw-translate-x:-25%}.-translate-x-1\\/4,.-translate-y-1\\/4{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\\/4{--tw-translate-y:-25%}.-translate-x-1\\/2{--tw-translate-x:-50%}.-translate-x-1\\/2,.-translate-y-1\\/2{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\\/2{--tw-translate-y:-50%}.-rotate-45{--tw-rotate:-45deg}.-rotate-45,.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-se-resize{cursor:se-resize}.cursor-pointer{cursor:pointer}.resize{resize:both}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:.5rem}.gap-4{gap:1rem}.gap-1{gap:.25rem}.overflow-hidden{overflow:hidden}.rounded-full{border-radius:9999px}.rounded{border-radius:.25rem}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.border{border-width:1px}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity))}.p-4{padding:1rem}.p-2{padding:.5rem}.py-4{padding-bottom:1rem;padding-top:1rem}.px-\\[11px\\]{padding-left:11px;padding-right:11px}.pb-12{padding-bottom:3rem}.text-xs{font-size:.75rem;line-height:1rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-\\[10px\\]{font-size:10px}.text-base{font-size:1rem;line-height:1.5rem}.font-bold{font-weight:700}.italic{font-style:italic}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219/var(--tw-text-opacity))}.opacity-0{opacity:0}.outline{outline-style:solid}.blur{--tw-blur:blur(8px)}.blur,.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.transition-all{transition-duration:.15s;transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1)}.transition{transition-duration:.15s;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1)}.hover\\:opacity-80:hover{opacity:.8}";
+    var css_248z$z = "/*! tailwindcss v3.2.0 | MIT License | https://tailwindcss.com*/*,:after,:before{border:0 solid #e5e7eb;box-sizing:border-box}:after,:before{--tw-content:\"\"}html{-webkit-text-size-adjust:100%;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4}body{line-height:inherit;margin:0}hr{border-top-width:1px;color:inherit;height:0}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{border-collapse:collapse;border-color:inherit;text-indent:0}button,input,optgroup,select,textarea{color:inherit;font-family:inherit;font-size:100%;font-weight:inherit;line-height:inherit;margin:0;padding:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}textarea{resize:vertical}input::-moz-placeholder, textarea::-moz-placeholder{color:#9ca3af;opacity:1}input::placeholder,textarea::placeholder{color:#9ca3af;opacity:1}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{height:auto;max-width:100%}[hidden]{display:none}*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }.container{width:100%}@media (min-width:640px){.container{max-width:640px}}@media (min-width:768px){.container{max-width:768px}}@media (min-width:1024px){.container{max-width:1024px}}@media (min-width:1280px){.container{max-width:1280px}}@media (min-width:1536px){.container{max-width:1536px}}.pointer-events-none{pointer-events:none}.visible{visibility:visible}.static{position:static}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.bottom-0{bottom:0}.right-0{right:0}.top-1\\/2{top:50%}.left-1\\/2{left:50%}.left-0{left:0}.top-0{top:0}.z-\\[999\\]{z-index:999}.z-20{z-index:20}.m-0{margin:0}.mx-2{margin-left:.5rem;margin-right:.5rem}.ml-0\\.5{margin-left:.125rem}.ml-0{margin-left:0}.mr-2{margin-right:.5rem}.mt-2{margin-top:.5rem}.mb-2\\.5{margin-bottom:.625rem}.mb-2{margin-bottom:.5rem}.ml-1{margin-left:.25rem}.mr-0{margin-right:0}.mt-4{margin-top:1rem}.block{display:block}.inline{display:inline}.flex{display:flex}.hidden{display:none}.aspect-square{aspect-ratio:1/1}.h-4{height:1rem}.h-full{height:100%}.h-12{height:3rem}.h-6{height:1.5rem}.h-16{height:4rem}.min-h-full{min-height:100%}.min-h-\\[200px\\]{min-height:200px}.w-4{width:1rem}.w-full{width:100%}.w-1\\/3{width:33.333333%}.w-2\\/3{width:66.666667%}.w-6{width:1.5rem}.w-16{width:4rem}.flex-grow{flex-grow:1}.-translate-x-1\\/4{--tw-translate-x:-25%}.-translate-x-1\\/4,.-translate-y-1\\/4{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\\/4{--tw-translate-y:-25%}.-translate-x-1\\/2{--tw-translate-x:-50%}.-translate-x-1\\/2,.-translate-y-1\\/2{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\\/2{--tw-translate-y:-50%}.-rotate-45{--tw-rotate:-45deg}.-rotate-45,.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-se-resize{cursor:se-resize}.cursor-pointer{cursor:pointer}.resize{resize:both}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:.5rem}.gap-1{gap:.25rem}.gap-4{gap:1rem}.overflow-hidden{overflow:hidden}.rounded-full{border-radius:9999px}.rounded{border-radius:.25rem}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.border{border-width:1px}.border-red-600{--tw-border-opacity:1;border-color:rgb(220 38 38/var(--tw-border-opacity))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity))}.p-4{padding:1rem}.p-2{padding:.5rem}.py-4{padding-bottom:1rem;padding-top:1rem}.px-\\[11px\\]{padding-left:11px;padding-right:11px}.pb-12{padding-bottom:3rem}.text-xs{font-size:.75rem;line-height:1rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-\\[10px\\]{font-size:10px}.text-base{font-size:1rem;line-height:1.5rem}.font-bold{font-weight:700}.italic{font-style:italic}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219/var(--tw-text-opacity))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38/var(--tw-text-opacity))}.opacity-0{opacity:0}.outline{outline-style:solid}.blur{--tw-blur:blur(8px)}.blur,.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.transition-all{transition-duration:.15s;transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1)}.transition{transition-duration:.15s;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1)}.hover\\:opacity-80:hover{opacity:.8}";
     styleInject(css_248z$z);
 
     var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -1236,7 +1236,7 @@ var ui = (function () {
     }
 
     // (34:2) {#if expanded}
-    function create_if_block$a(ctx) {
+    function create_if_block$c(ctx) {
     	let div;
     	let current;
     	const default_slot_template = /*#slots*/ ctx[4].default;
@@ -1291,7 +1291,7 @@ var ui = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$a.name,
+    		id: create_if_block$c.name,
     		type: "if",
     		source: "(34:2) {#if expanded}",
     		ctx
@@ -1326,7 +1326,7 @@ var ui = (function () {
     	if_block0 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
     	const button_slot_template = /*#slots*/ ctx[4].button;
     	const button_slot = create_slot(button_slot_template, ctx, /*$$scope*/ ctx[5], get_button_slot_context);
-    	let if_block1 = /*expanded*/ ctx[0] && create_if_block$a(ctx);
+    	let if_block1 = /*expanded*/ ctx[0] && create_if_block$c(ctx);
 
     	const block = {
     		c: function create() {
@@ -1425,7 +1425,7 @@ var ui = (function () {
     						transition_in(if_block1, 1);
     					}
     				} else {
-    					if_block1 = create_if_block$a(ctx);
+    					if_block1 = create_if_block$c(ctx);
     					if_block1.c();
     					transition_in(if_block1, 1);
     					if_block1.m(div2, null);
@@ -1664,7 +1664,7 @@ var ui = (function () {
     }
 
     // (18:4) {#if iconText}
-    function create_if_block$9(ctx) {
+    function create_if_block$b(ctx) {
     	let t;
 
     	const block = {
@@ -1684,7 +1684,7 @@ var ui = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$9.name,
+    		id: create_if_block$b.name,
     		type: "if",
     		source: "(18:4) {#if iconText}",
     		ctx
@@ -1700,7 +1700,7 @@ var ui = (function () {
     	let dispose;
 
     	function select_block_type(ctx, dirty) {
-    		if (/*iconText*/ ctx[2]) return create_if_block$9;
+    		if (/*iconText*/ ctx[2]) return create_if_block$b;
     		return create_else_block$2;
     	}
 
@@ -2538,7 +2538,7 @@ var ui = (function () {
     }
 
     // (51:0) {#if menuOpen}
-    function create_if_block$8(ctx) {
+    function create_if_block$a(ctx) {
     	let menu;
     	let current;
     	menu = new Menu({ $$inline: true });
@@ -2567,7 +2567,7 @@ var ui = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$8.name,
+    		id: create_if_block$a.name,
     		type: "if",
     		source: "(51:0) {#if menuOpen}",
     		ctx
@@ -2632,7 +2632,7 @@ var ui = (function () {
     		});
 
     	hovericon2.$on("click", /*onLoad*/ ctx[5]);
-    	let if_block = /*menuOpen*/ ctx[1] && create_if_block$8(ctx);
+    	let if_block = /*menuOpen*/ ctx[1] && create_if_block$a(ctx);
 
     	const block = {
     		c: function create() {
@@ -2734,7 +2734,7 @@ var ui = (function () {
     						transition_in(if_block, 1);
     					}
     				} else {
-    					if_block = create_if_block$8(ctx);
+    					if_block = create_if_block$a(ctx);
     					if_block.c();
     					transition_in(if_block, 1);
     					if_block.m(if_block_anchor.parentNode, if_block_anchor);
@@ -2932,7 +2932,7 @@ var ui = (function () {
     const file$d = "src/lib/components/Inputs/Checkbox.svelte";
 
     // (33:8) {#if checked}
-    function create_if_block$7(ctx) {
+    function create_if_block$9(ctx) {
     	let i;
     	let i_transition;
     	let current;
@@ -2970,7 +2970,7 @@ var ui = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$7.name,
+    		id: create_if_block$9.name,
     		type: "if",
     		source: "(33:8) {#if checked}",
     		ctx
@@ -2991,7 +2991,7 @@ var ui = (function () {
     	let current;
     	let mounted;
     	let dispose;
-    	let if_block = /*checked*/ ctx[0] && create_if_block$7(ctx);
+    	let if_block = /*checked*/ ctx[0] && create_if_block$9(ctx);
 
     	const block = {
     		c: function create() {
@@ -3064,7 +3064,7 @@ var ui = (function () {
     						transition_in(if_block, 1);
     					}
     				} else {
-    					if_block = create_if_block$7(ctx);
+    					if_block = create_if_block$9(ctx);
     					if_block.c();
     					transition_in(if_block, 1);
     					if_block.m(div0, null);
@@ -3246,15 +3246,15 @@ var ui = (function () {
     	}
     }
 
-    var css_248z$a = ".input.svelte-170yr2b{position:relative;transition:flex 0s .2s}input.svelte-170yr2b{align-items:center;background-color:var(--figma-color-bg);border:1px solid transparent;border-radius:var(--border-radius-small);color:var(--figma-color-text);display:flex;font-size:var(--font-size-xsmall);font-weight:var(--font-weight-normal);height:30px;letter-spacing:var(--font-letter-spacing-neg-xsmall);line-height:var(--line-height);margin:1px 0;outline:none;overflow:visible;padding:var(--size-xxsmall) var(--size-xxxsmall) var(--size-xxsmall) var(--size-xxsmall);position:relative;width:100%}input.svelte-170yr2b:-moz-placeholder-shown:hover{background-image:none;border:1px solid var(--figma-color-border);color:var(--figma-color-text-hover)}input.svelte-170yr2b:hover,input.svelte-170yr2b:placeholder-shown:hover{background-image:none;border:1px solid var(--figma-color-border);color:var(--figma-color-text-hover)}input.svelte-170yr2b::-moz-selection{background-color:var(--text-highlight);color:var(--figma-color-text)}input.svelte-170yr2b::selection{background-color:var(--text-highlight);color:var(--figma-color-text)}input.svelte-170yr2b::-moz-placeholder{border:1px solid transparent;color:var(--figma-color-text-tertiary)}input.svelte-170yr2b::placeholder{border:1px solid transparent;color:var(--figma-color-text-tertiary)}input.svelte-170yr2b:-moz-placeholder-shown{background-image:none;border:1px solid var(--figma-color-border);color:var(--figma-color-text)}input.svelte-170yr2b:placeholder-shown{background-image:none;border:1px solid var(--figma-color-border);color:var(--figma-color-text)}input.svelte-170yr2b:focus:-moz-placeholder-shown{border:1px solid var(--figma-color-border-selected);outline:1px solid var(--figma-color-border-selected);outline-offset:-2px}input.svelte-170yr2b:focus:placeholder-shown{border:1px solid var(--figma-color-border-selected);outline:1px solid var(--figma-color-border-selected);outline-offset:-2px}input.svelte-170yr2b:disabled:hover{border:1px solid transparent}input.svelte-170yr2b:active,input.svelte-170yr2b:focus{border:1px solid var(--figma-color-border-selected);color:var(--figma-color-text);outline:1px solid var(--figma-color-border-selected);outline-offset:-2px}input.svelte-170yr2b:disabled{background-image:none;color:var(--figma-color-text-disabled);position:relative}input.svelte-170yr2b:disabled:active{outline:none}.borders.svelte-170yr2b{background-image:none;border:1px solid var(--figma-color-border)}.borders.svelte-170yr2b:disabled{background-image:none;border:1px solid transparent}.borders.svelte-170yr2b:disabled:-moz-placeholder-shown{background-image:none;border:1px solid transparent}.borders.svelte-170yr2b:disabled:placeholder-shown{background-image:none;border:1px solid transparent}.borders.svelte-170yr2b:disabled:-moz-placeholder-shown:active{border:1px solid transparent;outline:none}.borders.svelte-170yr2b:disabled:placeholder-shown:active{border:1px solid transparent;outline:none}.borders.svelte-170yr2b:-moz-placeholder-shown{background-image:none;border:1px solid var(--figma-color-border)}.borders.svelte-170yr2b:placeholder-shown{background-image:none;border:1px solid var(--figma-color-border)}.indent.svelte-170yr2b{padding-left:32px}.invalid.svelte-170yr2b,.invalid.svelte-170yr2b:focus,.invalid.svelte-170yr2b:hover{border:1px solid var(--figma-color-border-danger-strong);outline:1px solid var(--figma-color-border-danger-strong);outline-offset:-2px}.icon.svelte-170yr2b{height:var(--size-medium);left:0;position:absolute;top:-1px;width:var(--size-medium);z-index:1}.error.svelte-170yr2b{color:var(--figma-color-text-danger);font-size:var(--font-size-xsmall);font-weight:var(--font-weight-normal);letter-spacing:var(--font-letter-spacing-neg-xsmall);line-height:var(--line-height);padding-left:var(--size-xxsmall);padding-top:var(--size-xxxsmall)}";
+    var css_248z$a = ".required.svelte-pi70ay input.svelte-pi70ay{border:1px solid #dc2626!important}.input.svelte-pi70ay.svelte-pi70ay{position:relative;transition:flex 0s .2s}input.svelte-pi70ay.svelte-pi70ay{align-items:center;background-color:var(--figma-color-bg);border:1px solid transparent;border-radius:var(--border-radius-small);color:var(--figma-color-text);display:flex;font-size:var(--font-size-xsmall);font-weight:var(--font-weight-normal);height:30px;letter-spacing:var(--font-letter-spacing-neg-xsmall);line-height:var(--line-height);margin:1px 0;outline:none;overflow:visible;padding:var(--size-xxsmall) var(--size-xxxsmall) var(--size-xxsmall) var(--size-xxsmall);position:relative;width:100%}input.svelte-pi70ay.svelte-pi70ay:-moz-placeholder-shown:hover{background-image:none;border:1px solid var(--figma-color-border);color:var(--figma-color-text-hover)}input.svelte-pi70ay.svelte-pi70ay:hover,input.svelte-pi70ay.svelte-pi70ay:placeholder-shown:hover{background-image:none;border:1px solid var(--figma-color-border);color:var(--figma-color-text-hover)}input.svelte-pi70ay.svelte-pi70ay::-moz-selection{background-color:var(--text-highlight);color:var(--figma-color-text)}input.svelte-pi70ay.svelte-pi70ay::selection{background-color:var(--text-highlight);color:var(--figma-color-text)}input.svelte-pi70ay.svelte-pi70ay::-moz-placeholder{border:1px solid transparent;color:var(--figma-color-text-tertiary)}input.svelte-pi70ay.svelte-pi70ay::placeholder{border:1px solid transparent;color:var(--figma-color-text-tertiary)}input.svelte-pi70ay.svelte-pi70ay:-moz-placeholder-shown{background-image:none;border:1px solid var(--figma-color-border);color:var(--figma-color-text)}input.svelte-pi70ay.svelte-pi70ay:placeholder-shown{background-image:none;border:1px solid var(--figma-color-border);color:var(--figma-color-text)}input.svelte-pi70ay.svelte-pi70ay:focus:-moz-placeholder-shown{border:1px solid var(--figma-color-border-selected);outline:1px solid var(--figma-color-border-selected);outline-offset:-2px}input.svelte-pi70ay.svelte-pi70ay:focus:placeholder-shown{border:1px solid var(--figma-color-border-selected);outline:1px solid var(--figma-color-border-selected);outline-offset:-2px}input.svelte-pi70ay.svelte-pi70ay:disabled:hover{border:1px solid transparent}input.svelte-pi70ay.svelte-pi70ay:active,input.svelte-pi70ay.svelte-pi70ay:focus{border:1px solid var(--figma-color-border-selected);color:var(--figma-color-text);outline:1px solid var(--figma-color-border-selected);outline-offset:-2px}input.svelte-pi70ay.svelte-pi70ay:disabled{background-image:none;color:var(--figma-color-text-disabled);position:relative}input.svelte-pi70ay.svelte-pi70ay:disabled:active{outline:none}.borders.svelte-pi70ay.svelte-pi70ay{background-image:none;border:1px solid var(--figma-color-border)}.borders.svelte-pi70ay.svelte-pi70ay:disabled{background-image:none;border:1px solid transparent}.borders.svelte-pi70ay.svelte-pi70ay:disabled:-moz-placeholder-shown{background-image:none;border:1px solid transparent}.borders.svelte-pi70ay.svelte-pi70ay:disabled:placeholder-shown{background-image:none;border:1px solid transparent}.borders.svelte-pi70ay.svelte-pi70ay:disabled:-moz-placeholder-shown:active{border:1px solid transparent;outline:none}.borders.svelte-pi70ay.svelte-pi70ay:disabled:placeholder-shown:active{border:1px solid transparent;outline:none}.borders.svelte-pi70ay.svelte-pi70ay:-moz-placeholder-shown{background-image:none;border:1px solid var(--figma-color-border)}.borders.svelte-pi70ay.svelte-pi70ay:placeholder-shown{background-image:none;border:1px solid var(--figma-color-border)}.indent.svelte-pi70ay.svelte-pi70ay{padding-left:32px}.invalid.svelte-pi70ay.svelte-pi70ay,.invalid.svelte-pi70ay.svelte-pi70ay:focus,.invalid.svelte-pi70ay.svelte-pi70ay:hover{border:1px solid var(--figma-color-border-danger-strong);outline:1px solid var(--figma-color-border-danger-strong);outline-offset:-2px}.icon.svelte-pi70ay.svelte-pi70ay{height:var(--size-medium);left:0;position:absolute;top:-1px;width:var(--size-medium);z-index:1}.error.svelte-pi70ay.svelte-pi70ay{color:var(--figma-color-text-danger);font-size:var(--font-size-xsmall);font-weight:var(--font-weight-normal);letter-spacing:var(--font-letter-spacing-neg-xsmall);line-height:var(--line-height);padding-left:var(--size-xxsmall);padding-top:var(--size-xxxsmall)}";
     styleInject(css_248z$a);
 
     /* src/lib/components/Inputs/Input.svelte generated by Svelte v3.48.0 */
 
     const file$c = "src/lib/components/Inputs/Input.svelte";
 
-    // (34:2) {#if invalid}
-    function create_if_block$6(ctx) {
+    // (32:2) {#if invalid}
+    function create_if_block$8(ctx) {
     	let div;
     	let t;
 
@@ -3262,8 +3262,8 @@ var ui = (function () {
     		c: function create() {
     			div = element("div");
     			t = text(/*errorMessage*/ ctx[7]);
-    			attr_dev(div, "class", "error svelte-170yr2b");
-    			add_location(div, file$c, 34, 4, 661);
+    			attr_dev(div, "class", "error svelte-pi70ay");
+    			add_location(div, file$c, 32, 4, 641);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3279,9 +3279,9 @@ var ui = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$6.name,
+    		id: create_if_block$8.name,
     		type: "if",
-    		source: "(34:2) {#if invalid}",
+    		source: "(32:2) {#if invalid}",
     		ctx
     	});
 
@@ -3295,7 +3295,7 @@ var ui = (function () {
     	let div_class_value;
     	let mounted;
     	let dispose;
-    	let if_block = /*invalid*/ ctx[6] && create_if_block$6(ctx);
+    	let if_block = /*invalid*/ ctx[6] && create_if_block$8(ctx);
 
     	const block = {
     		c: function create() {
@@ -3309,12 +3309,12 @@ var ui = (function () {
     			input.disabled = /*disabled*/ ctx[5];
     			attr_dev(input, "placeholder", /*placeholder*/ ctx[8]);
     			attr_dev(input, "errormessage", /*errorMessage*/ ctx[7]);
-    			attr_dev(input, "class", "svelte-170yr2b");
+    			attr_dev(input, "class", "svelte-pi70ay");
     			toggle_class(input, "borders", /*borders*/ ctx[4]);
     			toggle_class(input, "invalid", /*invalid*/ ctx[6]);
-    			add_location(input, file$c, 16, 2, 402);
-    			attr_dev(div, "class", div_class_value = "input " + /*className*/ ctx[9] + " svelte-170yr2b");
-    			add_location(div, file$c, 15, 0, 368);
+    			add_location(input, file$c, 14, 2, 382);
+    			attr_dev(div, "class", div_class_value = "input " + /*className*/ ctx[9] + " svelte-pi70ay");
+    			add_location(div, file$c, 13, 0, 348);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -3377,7 +3377,7 @@ var ui = (function () {
     				if (if_block) {
     					if_block.p(ctx, dirty);
     				} else {
-    					if_block = create_if_block$6(ctx);
+    					if_block = create_if_block$8(ctx);
     					if_block.c();
     					if_block.m(div, null);
     				}
@@ -3386,7 +3386,7 @@ var ui = (function () {
     				if_block = null;
     			}
 
-    			if (dirty & /*className*/ 512 && div_class_value !== (div_class_value = "input " + /*className*/ ctx[9] + " svelte-170yr2b")) {
+    			if (dirty & /*className*/ 512 && div_class_value !== (div_class_value = "input " + /*className*/ ctx[9] + " svelte-pi70ay")) {
     				attr_dev(div, "class", div_class_value);
     			}
     		},
@@ -3424,7 +3424,7 @@ var ui = (function () {
     	let { errorMessage = "Error message" } = $$props;
     	let { placeholder = "Input something here..." } = $$props;
     	let { ref = null } = $$props;
-    	let { class: className = "" } = $$props;
+    	let { className = undefined } = $$props;
 
     	const writable_props = [
     		'id',
@@ -3436,7 +3436,7 @@ var ui = (function () {
     		'errorMessage',
     		'placeholder',
     		'ref',
-    		'class'
+    		'className'
     	];
 
     	Object.keys($$props).forEach(key => {
@@ -3485,7 +3485,7 @@ var ui = (function () {
     		if ('errorMessage' in $$props) $$invalidate(7, errorMessage = $$props.errorMessage);
     		if ('placeholder' in $$props) $$invalidate(8, placeholder = $$props.placeholder);
     		if ('ref' in $$props) $$invalidate(1, ref = $$props.ref);
-    		if ('class' in $$props) $$invalidate(9, className = $$props.class);
+    		if ('className' in $$props) $$invalidate(9, className = $$props.className);
     	};
 
     	$$self.$capture_state = () => ({
@@ -3553,7 +3553,7 @@ var ui = (function () {
     			errorMessage: 7,
     			placeholder: 8,
     			ref: 1,
-    			class: 9
+    			className: 9
     		});
 
     		dispatch_dev("SvelteRegisterComponent", {
@@ -3636,11 +3636,11 @@ var ui = (function () {
     		throw new Error("<Input>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	get class() {
+    	get className() {
     		throw new Error("<Input>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	set class(value) {
+    	set className(value) {
     		throw new Error("<Input>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
@@ -3898,7 +3898,7 @@ var ui = (function () {
     }
 
     // (5:0) {#if label === true}
-    function create_if_block$5(ctx) {
+    function create_if_block$7(ctx) {
     	let li;
     	let current;
     	const default_slot_template = /*#slots*/ ctx[2].default;
@@ -3953,7 +3953,7 @@ var ui = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$5.name,
+    		id: create_if_block$7.name,
     		type: "if",
     		source: "(5:0) {#if label === true}",
     		ctx
@@ -3967,7 +3967,7 @@ var ui = (function () {
     	let if_block;
     	let if_block_anchor;
     	let current;
-    	const if_block_creators = [create_if_block$5, create_else_block$1];
+    	const if_block_creators = [create_if_block$7, create_else_block$1];
     	const if_blocks = [];
 
     	function select_block_type(ctx, dirty) {
@@ -4249,7 +4249,7 @@ var ui = (function () {
     }
 
     // (217:6) {#if menuItems && menuItems.length > 0}
-    function create_if_block$4(ctx) {
+    function create_if_block$6(ctx) {
     	let each_1_anchor;
     	let current;
     	let each_value = /*menuItems*/ ctx[0];
@@ -4335,7 +4335,7 @@ var ui = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$4.name,
+    		id: create_if_block$6.name,
     		type: "if",
     		source: "(217:6) {#if menuItems && menuItems.length > 0}",
     		ctx
@@ -4907,7 +4907,7 @@ var ui = (function () {
     	let current_block_type = select_block_type(ctx);
     	let if_block1 = current_block_type(ctx);
     	let if_block2 = !/*disabled*/ ctx[1] && create_if_block_5(ctx);
-    	let if_block3 = /*menuItems*/ ctx[0] && /*menuItems*/ ctx[0].length > 0 && create_if_block$4(ctx);
+    	let if_block3 = /*menuItems*/ ctx[0] && /*menuItems*/ ctx[0].length > 0 && create_if_block$6(ctx);
 
     	const block = {
     		c: function create() {
@@ -5009,7 +5009,7 @@ var ui = (function () {
     						transition_in(if_block3, 1);
     					}
     				} else {
-    					if_block3 = create_if_block$4(ctx);
+    					if_block3 = create_if_block$6(ctx);
     					if_block3.c();
     					transition_in(if_block3, 1);
     					if_block3.m(ul, null);
@@ -5567,38 +5567,86 @@ var ui = (function () {
     /* src/lib/components/Controls/File.svelte generated by Svelte v3.48.0 */
     const file$8 = "src/lib/components/Controls/File.svelte";
 
+    // (38:6) {#if !syntax || syntax === ""}
+    function create_if_block$5(ctx) {
+    	let div;
+    	let i;
+    	let t0;
+    	let p;
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			i = element("i");
+    			t0 = space();
+    			p = element("p");
+    			p.textContent = "Required";
+    			attr_dev(i, "class", "fa-sharp fa-solid fa-circle-exclamation");
+    			add_location(i, file$8, 39, 10, 1208);
+    			attr_dev(p, "class", "text-xs");
+    			add_location(p, file$8, 40, 10, 1272);
+    			attr_dev(div, "class", "flex items-center gap-1 text-red-600 text-xs");
+    			add_location(div, file$8, 38, 8, 1139);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			append_dev(div, i);
+    			append_dev(div, t0);
+    			append_dev(div, p);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block$5.name,
+    		type: "if",
+    		source: "(38:6) {#if !syntax || syntax === \\\"\\\"}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
     function create_fragment$8(ctx) {
     	let div9;
     	let div3;
     	let div0;
     	let h50;
     	let t1;
+    	let t2;
     	let div2;
     	let div1;
     	let input;
     	let updating_value;
-    	let t2;
+    	let t3;
     	let div7;
     	let div4;
     	let h51;
-    	let t4;
+    	let t5;
     	let div6;
     	let div5;
     	let selectmenu;
     	let updating_menuItems;
     	let updating_value_1;
-    	let t5;
+    	let t6;
     	let div8;
     	let checkbox;
     	let updating_value_2;
     	let updating_checked;
     	let current;
+    	let if_block = (!/*syntax*/ ctx[2] || /*syntax*/ ctx[2] === "") && create_if_block$5(ctx);
 
     	function input_value_binding(value) {
     		/*input_value_binding*/ ctx[7](value);
     	}
 
-    	let input_props = { placeholder: /*syntax*/ ctx[2] };
+    	let input_props = {
+    		placeholder: /*syntax*/ ctx[2],
+    		className: /*syntax*/ ctx[2] === "" ? "required" : ""
+    	};
 
     	if (/*syntax*/ ctx[2] !== void 0) {
     		input_props.value = /*syntax*/ ctx[2];
@@ -5662,19 +5710,21 @@ var ui = (function () {
     			h50 = element("h5");
     			h50.textContent = "File name";
     			t1 = space();
+    			if (if_block) if_block.c();
+    			t2 = space();
     			div2 = element("div");
     			div1 = element("div");
     			create_component(input.$$.fragment);
-    			t2 = space();
+    			t3 = space();
     			div7 = element("div");
     			div4 = element("div");
     			h51 = element("h5");
     			h51.textContent = "File type";
-    			t4 = space();
+    			t5 = space();
     			div6 = element("div");
     			div5 = element("div");
     			create_component(selectmenu.$$.fragment);
-    			t5 = space();
+    			t6 = space();
     			div8 = element("div");
     			create_component(checkbox.$$.fragment);
     			attr_dev(h50, "class", "m-0 text-xs");
@@ -5682,21 +5732,21 @@ var ui = (function () {
     			attr_dev(div0, "class", "flex justify-between items-center text-[10px] mt-2 mb-2.5");
     			add_location(div0, file$8, 35, 4, 977);
     			attr_dev(div1, "class", "w-full");
-    			add_location(div1, file$8, 39, 6, 1139);
+    			add_location(div1, file$8, 45, 6, 1376);
     			attr_dev(div2, "class", "input-row svelte-1vju4z");
-    			add_location(div2, file$8, 38, 4, 1109);
+    			add_location(div2, file$8, 44, 4, 1346);
     			add_location(div3, file$8, 34, 2, 967);
     			attr_dev(h51, "class", "m-0 text-xs");
-    			add_location(h51, file$8, 47, 6, 1386);
+    			add_location(h51, file$8, 58, 6, 1715);
     			attr_dev(div4, "class", "flex justify-between items-center text-[10px] mt-2 mb-2.5");
-    			add_location(div4, file$8, 46, 4, 1308);
+    			add_location(div4, file$8, 57, 4, 1637);
     			attr_dev(div5, "class", "w-full");
-    			add_location(div5, file$8, 50, 6, 1470);
+    			add_location(div5, file$8, 61, 6, 1799);
     			attr_dev(div6, "class", "input-row svelte-1vju4z");
-    			add_location(div6, file$8, 49, 4, 1440);
-    			add_location(div7, file$8, 45, 2, 1298);
+    			add_location(div6, file$8, 60, 4, 1769);
+    			add_location(div7, file$8, 56, 2, 1627);
     			attr_dev(div8, "class", "mt-2");
-    			add_location(div8, file$8, 56, 2, 1630);
+    			add_location(div8, file$8, 67, 2, 1959);
     			attr_dev(div9, "class", "w-full flex flex-col gap-2");
     			add_location(div9, file$8, 33, 0, 924);
     		},
@@ -5708,26 +5758,40 @@ var ui = (function () {
     			append_dev(div9, div3);
     			append_dev(div3, div0);
     			append_dev(div0, h50);
-    			append_dev(div3, t1);
+    			append_dev(div0, t1);
+    			if (if_block) if_block.m(div0, null);
+    			append_dev(div3, t2);
     			append_dev(div3, div2);
     			append_dev(div2, div1);
     			mount_component(input, div1, null);
-    			append_dev(div9, t2);
+    			append_dev(div9, t3);
     			append_dev(div9, div7);
     			append_dev(div7, div4);
     			append_dev(div4, h51);
-    			append_dev(div7, t4);
+    			append_dev(div7, t5);
     			append_dev(div7, div6);
     			append_dev(div6, div5);
     			mount_component(selectmenu, div5, null);
-    			append_dev(div9, t5);
+    			append_dev(div9, t6);
     			append_dev(div9, div8);
     			mount_component(checkbox, div8, null);
     			current = true;
     		},
     		p: function update(ctx, [dirty]) {
+    			if (!/*syntax*/ ctx[2] || /*syntax*/ ctx[2] === "") {
+    				if (if_block) ; else {
+    					if_block = create_if_block$5(ctx);
+    					if_block.c();
+    					if_block.m(div0, null);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
+
     			const input_changes = {};
     			if (dirty & /*syntax*/ 4) input_changes.placeholder = /*syntax*/ ctx[2];
+    			if (dirty & /*syntax*/ 4) input_changes.className = /*syntax*/ ctx[2] === "" ? "required" : "";
 
     			if (!updating_value && dirty & /*syntax*/ 4) {
     				updating_value = true;
@@ -5782,6 +5846,7 @@ var ui = (function () {
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div9);
+    			if (if_block) if_block.d();
     			destroy_component(input);
     			destroy_component(selectmenu);
     			destroy_component(checkbox);
@@ -5983,7 +6048,7 @@ var ui = (function () {
     	}
     }
 
-    var css_248z$5 = ".textarea.svelte-vsapop{position:relative}textarea.svelte-vsapop{align-items:center;background-color:var(--figma-color-bg);border:1px solid var(--figma-color-border);border-radius:var(--border-radius-small);color:var(--figma-color-text);display:flex;font-family:var(--font-stack);font-size:var(--font-size-xsmall);font-weight:var(--font-weight-normal);letter-spacing:var(--font-letter-spacing-neg-xsmall);line-height:var(--line-height);margin:1px 0;min-height:62px;outline:none;overflow:visible;overflow-y:auto;padding:7px 4px 9px 7px;position:relative;resize:none;width:100%}textarea.svelte-vsapop:-moz-placeholder-shown:hover{background-image:none;border:1px solid var(--figma-color-border);color:var(--figma-color-text)}textarea.svelte-vsapop:hover,textarea.svelte-vsapop:placeholder-shown:hover{background-image:none;border:1px solid var(--figma-color-border);color:var(--figma-color-text)}textarea.svelte-vsapop::-moz-selection{background-color:var(--text-highlight);color:var(--figma-color-text)}textarea.svelte-vsapop::selection{background-color:var(--text-highlight);color:var(--figma-color-text)}textarea.svelte-vsapop::-moz-placeholder{border:1px solid transparent;color:var(--figma-color-text-tertiary)}textarea.svelte-vsapop::placeholder{border:1px solid transparent;color:var(--figma-color-text-tertiary)}textarea.svelte-vsapop:focus:-moz-placeholder-shown{border:1px solid var(--figma-color-border-selected);outline:1px solid var(--figma-color-border-selected);outline-offset:-2px}textarea.svelte-vsapop:focus:placeholder-shown{border:1px solid var(--figma-color-border-selected);outline:1px solid var(--figma-color-border-selected);outline-offset:-2px}textarea.svelte-vsapop:active,textarea.svelte-vsapop:focus{border:1px solid var(--figma-color-border-selected);color:var(--figma-color-text);outline:1px solid var(--figma-color-border-selected);outline-offset:-2px;padding:7px 4px 9px 7px}textarea.svelte-vsapop:disabled,textarea.svelte-vsapop:disabled:hover{border:1px solid transparent;color:var(--figma-color-text-disabled);position:relative}textarea.svelte-vsapop:disabled:active{outline:none;padding:7px 4px 9px 7px}";
+    var css_248z$5 = ".required.svelte-11v42l4 textarea.svelte-11v42l4{border:1px solid #dc2626!important}.textarea.svelte-11v42l4.svelte-11v42l4{position:relative}textarea.svelte-11v42l4.svelte-11v42l4{align-items:center;background-color:var(--figma-color-bg);border:1px solid var(--figma-color-border);border-radius:var(--border-radius-small);color:var(--figma-color-text);display:flex;font-family:var(--font-stack);font-size:var(--font-size-xsmall);font-weight:var(--font-weight-normal);letter-spacing:var(--font-letter-spacing-neg-xsmall);line-height:var(--line-height);margin:1px 0;min-height:62px;outline:none;overflow:visible;overflow-y:auto;padding:7px 4px 9px 7px;position:relative;resize:none;width:100%}textarea.svelte-11v42l4.svelte-11v42l4:-moz-placeholder-shown:hover{background-image:none;border:1px solid var(--figma-color-border);color:var(--figma-color-text)}textarea.svelte-11v42l4.svelte-11v42l4:hover,textarea.svelte-11v42l4.svelte-11v42l4:placeholder-shown:hover{background-image:none;border:1px solid var(--figma-color-border);color:var(--figma-color-text)}textarea.svelte-11v42l4.svelte-11v42l4::-moz-selection{background-color:var(--text-highlight);color:var(--figma-color-text)}textarea.svelte-11v42l4.svelte-11v42l4::selection{background-color:var(--text-highlight);color:var(--figma-color-text)}textarea.svelte-11v42l4.svelte-11v42l4::-moz-placeholder{border:1px solid transparent;color:var(--figma-color-text-tertiary)}textarea.svelte-11v42l4.svelte-11v42l4::placeholder{border:1px solid transparent;color:var(--figma-color-text-tertiary)}textarea.svelte-11v42l4.svelte-11v42l4:focus:-moz-placeholder-shown{border:1px solid var(--figma-color-border-selected);outline:1px solid var(--figma-color-border-selected);outline-offset:-2px}textarea.svelte-11v42l4.svelte-11v42l4:focus:placeholder-shown{border:1px solid var(--figma-color-border-selected);outline:1px solid var(--figma-color-border-selected);outline-offset:-2px}textarea.svelte-11v42l4.svelte-11v42l4:active,textarea.svelte-11v42l4.svelte-11v42l4:focus{border:1px solid var(--figma-color-border-selected);color:var(--figma-color-text);outline:1px solid var(--figma-color-border-selected);outline-offset:-2px;padding:7px 4px 9px 7px}textarea.svelte-11v42l4.svelte-11v42l4:disabled,textarea.svelte-11v42l4.svelte-11v42l4:disabled:hover{border:1px solid transparent;color:var(--figma-color-text-disabled);position:relative}textarea.svelte-11v42l4.svelte-11v42l4:disabled:active{outline:none;padding:7px 4px 9px 7px}";
     styleInject(css_248z$5);
 
     /* src/lib/components/Inputs/TextArea.svelte generated by Svelte v3.48.0 */
@@ -6007,10 +6072,10 @@ var ui = (function () {
     			attr_dev(textarea, "rows", /*rows*/ ctx[2]);
     			textarea.disabled = /*disabled*/ ctx[4];
     			attr_dev(textarea, "placeholder", /*placeholder*/ ctx[5]);
-    			attr_dev(textarea, "class", "svelte-vsapop");
-    			add_location(textarea, file$7, 13, 2, 298);
-    			attr_dev(div, "class", div_class_value = "textarea " + /*className*/ ctx[6] + " svelte-vsapop");
-    			add_location(div, file$7, 12, 0, 261);
+    			attr_dev(textarea, "class", "svelte-11v42l4");
+    			add_location(textarea, file$7, 11, 2, 278);
+    			attr_dev(div, "class", div_class_value = "textarea " + /*className*/ ctx[6] + " svelte-11v42l4");
+    			add_location(div, file$7, 10, 0, 241);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -6058,7 +6123,7 @@ var ui = (function () {
     				set_input_value(textarea, /*value*/ ctx[0]);
     			}
 
-    			if (dirty & /*className*/ 64 && div_class_value !== (div_class_value = "textarea " + /*className*/ ctx[6] + " svelte-vsapop")) {
+    			if (dirty & /*className*/ 64 && div_class_value !== (div_class_value = "textarea " + /*className*/ ctx[6] + " svelte-11v42l4")) {
     				attr_dev(div, "class", div_class_value);
     			}
     		},
@@ -6091,8 +6156,8 @@ var ui = (function () {
     	let { name = null } = $$props;
     	let { disabled = false } = $$props;
     	let { placeholder = "Input something here..." } = $$props;
-    	let { class: className = "" } = $$props;
-    	const writable_props = ['id', 'value', 'rows', 'name', 'disabled', 'placeholder', 'class'];
+    	let { className = undefined } = $$props;
+    	const writable_props = ['id', 'value', 'rows', 'name', 'disabled', 'placeholder', 'className'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<TextArea> was created with unknown prop '${key}'`);
@@ -6130,7 +6195,7 @@ var ui = (function () {
     		if ('name' in $$props) $$invalidate(3, name = $$props.name);
     		if ('disabled' in $$props) $$invalidate(4, disabled = $$props.disabled);
     		if ('placeholder' in $$props) $$invalidate(5, placeholder = $$props.placeholder);
-    		if ('class' in $$props) $$invalidate(6, className = $$props.class);
+    		if ('className' in $$props) $$invalidate(6, className = $$props.className);
     	};
 
     	$$self.$capture_state = () => ({
@@ -6185,7 +6250,7 @@ var ui = (function () {
     			name: 3,
     			disabled: 4,
     			placeholder: 5,
-    			class: 6
+    			className: 6
     		});
 
     		dispatch_dev("SvelteRegisterComponent", {
@@ -6244,11 +6309,11 @@ var ui = (function () {
     		throw new Error("<TextArea>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	get class() {
+    	get className() {
     		throw new Error("<TextArea>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	set class(value) {
+    	set className(value) {
     		throw new Error("<TextArea>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
@@ -6257,9 +6322,50 @@ var ui = (function () {
     styleInject(css_248z$4);
 
     /* src/lib/components/Controls/Images.svelte generated by Svelte v3.48.0 */
-
-    const { console: console_1$1 } = globals;
     const file$6 = "src/lib/components/Controls/Images.svelte";
+
+    // (65:6) {#if !altText || altText === ""}
+    function create_if_block$4(ctx) {
+    	let div;
+    	let i;
+    	let t0;
+    	let p;
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			i = element("i");
+    			t0 = space();
+    			p = element("p");
+    			p.textContent = "Required";
+    			attr_dev(i, "class", "fa-sharp fa-solid fa-circle-exclamation");
+    			add_location(i, file$6, 66, 10, 2097);
+    			attr_dev(p, "class", "text-xs");
+    			add_location(p, file$6, 67, 10, 2161);
+    			attr_dev(div, "class", "flex items-center gap-1 text-red-600 text-xs");
+    			add_location(div, file$6, 65, 8, 2028);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			append_dev(div, i);
+    			append_dev(div, t0);
+    			append_dev(div, p);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block$4.name,
+    		type: "if",
+    		source: "(65:6) {#if !altText || altText === \\\"\\\"}",
+    		ctx
+    	});
+
+    	return block;
+    }
 
     function create_fragment$6(ctx) {
     	let div17;
@@ -6295,6 +6401,7 @@ var ui = (function () {
     	let div13;
     	let h53;
     	let t10;
+    	let t11;
     	let div15;
     	let div14;
     	let textarea;
@@ -6347,13 +6454,15 @@ var ui = (function () {
     	input = new Input({ props: input_props, $$inline: true });
     	binding_callbacks.push(() => bind(input, 'value', input_value_binding));
     	input.$on("change", /*change_handler_2*/ ctx[12]);
+    	let if_block = (!/*altText*/ ctx[0] || /*altText*/ ctx[0] === "") && create_if_block$4(ctx);
 
     	function textarea_value_binding(value) {
     		/*textarea_value_binding*/ ctx[13](value);
     	}
 
     	let textarea_props = {
-    		placeholder: "Enter alternate text to apply to your images."
+    		placeholder: "Enter alternate text to apply to your images.",
+    		className: /*altText*/ ctx[0] === "" ? "required" : ""
     	};
 
     	if (/*altText*/ ctx[0] !== void 0) {
@@ -6400,6 +6509,8 @@ var ui = (function () {
     			h53 = element("h5");
     			h53.textContent = "Alt text";
     			t10 = space();
+    			if (if_block) if_block.c();
+    			t11 = space();
     			div15 = element("div");
     			div14 = element("div");
     			create_component(textarea.$$.fragment);
@@ -6440,9 +6551,9 @@ var ui = (function () {
     			attr_dev(div13, "class", "flex justify-between items-center text-[10px] mt-2 mb-2.5");
     			add_location(div13, file$6, 62, 4, 1865);
     			attr_dev(div14, "class", "w-full");
-    			add_location(div14, file$6, 66, 6, 2026);
+    			add_location(div14, file$6, 72, 6, 2265);
     			attr_dev(div15, "class", "input-row svelte-r35kvp");
-    			add_location(div15, file$6, 65, 4, 1996);
+    			add_location(div15, file$6, 71, 4, 2235);
     			add_location(div16, file$6, 61, 2, 1855);
     			attr_dev(div17, "class", "w-full flex flex-col gap-2");
     			add_location(div17, file$6, 17, 0, 477);
@@ -6480,7 +6591,9 @@ var ui = (function () {
     			append_dev(div17, div16);
     			append_dev(div16, div13);
     			append_dev(div13, h53);
-    			append_dev(div16, t10);
+    			append_dev(div13, t10);
+    			if (if_block) if_block.m(div13, null);
+    			append_dev(div16, t11);
     			append_dev(div16, div15);
     			append_dev(div15, div14);
     			mount_component(textarea, div14, null);
@@ -6522,7 +6635,20 @@ var ui = (function () {
     			}
 
     			input.$set(input_changes);
+
+    			if (!/*altText*/ ctx[0] || /*altText*/ ctx[0] === "") {
+    				if (if_block) ; else {
+    					if_block = create_if_block$4(ctx);
+    					if_block.c();
+    					if_block.m(div13, null);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
+
     			const textarea_changes = {};
+    			if (dirty & /*altText*/ 1) textarea_changes.className = /*altText*/ ctx[0] === "" ? "required" : "";
 
     			if (!updating_value_3 && dirty & /*altText*/ 1) {
     				updating_value_3 = true;
@@ -6552,6 +6678,7 @@ var ui = (function () {
     			destroy_component(selectmenu0);
     			destroy_component(selectmenu1);
     			destroy_component(input);
+    			if (if_block) if_block.d();
     			destroy_component(textarea);
     		}
     	};
@@ -6588,7 +6715,7 @@ var ui = (function () {
     	];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$1.warn(`<Images> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Images> was created with unknown prop '${key}'`);
     	});
 
     	function selectmenu0_value_binding(value) {
@@ -6617,10 +6744,7 @@ var ui = (function () {
     		$$invalidate(0, altText);
     	}
 
-    	const change_handler_3 = () => {
-    		console.log("here");
-    		dispatch("changeConfig");
-    	};
+    	const change_handler_3 = () => dispatch("changeConfig");
 
     	$$self.$$set = $$props => {
     		if ('altText' in $$props) $$invalidate(0, altText = $$props.altText);
@@ -8922,7 +9046,7 @@ var ui = (function () {
     /* src/App.svelte generated by Svelte v3.48.0 */
     const file = "src/App.svelte";
 
-    // (247:4) {#if views}
+    // (256:4) {#if views}
     function create_if_block_1(ctx) {
     	let panel0;
     	let updating_expanded;
@@ -9113,14 +9237,14 @@ var ui = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(247:4) {#if views}",
+    		source: "(256:4) {#if views}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (248:6) <Panel title="File settings" bind:expanded={views.file} on:changeView={onChangeView}>
+    // (257:6) <Panel title="File settings" bind:expanded={views.file} on:changeView={onChangeView}>
     function create_default_slot_4(ctx) {
     	let file_1;
     	let updating_fileType;
@@ -9242,14 +9366,14 @@ var ui = (function () {
     		block,
     		id: create_default_slot_4.name,
     		type: "slot",
-    		source: "(248:6) <Panel title=\\\"File settings\\\" bind:expanded={views.file} on:changeView={onChangeView}>",
+    		source: "(257:6) <Panel title=\\\"File settings\\\" bind:expanded={views.file} on:changeView={onChangeView}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (259:6) <Panel title="Image settings" bind:expanded={views.images} on:changeView={onChangeView}>
+    // (268:6) <Panel title="Image settings" bind:expanded={views.images} on:changeView={onChangeView}>
     function create_default_slot_3(ctx) {
     	let images;
     	let updating_scaleOptions;
@@ -9386,14 +9510,14 @@ var ui = (function () {
     		block,
     		id: create_default_slot_3.name,
     		type: "slot",
-    		source: "(259:6) <Panel title=\\\"Image settings\\\" bind:expanded={views.images} on:changeView={onChangeView}>",
+    		source: "(268:6) <Panel title=\\\"Image settings\\\" bind:expanded={views.images} on:changeView={onChangeView}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (270:6) <Panel title="Page settings" bind:expanded={views.page} on:changeView={onChangeView}>
+    // (279:6) <Panel title="Page settings" bind:expanded={views.page} on:changeView={onChangeView}>
     function create_default_slot_2(ctx) {
     	let page;
     	let updating_includeResizer;
@@ -9530,14 +9654,14 @@ var ui = (function () {
     		block,
     		id: create_default_slot_2.name,
     		type: "slot",
-    		source: "(270:6) <Panel title=\\\"Page settings\\\" bind:expanded={views.page} on:changeView={onChangeView}>",
+    		source: "(279:6) <Panel title=\\\"Page settings\\\" bind:expanded={views.page} on:changeView={onChangeView}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (281:6) <Panel title="Text settings" bind:expanded={views.text} on:changeView={onChangeView}>
+    // (290:6) <Panel title="Text settings" bind:expanded={views.text} on:changeView={onChangeView}>
     function create_default_slot_1(ctx) {
     	let text_1;
     	let updating_showVariablesButton;
@@ -9659,14 +9783,14 @@ var ui = (function () {
     		block,
     		id: create_default_slot_1.name,
     		type: "slot",
-    		source: "(281:6) <Panel title=\\\"Text settings\\\" bind:expanded={views.text} on:changeView={onChangeView}>",
+    		source: "(290:6) <Panel title=\\\"Text settings\\\" bind:expanded={views.text} on:changeView={onChangeView}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (295:4) <Panel title="Output" bind:expanded={views.preview} on:changeView={onChangeView}>
+    // (304:4) <Panel title="Output" bind:expanded={views.preview} on:changeView={onChangeView}>
     function create_default_slot(ctx) {
     	let preview;
     	let updating_exampleAssets;
@@ -9770,14 +9894,14 @@ var ui = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(295:4) <Panel title=\\\"Output\\\" bind:expanded={views.preview} on:changeView={onChangeView}>",
+    		source: "(304:4) <Panel title=\\\"Output\\\" bind:expanded={views.preview} on:changeView={onChangeView}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (301:0) {#if errorMessage}
+    // (310:0) {#if errorMessage}
     function create_if_block(ctx) {
     	let errormessage;
     	let current;
@@ -9818,7 +9942,7 @@ var ui = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(301:0) {#if errorMessage}",
+    		source: "(310:0) {#if errorMessage}",
     		ctx
     	});
 
@@ -9896,16 +10020,16 @@ var ui = (function () {
     			t3 = space();
     			create_component(footer.$$.fragment);
     			attr_dev(i, "class", "ml-0.5 absolute text-xs text-gray-300 -rotate-45 -translate-x-1/4 -translate-y-1/4 fa-sharp fa-solid fa-grip-dots top-1/2 left-1/2");
-    			add_location(i, file, 239, 2, 7391);
+    			add_location(i, file, 248, 2, 7645);
     			attr_dev(div0, "id", "corner");
     			attr_dev(div0, "class", "fixed bottom-0 right-0 cursor-se-resize w-4 h-4 z-[999] overflow-hidden");
-    			add_location(div0, file, 233, 0, 7234);
+    			add_location(div0, file, 242, 0, 7488);
     			attr_dev(div1, "class", "flex flex-col w-1/3 min-h-full pb-12 control-panel svelte-1sr9svg");
-    			add_location(div1, file, 245, 2, 7602);
+    			add_location(div1, file, 254, 2, 7856);
     			attr_dev(div2, "class", "sticky w-2/3 h-full pb-12");
-    			add_location(div2, file, 293, 2, 9138);
+    			add_location(div2, file, 302, 2, 9392);
     			attr_dev(div3, "class", "flex w-full overflow-hidden content svelte-1sr9svg");
-    			add_location(div3, file, 244, 0, 7550);
+    			add_location(div3, file, 253, 0, 7804);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -10194,6 +10318,17 @@ var ui = (function () {
     	const onChangeConfig = () => postMessage({ type: "config", config: buildConfig() });
 
     	const onSelectExport = () => {
+    		if (!altText || altText === "") {
+    			setErrorMessage("Please enter an alt text");
+    			$$invalidate(7, views.images = true, views);
+    			return;
+    		}
+
+    		if (!syntax || syntax === "") {
+    			setErrorMessage("File name cannot be empty");
+    			return;
+    		}
+
     		loading = true;
     		postMessage({ type: "export", config: buildConfig() });
     	};

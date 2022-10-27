@@ -62,16 +62,20 @@
   <div>
     <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
       <h5 class="m-0 text-xs">Alt text</h5>
+      {#if !altText || altText === ""}
+        <div class="flex items-center gap-1 text-red-600 text-xs">
+          <i class="fa-sharp fa-solid fa-circle-exclamation" />
+          <p class="text-xs">Required</p>
+        </div>
+      {/if}
     </div>
     <div class="input-row">
       <div class="w-full">
         <TextArea
           bind:value={altText}
           placeholder="Enter alternate text to apply to your images."
-          on:change={() => {
-            console.log("here");
-            dispatch("changeConfig");
-          }}
+          on:change={() => dispatch("changeConfig")}
+          className={altText === "" ? "required" : ""}
         />
       </div>
     </div>
