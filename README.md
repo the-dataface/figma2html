@@ -54,6 +54,8 @@ From resources:
    - In the plugin dialog, you can you load your preconfigured settings from a YAML text node named `f2h-settings` on the current page in your Figma doc, or you can write your current settings to a YAML text node.
 3. Click Export and voila, you can save your exported images and HTML file as a zipped folder.
 
+Check out [this demo Figma file](https://www.figma.com/file/THVkWmLhe7TJD16hj0IDIR/figma2html-Demo?node-id=0%3A1) if you need a reference to get started!
+
 ## How it Works
 
 - The plugin grabs all frames named `#[width]px` on your current page, unframes all children (turns frames into groups to get positions relative to the parent frame), hides all text layers, and exports as a `PNG`, `JPG`, or `SVG`, at a specified scale.
