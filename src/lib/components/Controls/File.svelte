@@ -46,7 +46,7 @@
       <div class="w-full">
         <Input
           bind:value={syntax}
-          placeholder={syntax}
+          placeholder="Enter a file name"
           on:change={() => validateFileName(syntax)}
           className={syntax === "" ? "required" : ""}
         />
