@@ -1,5 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
+  import slugify from "slugify";
 
   import Checkbox from "../Inputs/Checkbox.svelte";
   import Input from "../Inputs/Input.svelte";
@@ -11,6 +12,23 @@
   export let menuItems = [];
   export let syntax = undefined;
   export let testingMode = false;
+  export let errorMessage = "";
+
+  const validateFileName = (fileName) => {
+    if (fileName === "") {
+      errorMessage = "File name cannot be empty";
+      dispatch("sendError");
+      return;
+    }
+    if (fileName.includes("/")) {
+      errorMessage = "File name cannot contain '/'";
+      dispatch("sendError");
+      return;
+    }
+    syntax = slugify(fileName, { lower: true });
+    dispatch("changeConfig");
+    return;
+  };
 </script>
 
 <div class="w-full flex flex-col gap-2">
@@ -20,7 +38,7 @@
     </div>
     <div class="input-row">
       <div class="w-full">
-        <Input bind:value={syntax} placeholder={syntax} on:change={() => dispatch("changeConfig")} />
+        <Input bind:value={syntax} placeholder={syntax} on:change={() => validateFileName(syntax)} />
       </div>
     </div>
   </div>
