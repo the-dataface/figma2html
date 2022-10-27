@@ -89,7 +89,6 @@
   let applyHtags = false;
   let styleTextSegments = true;
   let includeGoogleFonts = true;
-  let clickableLink: string | undefined = undefined;
   let maxWidth: number | undefined = undefined;
   let imagePath: string | undefined = undefined;
   let altText: string | undefined = undefined;
@@ -114,7 +113,6 @@
       maxWidth,
       fluid,
       centerHtmlOutput,
-      clickableLink,
       imagePath,
       altText,
       applyStyleNames,
@@ -142,7 +140,6 @@
       maxWidth = config.maxWidth;
       fluid = config.fluid;
       centerHtmlOutput = config.centerHtmlOutput;
-      clickableLink = config.clickableLink;
       imagePath = config.imagePath;
       altText = config.altText;
       applyStyleNames = config.applyStyleNames;
@@ -362,7 +359,6 @@
           bind:fluid
           bind:maxWidth
           bind:customScript
-          bind:clickableLink
           on:changeConfig={onChangeConfig}
         />
       </Panel>

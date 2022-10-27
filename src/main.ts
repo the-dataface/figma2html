@@ -167,7 +167,6 @@ class StoredConfig {
 				maxWidth: null,
 				fluid: true,
 				centerHtmlOutput: false,
-				clickableLink: null,
 				imagePath: 'img',
 				altText: null,
 				applyStyleNames: true,

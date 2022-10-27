@@ -15,13 +15,6 @@ export default ({ containerId, config, frameCss }) => {
 		};
 	}
 
-	// add clickable link base styles
-	if (config.clickableLink !== '')
-		selectors[`${id} .f2h-link`] = {
-			cursor: 'pointer',
-			'text-decoration': 'none',
-			color: 'inherit',
-		};
 
 	// default <p> styles
 	selectors[`${id} p, ${id} .body`] = { margin: '0' };

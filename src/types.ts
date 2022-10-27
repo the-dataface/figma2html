@@ -13,7 +13,6 @@ export interface Config {
 	fluid: boolean;
 	maxWidth: number;
 	centerHtmlOutput: boolean;
-	clickableLink: string;
 	imagePath: string;
 	altText: string;
 	applyStyleNames: boolean;

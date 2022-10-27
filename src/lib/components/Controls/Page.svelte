@@ -8,7 +8,6 @@
   const dispatch = createEventDispatcher();
 
   export let centerHtmlOutput = false;
-  export let clickableLink = undefined;
   export let customScript = undefined;
   export let fluid = false;
   export let includeResizer = false;
@@ -50,21 +49,6 @@
             on:change={() => dispatch("changeConfig")}
           />
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div>
-    <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
-      <h5 class="m-0 text-xs">Clickable link</h5>
-    </div>
-    <div class="input-row">
-      <div class="w-full">
-        <Input
-          bind:value={clickableLink}
-          placeholder="Enter a link to apply to the full image."
-          on:change={() => dispatch("changeConfig")}
-        />
       </div>
     </div>
   </div>

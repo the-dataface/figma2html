@@ -35,10 +35,7 @@ export default ({ config, assets, variables }) => {
 
 	html += `\n\n<div id="${containerId}" class="figma2html">`;
 
-	if (config.clickableLink)
-		html += `\n\t<a class="f2h-link" href="${config.clickableLink}">`;
-
-	html += `\n${config.clickableLink ? '\t\t' : '\t'}${assets
+	html += `\n\t${assets
 		.map(({ node, filename }) =>
 			frame({
 				node,
@@ -50,8 +47,6 @@ export default ({ config, assets, variables }) => {
 			}).html
 		)
 		.join('\n\n')}`;
-
-	if (config.clickableLink) html += `\n\t</a>`;
 
 	if (config.includeResizer) html += `\n\n${js.resizer(containerId, false)}`;
 

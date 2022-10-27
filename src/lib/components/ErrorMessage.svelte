@@ -1,10 +1,11 @@
 <script>
   import { fade } from "svelte/transition";
+  import { Icon, IconWarning } from "figma-plugin-ds-svelte";
 
   export let errorMessage;
 </script>
 
-<div class="error-message flex gap-2 items-center" transition:fade>
+<div class="error-message flex items-center gap-2" transition:fade>
   <i class="fa-sharp fa-solid fa-triangle-exclamation" />
   {errorMessage}
 </div>
