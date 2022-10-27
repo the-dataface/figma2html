@@ -3,14 +3,18 @@
 
   import Checkbox from "../Inputs/Checkbox.svelte";
   import Input from "../Inputs/Input.svelte";
+  import TextArea from "../Inputs/TextArea.svelte";
 
   const dispatch = createEventDispatcher();
 
-  export let includeResizer = false;
   export let centerHtmlOutput = false;
-  export let fluid = false;
-  export let maxWidth = undefined;
   export let clickableLink = undefined;
+  export let customScript = undefined;
+  export let fluid = false;
+  export let includeResizer = false;
+  export let maxWidth = undefined;
+
+  $: console.log(customScript);
 </script>
 
 <div class="w-full flex flex-col gap-2">
@@ -40,7 +44,11 @@
       </div>
       <div class="input-row">
         <div class="w-full">
-          <Input bind:value={maxWidth} placeholder={maxWidth} on:change={() => dispatch("changeConfig")} />
+          <Input
+            bind:value={maxWidth}
+            placeholder="Enter a max width for the images."
+            on:change={() => dispatch("changeConfig")}
+          />
         </div>
       </div>
     </div>
@@ -52,7 +60,26 @@
     </div>
     <div class="input-row">
       <div class="w-full">
-        <Input bind:value={clickableLink} placeholder={clickableLink} on:change={() => dispatch("changeConfig")} />
+        <Input
+          bind:value={clickableLink}
+          placeholder="Enter a link to apply to the full image."
+          on:change={() => dispatch("changeConfig")}
+        />
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+      <h5 class="m-0 text-xs">Custom script</h5>
+    </div>
+    <div class="input-row">
+      <div class="w-full">
+        <TextArea
+          bind:value={customScript}
+          placeholder="Enter a custom script to be included in the exported HTML file here."
+          on:change={() => dispatch("changeConfig")}
+        />
       </div>
     </div>
   </div>

@@ -3,6 +3,7 @@
 
   import Input from "../Inputs/Input.svelte";
   import SelectMenu from "../Inputs/SelectMenu.svelte";
+  import TextArea from "../Inputs/TextArea.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -49,7 +50,11 @@
     </div>
     <div class="input-row">
       <div class="w-full">
-        <Input bind:value={imagePath} placeholder={imagePath} on:change={() => dispatch("changeConfig")} />
+        <Input
+          bind:value={imagePath}
+          placeholder="Enter an image path to include in your export."
+          on:change={() => dispatch("changeConfig")}
+        />
       </div>
     </div>
   </div>
@@ -60,7 +65,14 @@
     </div>
     <div class="input-row">
       <div class="w-full">
-        <Input bind:value={altText} placeholder={altText} on:change={() => dispatch("changeConfig")} />
+        <TextArea
+          bind:value={altText}
+          placeholder="Enter alternate text to apply to your images."
+          on:change={() => {
+            console.log("here");
+            dispatch("changeConfig");
+          }}
+        />
       </div>
     </div>
   </div>

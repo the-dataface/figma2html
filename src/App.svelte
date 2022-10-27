@@ -93,6 +93,7 @@
   let maxWidth: number | undefined = undefined;
   let imagePath: string | undefined = undefined;
   let altText: string | undefined = undefined;
+  let customScript: string | undefined = undefined;
 
   let nodeCount = 0;
   let exampleAssets: Asset[] = [];
@@ -120,6 +121,7 @@
       applyHtags,
       styleTextSegments,
       includeGoogleFonts,
+      customScript,
     };
   };
 
@@ -147,6 +149,7 @@
       applyHtags = config.applyHtags;
       styleTextSegments = config.styleTextSegments;
       includeGoogleFonts = config.includeGoogleFonts;
+      customScript = config.customScript;
     } else if (type === "preview") {
       const preview = message.preview;
       nodeCount = preview.nodeCount;
@@ -345,6 +348,7 @@
           bind:centerHtmlOutput
           bind:fluid
           bind:maxWidth
+          bind:customScript
           bind:clickableLink
           on:changeConfig={onChangeConfig}
         />

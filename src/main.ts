@@ -170,11 +170,12 @@ class StoredConfig {
 				centerHtmlOutput: false,
 				clickableLink: null,
 				imagePath: 'img',
-				altText: '',
+				altText: null,
 				applyStyleNames: true,
 				applyHtags: true,
 				styleTextSegments: true,
 				includeGoogleFonts: true,
+				customScript: null
 			};
 		} else {
 			return _config;

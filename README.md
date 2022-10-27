@@ -1,7 +1,7 @@
 ![Cover Art](/src/img/coverArt.png)
 ## figma2html
 
-Export Figma frames as responsive images with text elements rendered as HTML. A Figma version of [ai2html](http://ai2html.org), with some extra features.
+Export Figma frames as responsive images with text elements rendered as HTML. A Figma version of [ai2html](http://ai2html.org), with some extra features. The plugin uses some input elements from Thomas Lowry's [Figma Plugin DS Svelte](https://github.com/thomas-lowry/figma-plugin-ds-svelte) library.
 
 ### Development Instructions
 
@@ -15,9 +15,9 @@ Export Figma frames as responsive images with text elements rendered as HTML. A 
 ### Instructions
 
 1. Create your artwork
-    - Size your frames based on the breakpoints you need for your website (note that height breakpoints will be based on the width of your frames and height doesn’t matter).
-    - Name the frames your want to export in this format: `#[width]px`.
-    - If you're using a Google Font that's built in to Figma, you'll have the option to automatically include the appropriate Google Fonts tag in your exported HTML. Otherwise, make sure you have any necessary webfonts set up in your project and they're named the same as they appear in Figma.
+    - Size your frames based on the breakpoints you need for your website (note that breakpoints will be based on the width of your frames and height doesn’t matter).
+    - Name the frames your want to export in this format: `#[width]px` (i.e. `#640px`).
+    - If you're using a Google Font that's built in to Figma, you'll have the option to automatically include the appropriate Google Fonts tag in your exported HTML. Otherwise, you can add your webfonts to your project yourself or include a custom script or link any custom CSS in the `Page settings` panel.'
 2. Run the plugin and configure your settings
     - In the plugin dialog, you can you load your preconfigured settings from a YAML text node named `f2h-settings` on the current page in your Figma doc, or you can write your current settings to a YAML text node.
 3. Click Export and voila, you can save your exported images and HTML file as a zipped folder.
@@ -36,27 +36,28 @@ Export Figma frames as responsive images with text elements rendered as HTML. A 
 **File settings**
 - The inputted Filename will be the name of the outputted zipped folder and HTML file. You can customize this, but will default to the current page name in Figma.
 - Filetype option so far is just `html`. `svelte` is coming soon!
+- Turn on `Testing Mode` to keep text visible on exported images. Useful for comparing layouts in the exported HTML vs the designs in Figma.
 
 **Image settings**
-- Input an `Image Scale` to export images at a specified scale.
-- `Image Format` options include `PNG`, `JPG`, and `SVG`.
+- Input an `Image scale` to export images at a specified scale.
+- `Image format` options include `PNG`, `JPG`, and `SVG`.
 - The `Path` field allows you to specify an image path, which will be referenced in the image paths in the outputted HTML. Useful if you will be dropping your outputted files into a larger codebase.
-- `Alt Text` allows you to add an alt text tag to images in your outputted HTML.
+- `Alt text` allows you to add an alt text tag to images in your outputted HTML.
 
 **Page settings**
-- Turn on `Include Resizer Script` to include JS in your outputted file which will show and hide the appropriate image at the appropriate size.
-- Turn on `Center HTML Output` to center your page content in the outputted HTML.
+- Turn on `Include resizer script` to include JS in your outputted file which will show and hide the appropriate image at the appropriate size.
+- Turn on `Center HTML output` to center your page content in the outputted HTML.
 - Turn on `Fluid` to have the f2h containers fill the width of the screen. If off, f2h containers will maintain the widths at which they were designed in Figma.
-- Turn on `Testing Mode` to keep text visible on exported images. Useful for comparing layouts in the exported HTML vs the designs in Figma.
-- Input a `Max Width` in pixels to apply a max width to your page content.
-- Include a `Clickable Link` to wrap your output in an `<a>` tag.
+- Input a `Max width` in pixels to apply a max width to your page content.
+- Include a `Clickable link` to wrap your output in an `<a>` tag.
+- Include `Custom scripts`, like Typekit tags, to your outputted HTML.
 
 **Text settings**
-- Turn on `Style Text Elements` to include inline styles to match the text styles you see in Figma.
-- Turn on `Include Figma Styles` as Classes to include any named styles in Figma as classes on your text elements. Ex. `Desktop/Utility Sans` will be included as `class="utility-sans"`.
+- Turn on `Style text elements` to include inline styles to match the text styles you see in Figma.
+- Turn on `Include figma styles` as Classes to include any named styles in Figma as classes on your text elements. Ex. `Desktop/Utility Sans` will be included as `class="utility-sans"`.
 - Turn on `Convert Header Styles to H tags` to render text elements containing a header class in Figma (`h1`, `h2`, `h3`, etc.) with the appropriate H tag in the outputted HTML, instead of as a `<p>` element.
 - Turn on `Include Google Fonts` to include a Google Fonts tag for included Google Fonts in the outputted HTML.
-- **Including custom attributes:** you can include custom attributes on a text layer by naming the layer `[f2h]` followed by a list of attributes in YAML format. For example, a text layer named `[f2h]class:text-sm,font-sans;id:my-text-layer` will render as `<p class="font-sans text-sm" id="my-text-layer">`). Very useful for including Tailwind classes. Note that naming your layers like this will not turn off `Style Text Elements` for that node, and will still include inline styling for child spans. To rely purely on class names for styling, turn off the `Style Text Elements` option. (should we change this?)
+- **Including custom attributes:** you can include custom attributes on a text layer by naming the layer `[f2h]` followed by a list of attributes in YAML format. For example, a text layer named `[f2h]class:text-sm,font-sans;id:my-text-layer` will render as `<p class="font-sans text-sm" id="my-text-layer">`). Very useful for including Tailwind classes. Note that naming your layers like this will not turn off `Style text elements` for that node, and will still include inline styling for child spans. To rely purely on class names for styling, turn off the `Style text elements` option. (should we change this?)
 
 **Variable Text**
 You can include variable text within your exportable frames. To do so, you need a text node on the current page named `f2h-variables`. Click the button in the plugin dialog to generate an example node. The text node should be written in YAML with key/value pairs like this:

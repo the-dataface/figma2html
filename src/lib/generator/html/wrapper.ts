@@ -58,6 +58,8 @@ export default ({ config, assets, variables }) => {
 	if (config.includeGoogleFonts && !!fontList.length)
 		html += `\n\n${js.fonts(fontList)}`;
 
+	if (config.customScript) html += `\n\n${config.customScript}`;
+
 	html += `\n\n<!-- End figma2html generated content - ${timestamp()} -->`;
 
 	return html;

@@ -20,6 +20,7 @@ export interface Config {
 	applyHtags: boolean;
 	styleTextSegments: boolean;
 	includeGoogleFonts: boolean;
+	customScript: string;
 }
 
 export interface Variable {
