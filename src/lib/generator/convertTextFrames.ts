@@ -158,14 +158,14 @@ export default (textFrames, frameWidth, frameHeight) => {
 			elId,
 			segments: textSegments,
 			baseStyle,
-			x: `${x}% `,
-			y: `${y}% `,
+			x: `${x.toFixed(2)}% `,
+			y: `${y.toFixed(2)}% `,
 			horizontalAlignment: textFrame.textAlignHorizontal,
 			verticalAlignment: textFrame.textAlignVertical,
 			width:
 				textFrame.textAutoResize === 'WIDTH_AND_HEIGHT'
 					? 'auto'
-					: `${textFrame.width}px`,
+					: `${textFrame.width.toFixed(2)}px`,
 			opacity: textFrame.opacity,
 			translate: `${translateX}%, ${translateY}%`,
 			rotation: textFrame.rotation * -1,
