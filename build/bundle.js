@@ -5678,27 +5678,27 @@ var ui = (function () {
     			div8 = element("div");
     			create_component(checkbox.$$.fragment);
     			attr_dev(h50, "class", "m-0 text-xs");
-    			add_location(h50, file$8, 36, 6, 1000);
+    			add_location(h50, file$8, 36, 6, 1055);
     			attr_dev(div0, "class", "flex justify-between items-center text-[10px] mt-2 mb-2.5");
-    			add_location(div0, file$8, 35, 4, 922);
+    			add_location(div0, file$8, 35, 4, 977);
     			attr_dev(div1, "class", "w-full");
-    			add_location(div1, file$8, 39, 6, 1084);
+    			add_location(div1, file$8, 39, 6, 1139);
     			attr_dev(div2, "class", "input-row svelte-1vju4z");
-    			add_location(div2, file$8, 38, 4, 1054);
-    			add_location(div3, file$8, 34, 2, 912);
+    			add_location(div2, file$8, 38, 4, 1109);
+    			add_location(div3, file$8, 34, 2, 967);
     			attr_dev(h51, "class", "m-0 text-xs");
-    			add_location(h51, file$8, 47, 6, 1331);
+    			add_location(h51, file$8, 47, 6, 1386);
     			attr_dev(div4, "class", "flex justify-between items-center text-[10px] mt-2 mb-2.5");
-    			add_location(div4, file$8, 46, 4, 1253);
+    			add_location(div4, file$8, 46, 4, 1308);
     			attr_dev(div5, "class", "w-full");
-    			add_location(div5, file$8, 50, 6, 1415);
+    			add_location(div5, file$8, 50, 6, 1470);
     			attr_dev(div6, "class", "input-row svelte-1vju4z");
-    			add_location(div6, file$8, 49, 4, 1385);
-    			add_location(div7, file$8, 45, 2, 1243);
+    			add_location(div6, file$8, 49, 4, 1440);
+    			add_location(div7, file$8, 45, 2, 1298);
     			attr_dev(div8, "class", "mt-2");
-    			add_location(div8, file$8, 56, 2, 1575);
+    			add_location(div8, file$8, 56, 2, 1630);
     			attr_dev(div9, "class", "w-full flex flex-col gap-2");
-    			add_location(div9, file$8, 33, 0, 869);
+    			add_location(div9, file$8, 33, 0, 924);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -5816,13 +5816,17 @@ var ui = (function () {
     			return;
     		}
 
-    		if (fileName.includes("/")) {
-    			$$invalidate(6, errorMessage = "File name cannot contain '/'");
-    			dispatch("sendError");
-    			return;
-    		}
+    		// if (fileName.includes("/")) {
+    		//   errorMessage = "File name cannot contain '/'";
+    		//   dispatch("sendError");
+    		//   return;
+    		// }
+    		$$invalidate(2, syntax = slugify(fileName, {
+    			lower: true,
+    			strict: true,
+    			remove: /[*+~.()'"!:@]/g
+    		}));
 
-    		$$invalidate(2, syntax = slugify(fileName, { lower: true }));
     		dispatch("changeConfig");
     		return;
     	};

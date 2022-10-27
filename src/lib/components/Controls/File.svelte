@@ -20,12 +20,12 @@
       dispatch("sendError");
       return;
     }
-    if (fileName.includes("/")) {
-      errorMessage = "File name cannot contain '/'";
-      dispatch("sendError");
-      return;
-    }
-    syntax = slugify(fileName, { lower: true });
+    // if (fileName.includes("/")) {
+    //   errorMessage = "File name cannot contain '/'";
+    //   dispatch("sendError");
+    //   return;
+    // }
+    syntax = slugify(fileName, { lower: true, strict: true, remove: /[*+~.()'"!:@]/g });
     dispatch("changeConfig");
     return;
   };
