@@ -1,4 +1,5 @@
 ![Cover Art](/src/img/coverArt.png)
+
 # figma2html
 
 Export Figma frames to responsive HTML and CSS. A Figma version of [ai2html](http://ai2html.org), with some extra features.
@@ -10,7 +11,7 @@ Export Figma frames to responsive HTML and CSS. A Figma version of [ai2html](ht
 - [Node and NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) - The runtime and package manager
 - [Figma Desktop](https://www.figma.com/downloads/) - Required for running plug-ins in development
 
-### Steps 
+### Steps
 
 #### Clone this repo
 
@@ -20,7 +21,7 @@ git clone https://github.com/the-dataface/figma2html.git
 
 #### Build plugin
 
-In a terminal, run `npm run build` to create a build of the project, which is required to run a plugin in development. There should be a `build` folder with three files: `bundle.js`, `index.html`, `main.js`
+There should be a `build` folder with three files: `bundle.js`, `index.html`, `main.js`, which are required to run the plugin in development. If you make updates locally, run `npm run build` in a terminal to rebuild the project.
 
 #### Import plugin
 
@@ -33,7 +34,7 @@ From the quick actions bar:
 1. `cmd + /` to open the quick actions bar
 2. Type `figma2html` and hit enter on the plugin
 
-From menu: 
+From menu:
 
 1. From Figma's top menu: `Plugins` > `Development` > `figma2html`
 
@@ -46,13 +47,12 @@ From resources:
 ## Instructions
 
 1. Create your artwork
-    - Size your frames based on the breakpoints you need for your website (note that breakpoints will be based on the width of your frames and height doesn’t matter).
-    - Name the frames your want to export in this format: `#[width]px` (i.e. `#640px`).
-    - If you're using a Google Font that's built in to Figma, you'll have the option to automatically include the appropriate Google Fonts tag in your exported HTML. Otherwise, you can add your webfonts to your project yourself or include a custom script or link any custom CSS in the `Page settings` panel.'
+   - Size your frames based on the breakpoints you need for your website (note that breakpoints will be based on the width of your frames and height doesn’t matter).
+   - Name the frames your want to export in this format: `#[width]px` (i.e. `#640px`).
+   - If you're using a Google Font that's built in to Figma, you'll have the option to automatically include the appropriate Google Fonts tag in your exported HTML. Otherwise, you can add your webfonts to your project yourself or include a custom script or link any custom CSS in the `Page settings` panel.'
 2. Run the plugin and configure your settings
-    - In the plugin dialog, you can you load your preconfigured settings from a YAML text node named `f2h-settings` on the current page in your Figma doc, or you can write your current settings to a YAML text node.
+   - In the plugin dialog, you can you load your preconfigured settings from a YAML text node named `f2h-settings` on the current page in your Figma doc, or you can write your current settings to a YAML text node.
 3. Click Export and voila, you can save your exported images and HTML file as a zipped folder.
-
 
 ## How it Works
 
@@ -103,10 +103,9 @@ You can include variable text within your exportable frames. To do so, you need 
 hed: This is a headline
 ```
 
-Based on the above example, the plugin will ok for any strings in your exportable frames that match the key, wrapped in curly brackets (i.e. `{{hed}}`), and replace it with `This is a headline`. 
+Based on the above example, the plugin will ok for any strings in your exportable frames that match the key, wrapped in curly brackets (i.e. `{{hed}}`), and replace it with `This is a headline`.
 
 Note that it does not replace the text in your artwork, just in the exported html. Running the plugin will reformat the variables text node.
-
 
 ## Support + Feedback
 
