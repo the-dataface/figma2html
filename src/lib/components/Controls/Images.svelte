@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
 
-  import Input from "../Inputs/Input.svelte"
+  import Input from "../Inputs/Input.svelte";
   import SelectMenu from "../Inputs/SelectMenu.svelte";
 
   const dispatch = createEventDispatcher();
@@ -15,51 +15,55 @@
 </script>
 
 <div class="w-full flex flex-col gap-2">
-    <div class="flex gap-2">
-        <div class="flex-grow">
-            <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
-                <h5 class="m-0 text-xs">Scale</h5>
-            </div>
-            <div class="input-row">
-                <div class="w-full">
-                    <SelectMenu menuItems={scaleOptions} bind:value={scale} on:change={() => dispatch("changeConfig")} />
-                </div>
-            </div>
+  <div class="flex gap-2">
+    <div class="flex-grow">
+      <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+        <h5 class="m-0 text-xs">Scale</h5>
+      </div>
+      <div class="input-row">
+        <div class="w-full" class:disabled={extension.value === "SVG"}>
+          <SelectMenu
+            menuItems={scaleOptions}
+            bind:value={scale}
+            on:change={() => dispatch("changeConfig")}
+            disabled={extension.value === "SVG"}
+          />
         </div>
-        <div class="flex-grow">
-            <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
-                <h5 class="m-0 text-xs">Format</h5>
-            </div>
-            <div class="input-row">
-                <div class="w-full">
-                    <SelectMenu menuItems={extensionOptions} bind:value={extension} on:change={() => dispatch("changeConfig")} />
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
-
-
-    <div>
-        <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
-            <h5 class="m-0 text-xs">Path</h5>
+    <div class="flex-grow">
+      <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+        <h5 class="m-0 text-xs">Format</h5>
+      </div>
+      <div class="input-row">
+        <div class="w-full">
+          <SelectMenu menuItems={extensionOptions} bind:value={extension} on:change={() => dispatch("changeConfig")} />
         </div>
-        <div class="input-row">
-            <div class="w-full">
-                <Input bind:value={imagePath} placeholder={imagePath} on:change={() => dispatch("changeConfig")} />
-            </div>
-        </div>
+      </div>
     </div>
+  </div>
 
-    <div>
-        <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
-            <h5 class="m-0 text-xs">Alt text</h5>
-        </div>
-        <div class="input-row">
-            <div class="w-full">
-                <Input bind:value={altText} placeholder={altText} on:change={() => dispatch("changeConfig")} />
-            </div>
-        </div>
+  <div>
+    <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+      <h5 class="m-0 text-xs">Path</h5>
     </div>
+    <div class="input-row">
+      <div class="w-full">
+        <Input bind:value={imagePath} placeholder={imagePath} on:change={() => dispatch("changeConfig")} />
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+      <h5 class="m-0 text-xs">Alt text</h5>
+    </div>
+    <div class="input-row">
+      <div class="w-full">
+        <Input bind:value={altText} placeholder={altText} on:change={() => dispatch("changeConfig")} />
+      </div>
+    </div>
+  </div>
 </div>
 
 <style>
@@ -77,5 +81,11 @@
 
   .toggle-button.active {
     border: 2px solid var(--figma-color-bg-success) !important;
+  }
+
+  .disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 </style>

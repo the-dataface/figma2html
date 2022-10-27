@@ -17,8 +17,6 @@ import {
 	Views,
 } from './types';
 
-log(fontList);
-
 figma.showUI(__html__, { width: 560, height: 500, themeColors: true });
 
 const defaultVariables = {
@@ -77,8 +75,6 @@ class StoredVariables {
 			(node) => node.type === 'TEXT' && node.name === 'f2h-variables'
 		);
 
-		log('variablesNode', variablesNode);
-
 		if (!!variablesNode?.characters) {
 			const variables = yaml.load(variablesNode.characters);
 			StoredVariables.writeVariables();
@@ -109,8 +105,6 @@ class StoredVariables {
 		const existingVariables = figma.currentPage.findOne(
 			(node) => node.type === 'TEXT' && node.name === 'f2h-variables'
 		);
-
-		log('existingVariables', existingVariables);
 
 		if (!!existingVariables?.characters) {
 			// save xPos of existing variables text node if it exists
@@ -247,8 +241,6 @@ class StoredConfig {
 		const settingsNode = figma.currentPage.findOne(
 			(node) => node.name === 'f2h-settings' && node.type === 'TEXT'
 		);
-
-		log('settingsNode', settingsNode);
 
 		if (!!settingsNode?.characters) {
 			const config = parseConfig(yaml.load(settingsNode.characters));
@@ -474,8 +466,6 @@ const generateExport = async (config: Config, variables: Variable) => {
 
 	const file = await getFile(config, assets, variables);
 
-	log('assets + file', { assets, file });
-
 	tempFrame.remove();
 
 	figma.ui.postMessage({
@@ -487,7 +477,6 @@ const generateExport = async (config: Config, variables: Variable) => {
 
 figma.ui.onmessage = async (message) => {
 	const { type } = message;
-	log('Message:', type);
 
 	let storedConfig, storedVariables, storedViews, storedSize;
 
@@ -505,8 +494,8 @@ figma.ui.onmessage = async (message) => {
 			storedVariables = await StoredVariables.get();
 			storedViews = await StoredViews.get();
 
-			log('Loaded stored config:', storedConfig);
-			log('Loaded stored variables:', storedVariables);
+			log('Loaded stored config');
+			log('Loaded stored variables');
 
 			figma.ui.postMessage({
 				type: 'load',
@@ -552,8 +541,6 @@ figma.ui.onmessage = async (message) => {
 			storedViews = await StoredViews.get();
 			storedSize = await StoredSize.get();
 
-			console.log(storedViews);
-
 			figma.ui.resize(storedSize.w, storedSize.h);
 
 			figma.ui.postMessage({
@@ -569,14 +556,14 @@ figma.ui.onmessage = async (message) => {
 		case 'saveSettings':
 			storedConfig = await StoredConfig.get();
 			await StoredConfig.writeSettings(storedConfig);
-			log('Writing stored config:', storedConfig);
+			log('Writing stored config');
 			break;
 		case 'loadSettings':
 			await StoredConfig.loadSettings();
 			storedConfig = await StoredConfig.get();
 			storedVariables = await StoredVariables.get();
 			storedViews = await StoredViews.get();
-			log('Loaded stored config:', storedConfig);
+			log('Loaded stored config');
 			figma.ui.postMessage({
 				type: 'load',
 				config: storedConfig,
@@ -587,15 +574,10 @@ figma.ui.onmessage = async (message) => {
 			break;
 		case 'writeVariables':
 			await StoredVariables.writeVariables();
-			log('Writing example variables:', defaultVariables);
+			log('Writing example variables');
 			break;
 	}
 };
-
-// figma.on("selectionchange", async () => {
-//   const storedConfig = await StoredConfig.get();
-//   await refreshPreview(storedConfig);
-// });
 
 figma.on('close', () => {
 	tempFrame.remove();

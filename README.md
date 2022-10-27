@@ -1,4 +1,4 @@
-![Cover Art](/the-dataface/figma2html/raw/main/src/img/coverArt.png)
+![Cover Art](/src/img/coverArt.png)
 ## figma2html
 
 Export Figma frames as responsive images with text elements rendered as HTML. A Figma version of [ai2html](http://ai2html.org), with some extra features.

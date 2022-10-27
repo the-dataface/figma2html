@@ -303,8 +303,6 @@
     window.removeEventListener("mousemove", resizeWindow, true);
     window.removeEventListener("mouseup", null);
   };
-
-  $: console.log(views);
 </script>
 
 <div
