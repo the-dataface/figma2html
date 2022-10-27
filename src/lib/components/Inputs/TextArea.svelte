@@ -5,9 +5,7 @@
   export let name = null;
   export let disabled = false;
   export let placeholder = "Input something here...";
-  export { className as class };
-
-  let className = "";
+  export let className = undefined;
 </script>
 
 <div class="textarea {className}">
@@ -28,6 +26,10 @@
 </div>
 
 <style>
+  .required textarea {
+    border: 1px solid rgb(220, 38, 38) !important;
+  }
+
   .textarea {
     position: relative;
   }

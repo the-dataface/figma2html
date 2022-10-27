@@ -35,10 +35,21 @@
   <div>
     <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
       <h5 class="m-0 text-xs">File name</h5>
+      {#if !syntax || syntax === ""}
+        <div class="flex items-center gap-1 text-red-600 text-xs">
+          <i class="fa-sharp fa-solid fa-circle-exclamation" />
+          <p class="text-xs">Required</p>
+        </div>
+      {/if}
     </div>
     <div class="input-row">
       <div class="w-full">
-        <Input bind:value={syntax} placeholder={syntax} on:change={() => validateFileName(syntax)} />
+        <Input
+          bind:value={syntax}
+          placeholder={syntax}
+          on:change={() => validateFileName(syntax)}
+          className={syntax === "" ? "required" : ""}
+        />
       </div>
     </div>
   </div>

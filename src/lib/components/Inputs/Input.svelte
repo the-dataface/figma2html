@@ -8,9 +8,7 @@
   export let errorMessage = "Error message";
   export let placeholder = "Input something here...";
   export let ref = null;
-  export { className as class };
-
-  let className = "";
+  export let className = undefined;
 </script>
 
 <div class="input {className}">
@@ -39,6 +37,10 @@
 </div>
 
 <style>
+  .required input {
+    border: 1px solid rgb(220, 38, 38) !important;
+  }
+
   .input {
     position: relative;
     transition: flex 0s 0.2s;
