@@ -328,7 +328,9 @@
           bind:testingMode
           bind:menuItems={fileTypeOptions}
           bind:syntax
+          bind:errorMessage
           on:changeConfig={onChangeConfig}
+          on:sendError={() => setErrorMessage(errorMessage)}
         />
       </Panel>
       <Panel title="Image settings" bind:expanded={views.images} on:changeView={onChangeView}>

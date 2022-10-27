@@ -3,8 +3,7 @@ import yaml from 'js-yaml';
 import createSettingsBlock from 'lib/generator/createSettingsBlock';
 import { createGroupsFromFrames } from 'lib/generator/group';
 import html from 'lib/generator/html/wrapper';
-import { fontList } from 'lib/generator/styleProps';
-import camelize from 'lib/utils/camelize';
+import dashify from 'lib/utils/dashify';
 import log from 'lib/utils/log';
 
 import {
@@ -159,7 +158,7 @@ class StoredConfig {
 		// set up config defaults if none found
 		if (!_config) {
 			return {
-				syntax: camelize(figma.currentPage.name),
+				syntax: dashify(figma.currentPage.name),
 				scale: { value: 2, label: "2x", selected: true },
 				extension: { value: 'PNG', label: 'png', selected: true },
 				fileType: { value: 'html', label: 'html', selected: true },

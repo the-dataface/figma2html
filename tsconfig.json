@@ -2,6 +2,7 @@
   "compilerOptions": {
     "outDir": "build",
     "target": "ES2019",
+    "moduleResolution": "node",
     "lib": ["ES2019", "dom"],
     "typeRoots": [
       "./node_modules/@types",
@@ -13,6 +14,6 @@
       "*": ["./src/*"],
     },
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
   }
 }
