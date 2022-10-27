@@ -1,7 +1,7 @@
 ![Cover Art](/src/img/coverArt.png)
 # figma2html
 
-Export Figma frames as responsive images with text elements rendered as HTML. A Figma version of [ai2html](http://ai2html.org), with some extra features. The plugin uses some input elements from Thomas Lowry's [Figma Plugin DS Svelte](https://github.com/thomas-lowry/figma-plugin-ds-svelte) library.
+Export Figma frames to responsive HTML and CSS. A Figma version of [ai2html](http://ai2html.org), with some extra features.
 
 ## Development
 
@@ -49,6 +49,7 @@ From menu:
 
 
 ## How it Works
+
 - The plugin grabs all frames named `#[width]px` on your current page, unframes all children (turns frames into groups to get positions relative to the parent frame), hides all text layers, and exports as a `PNG`, `JPG`, or `SVG`, at a specified scale.
 - All text elements are added via absolutely positioned divs.
 - Text is rendered as `<p>` (or header) elements. A style is applied based on the most frequently used style within that frame, with inline styles applied to text that differs. This should match what you see in Figma.
@@ -72,7 +73,7 @@ From menu:
 - The `Path` field allows you to specify an image path, which will be referenced in the image paths in the outputted HTML. Useful if you will be dropping your outputted files into a larger codebase.
 - `Alt text` allows you to add an alt text tag to images in your outputted HTML.
 
-**Page settings**
+### Page settings
 
 - Turn on `Include resizer script` to include JS in your outputted file which will show and hide the appropriate image at the appropriate size.
 - Turn on `Center HTML output` to center your page content in the outputted HTML.
@@ -104,8 +105,8 @@ Note that it does not replace the text in your artwork, just in the exported htm
 
 ## Support + Feedback
 
-We really hope you find this plugin as useful as we do and we're always open to feedback, bug reports, and feature suggestions. Feel free to comment on the Figma plugin community page, add an issue to this repo, or shoot us an email at sam@thedataface.com.
+We hope you find this plugin as useful as we do. We're always open to feedback, bug reports and feature suggestions. Feel free to comment on the Figma plugin community page, [open an issue](https://github.com/the-dataface/figma2html/issues) on this repo, or shoot us an email at [sam@thedataface.com](mailto:sam@thedataface.com?subject=FIGMA2HTML").
 
 ## Thanks
 
-Many thanks to the [ai2html](http://ai2html.org) team at the New York Times, both for inspiration and the code on which this plugin is based. Contributors from the DataFace team include Sam Vickars,  Sawyer Click, and Michael Hester.
+Many thanks to the [ai2html](http://ai2html.org) team at _The New York Times_, both for inspiration and the code on which this plugin is based. Contributors from the DataFace team include [Sam Vickars](https://twitter.com/samvickars), [Sawyer Click](https://twitter.com/sawyerdabear), and [Michael Hester](https://twitter.com/immichaelhester). The plugin uses some input elements from Thomas Lowry's [Figma Plugin DS Svelte](https://github.com/thomas-lowry/figma-plugin-ds-svelte) library.
