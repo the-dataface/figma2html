@@ -397,6 +397,7 @@
 <style>
   .content {
     color: var(--figma-color-text);
+    background-color: var(--figma-color-bg);
     min-height: calc(100% + 48px);
   }
 
