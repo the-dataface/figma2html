@@ -4069,26 +4069,16 @@ var span = (segment, variables, styleTextSegments) => {
 var dashify = (str) => str.replace(/[^\w\s]/gi, '').replace(/\s+/g, '-').toLowerCase();
 
 const convert = (prop, value) => {
-    let weightLookup = {
-        Thin: 100,
-        ExtraLight: 200,
-        Light: 300,
-        Regular: 400,
-        Medium: 500,
-        SemiBold: 600,
-        Bold: 700,
-        ExtraBold: 800,
-        Black: 900,
-    };
     if (prop === 'fontName') {
         // add font family to array for google fonts
         if (fontList.indexOf(value) < 0)
             fontList.push(value);
         let family = value.family;
-        let weight = value.style === 'Italic' ? weightLookup['Regular'] : weightLookup[value.style.replace(' Italic', '')];
         let style = value.style.includes('Italic') ? 'italic' : 'normal';
-        return `font-family: ${family}; font-weight: ${weight}; font-style: ${style};`;
+        return `font-family: ${family}; font-style: ${style};`;
     }
+    if (prop === "fontWeight")
+        return ` font-weight: ${value};`;
     if (prop === 'fontSize')
         return ` font-size: ${value}px;`;
     if (prop === 'textDecoration')
@@ -4125,6 +4115,7 @@ var styleProps = { convert, fontList, styles };
 var convertTextFrames = (textFrames, frameWidth, frameHeight) => {
     const props = [
         'fontName',
+        'fontWeight',
         'fontSize',
         'textDecoration',
         'textCase',
