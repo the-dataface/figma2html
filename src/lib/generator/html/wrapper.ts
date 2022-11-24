@@ -48,6 +48,8 @@ export default ({ config, assets, variables }) => {
 		)
 		.join('\n\n')}`;
 
+	html += `\n</div>`;
+
 	if (config.includeResizer) html += `\n\n${js.resizer(containerId, false)}`;
 
 	if (config.includeGoogleFonts && !!fontList.length)
