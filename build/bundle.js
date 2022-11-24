@@ -9903,16 +9903,16 @@ var ui = (function () {
     			t3 = space();
     			create_component(footer.$$.fragment);
     			attr_dev(i, "class", "ml-0.5 absolute text-xs text-gray-300 -rotate-45 -translate-x-1/4 -translate-y-1/4 fa-sharp fa-solid fa-grip-dots top-1/2 left-1/2");
-    			add_location(i, file, 245, 2, 7545);
+    			add_location(i, file, 245, 2, 7542);
     			attr_dev(div0, "id", "corner");
     			attr_dev(div0, "class", "fixed bottom-0 right-0 cursor-se-resize w-4 h-4 z-[999] overflow-hidden");
-    			add_location(div0, file, 239, 0, 7388);
+    			add_location(div0, file, 239, 0, 7385);
     			attr_dev(div1, "class", "flex flex-col w-1/3 min-h-full pb-12 control-panel svelte-nhire5");
-    			add_location(div1, file, 251, 2, 7756);
+    			add_location(div1, file, 251, 2, 7753);
     			attr_dev(div2, "class", "sticky w-2/3 h-full pb-12");
-    			add_location(div2, file, 298, 2, 9263);
+    			add_location(div2, file, 298, 2, 9260);
     			attr_dev(div3, "class", "flex w-full overflow-hidden content svelte-nhire5");
-    			add_location(div3, file, 250, 0, 7704);
+    			add_location(div3, file, 250, 0, 7701);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -10068,8 +10068,14 @@ var ui = (function () {
     			label: "html",
     			group: null,
     			selected: false
+    		},
+    		{
+    			value: "svelte",
+    			label: "svelte",
+    			group: null,
+    			selected: false
     		}
-    	]; // { value: "svelte", label: "svelte", group: null, selected: false }, // TO DO
+    	]; // TO DO
 
     	let extension = undefined;
 

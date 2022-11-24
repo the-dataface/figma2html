@@ -120,6 +120,6 @@ export default (containerId, isSvelte) => {
 	)})("${containerId}", {namespace: "", setup: window.setupInteractive || window.getComponent});`;
 
 	if (isSvelte)
-		return `<script>\n\timport { onMount } from 'svelte';\n\tonMount(() => {\n\t\t${resizerJs}\n\t\t});\n</script>`;
-	else return `<script>\n\t${resizerJs}\n</script>`;
+		return `<script>\n\t import { onMount } from 'svelte'; \n\t onMount(() => {\n\t\t${resizerJs}\n\t\t});\n</script>`;
+	else return `<script>\n\t ${resizerJs}\n </script>`;
 };
