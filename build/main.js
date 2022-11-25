@@ -4508,7 +4508,8 @@ var resizer = (containerId, isSvelte) => {
         };
         const update = () => {
             const frames = selectChildren(`.${nameSpace}artboard:where([data-min-width],[data-max-width])`, container);
-            const width = Math.round(container.offsetWidth);
+            // set width to either the container width or the window width, whichever is smaller
+            const width = Math.min(Math.round(container.offsetWidth), window.innerWidth);
             // Set frame visibility based on container width
             frames.forEach(function (el) {
                 let minwidth = el.getAttribute('data-min-width');
@@ -4898,10 +4899,11 @@ const getAssets = async (exportables, config, previewSettings) => {
         let originalNode = figma.getNodeById(exportable.id);
         // Convert all frames within this frame that contain text layers to groups
         let grouplessNode = originalNode.clone();
+        grouplessNode.layoutMode = 'NONE';
         grouplessNode = withModificationsForText(grouplessNode);
         // Hide all text layers.
-        let modifiedNode = originalNode.clone();
-        modifiedNode = withModificationsForExport(modifiedNode, config);
+        let modifiedNode;
+        modifiedNode = withModificationsForExport(grouplessNode, config);
         if (tempFrame.frame) {
             tempFrame.frame.appendChild(grouplessNode);
             tempFrame.frame.appendChild(modifiedNode);
@@ -4939,10 +4941,16 @@ const getAssets = async (exportables, config, previewSettings) => {
 const withModificationsForText = (node) => {
     // find all frame nodes within the frame
     const allNodes = node.findAll((node) => node.type === 'FRAME');
-    // find all frame nodes within the frame with a child node of type TEXT
-    const allTextNodes = allNodes.filter((node) => node.children.find((child) => child.type === 'TEXT'));
+    // find all frame nodes within the frame that contain text layers
+    allNodes.filter((node) => {
+        return node.findAll((node) => node.type === 'TEXT').length > 0;
+    });
+    // // find all frame nodes within the frame with a child node of type TEXT
+    // const allTextNodes = allNodes.filter((node) =>
+    // 	node.children.find((child) => child.type === 'TEXT')
+    // );
     // convert all frames to groups for positioning
-    createGroupsFromFrames(allTextNodes);
+    createGroupsFromFrames(allNodes);
     return node;
 };
 const withModificationsForExport = (node, config) => {
