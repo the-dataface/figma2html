@@ -338,11 +338,12 @@ const getAssets = async (
 
 		// Convert all frames within this frame that contain text layers to groups
 		let grouplessNode = originalNode.clone();
+		grouplessNode.layoutMode = 'NONE';
 		grouplessNode = withModificationsForText(grouplessNode);
 
 		// Hide all text layers.
-		let modifiedNode = originalNode.clone();
-		modifiedNode = withModificationsForExport(modifiedNode, config);
+		let modifiedNode;
+		modifiedNode = withModificationsForExport(grouplessNode, config);
 
 		if (tempFrame.frame) {
 			tempFrame.frame.appendChild(grouplessNode);
@@ -399,13 +400,18 @@ const withModificationsForText = (node: FrameNode): FrameNode => {
 	// find all frame nodes within the frame
 	const allNodes = node.findAll((node) => node.type === 'FRAME');
 
-	// find all frame nodes within the frame with a child node of type TEXT
-	const allTextNodes = allNodes.filter((node) =>
-		node.children.find((child) => child.type === 'TEXT')
-	);
+	// find all frame nodes within the frame that contain text layers
+	const allTextNodes = allNodes.filter((node) => {
+		return node.findAll((node) => node.type === 'TEXT').length > 0;
+	});
+
+	// // find all frame nodes within the frame with a child node of type TEXT
+	// const allTextNodes = allNodes.filter((node) =>
+	// 	node.children.find((child) => child.type === 'TEXT')
+	// );
 
 	// convert all frames to groups for positioning
-	const groups: GroupNode[] = createGroupsFromFrames(allTextNodes);
+	const groups: GroupNode[] = createGroupsFromFrames(allNodes);
 
 	return node;
 };

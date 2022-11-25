@@ -5,6 +5,7 @@ import trim from 'lib/utils/trim';
 export default (textFrames, frameWidth, frameHeight) => {
 	const props = [
 		'fontName',
+		'fontWeight',
 		'fontSize',
 		'textDecoration',
 		'textCase',

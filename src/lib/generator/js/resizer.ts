@@ -66,7 +66,8 @@ export default (containerId, isSvelte) => {
 				container
 			);
 
-			const width = Math.round(container.offsetWidth);
+			// set width to either the container width or the window width, whichever is smaller
+			const width = Math.min(Math.round(container.offsetWidth), window.innerWidth);
 
 			// Set frame visibility based on container width
 			frames.forEach(function (el) {
@@ -120,6 +121,6 @@ export default (containerId, isSvelte) => {
 	)})("${containerId}", {namespace: "", setup: window.setupInteractive || window.getComponent});`;
 
 	if (isSvelte)
-		return `<script>\n\timport { onMount } from 'svelte';\n\tonMount(() => {\n\t\t${resizerJs}\n\t\t});\n</script>`;
-	else return `<script>\n\t${resizerJs}\n</script>`;
+		return `<script>\n\t import { onMount } from 'svelte'; \n\t onMount(() => {\n\t\t${resizerJs}\n\t\t});\n</script>`;
+	else return `<script>\n\t ${resizerJs}\n </script>`;
 };
