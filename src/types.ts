@@ -1,6 +1,15 @@
-export type Extension = { value: 'PNG', label: 'png', selected: false } | { value: 'JPG', label: 'jpg', selected: false } | { value: 'SVG', label: 'svg', selected: false };
-export type FileType = { value: 'html', label: 'html', selected: false } | { value: 'svelte', label: 'svelte', selected: false };
-export type Scale = { value: 1, label: "1x", selected: false } | { value: 2, label: "2x", selected: false } | { value: 4, label: "4x", selected: false };
+export type Extension =
+	| { value: 'PNG'; label: 'png'; selected: boolean }
+	| { value: 'JPG'; label: 'jpg'; selected: boolean }
+	| { value: 'SVG'; label: 'svg'; selected: boolean };
+export type FileType =
+	| { value: 'html'; label: 'html'; selected: boolean }
+	| { value: 'svelte'; label: 'svelte'; selected: boolean };
+export type Scale =
+	| { value: 1; label: '1x'; selected: boolean }
+	| { value: 2; label: '2x'; selected: boolean }
+	| { value: 4; label: '4x'; selected: boolean };
+
 export type Loading = boolean;
 
 export interface Config {
