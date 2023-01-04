@@ -12,13 +12,14 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 
 	const frameContent = { html: '', css: '', js: '' };
 
-	const frameClass = `f2h-frame`;
 	const width = +node.name.replace('#', '').replace('px', '');
-	const frameHeight = node.height;
-	const id = `f2h-frame-${width}`;
-	const range = widthRange.ranges[widthRange.widths.indexOf(width)];
 	const height = node.height;
 	const aspectRatio = width / height;
+	const range = widthRange.ranges[widthRange.widths.indexOf(width)];
+
+	const frameHeight = node.height;
+	const frameClass = `f2h-frame`;
+	const id = `f2h-frame-${width}`;
 	const extension = config.extension.value.toLowerCase();
 
 	frameContent.css += `\t${css.frame(id)}`;
@@ -69,7 +70,11 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 		alt: altText,
 		'data-src': filename + '.' + extension,
 		src: 'data:image/gif;base64,R0lGODlhCgAKAIAAAB8fHwAAACH5BAEAAAAALAAAAAAKAAoAAAIIhI+py+0PYysAOw==',
-		loading: 'lazy'
+		loading: 'lazy',
+		draggable: 'false',
+		decoding: 'async',
+		width: width,
+		height: height
 	})}/>\n\t\t</picture>\n`;
 
 	if (textData) {
