@@ -74,5 +74,3 @@ export interface Views {
 	text: boolean;
 	preview: boolean;
 }
-
-export default {};

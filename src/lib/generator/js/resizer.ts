@@ -1,4 +1,4 @@
-import trim from 'lib/utils/trim';
+import trim from '$lib/utils/trim';
 
 export default (containerId, isSvelte) => {
 	// The resizer function is embedded in the HTML page -- external variables must

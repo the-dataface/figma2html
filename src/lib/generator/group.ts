@@ -23,6 +23,7 @@ export const createGroupsFromFrames = (
 		const group = createGroupFromFrame(node as FrameNode);
 		if (group) {
 			groups.push(group);
+			// @ts-ignore
 			if (!node.children.length) node.remove();
 		}
 	}

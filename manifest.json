@@ -1,10 +1,8 @@
 {
-  "name": "figma2html",
-  "api": "1.0.0",
-  "id": "1109185297790825980",
-  "main": "build/main.js",
-  "ui": "build/index.html",
-  "editorType": [
-    "figma"
-  ]
+	"name": "figma2html",
+	"api": "1.0.0",
+	"id": "1109185297790825980",
+	"main": "dist/code.js",
+	"ui": "dist/index.html",
+	"editorType": ["figma"]
 }

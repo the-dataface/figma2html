@@ -1,11 +1,10 @@
-import timestamp from 'lib/utils/timestamp';
-
 import frame from './frame';
 import { fontList } from '../styleProps';
 
-import css from 'lib/generator/css/index';
-import js from 'lib/generator/js/index';
-import widthRange from 'lib/generator/widthRange';
+import css from '$lib/generator/css/index';
+import js from '$lib/generator/js/index';
+import widthRange from '$lib/generator/widthRange';
+import timestamp from '$lib/utils/timestamp';
 
 export default ({ config, assets, variables }) => {
 	let html = ``;

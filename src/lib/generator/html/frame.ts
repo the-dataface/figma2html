@@ -1,8 +1,8 @@
-import convertTextFrames from 'lib/generator/convertTextFrames';
-import css from 'lib/generator/css/index';
-import roundTo from 'lib/utils/roundTo';
-import stringify from 'lib/utils/stringify';
-import trim from 'lib/utils/trim';
+import convertTextFrames from '$lib/generator/convertTextFrames';
+import css from '$lib/generator/css/index';
+import roundTo from '$lib/utils/roundTo';
+import stringify from '$lib/utils/stringify';
+import trim from '$lib/utils/trim';
 
 import span from './span';
 
