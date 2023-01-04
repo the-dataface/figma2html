@@ -386,12 +386,11 @@ const getAssets = async (
 
 const withModificationsForText = (node: FrameNode): FrameNode => {
 	// find all frame nodes within the frame
-	// const allNodes = node.findAllWithCriteria({ types: ['FRAME'] });
-	const allNodes = node.findAll((node) => node.type === 'FRAME') as FrameNode[];
+	const frameNodes = node.findAllWithCriteria({ types: ['FRAME'] });
 
 	// find all frame nodes within the frame that contain text layers
-	const allTextNodes = allNodes.filter((node) => {
-		return node.findAll((node) => node.type === 'TEXT').length > 0;
+	const textNodes = frameNodes.filter((node) => {
+		return node.findAllWithCriteria({ types: ['TEXT'] }).length > 0;
 	});
 
 	// // find all frame nodes within the frame with a child node of type TEXT
@@ -400,14 +399,13 @@ const withModificationsForText = (node: FrameNode): FrameNode => {
 	// );
 
 	// convert all frames to groups for positioning
-	const groups: GroupNode[] = createGroupsFromFrames(allNodes);
+	const groups: GroupNode[] = createGroupsFromFrames(frameNodes);
 
 	return node;
 };
 
 const withModificationsForExport = (node: FrameNode, config: Config): FrameNode => {
-	// const textNodes = node.findAllWithCriteria({ types: ['TEXT'] });
-	const textNodes = node.findAll((node) => node.type === 'TEXT') as TextNode[];
+	const textNodes = node.findAllWithCriteria({ types: ['TEXT'] });
 
 	config.testingMode
 		? textNodes.forEach((node) => (node.opacity = 0.5)) // fade all text layers if testingMode is true
