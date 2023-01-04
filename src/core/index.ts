@@ -1,4 +1,4 @@
-import type { Asset, Config, Exportable, HTMLFile, PreviewSettings, Variable, Views } from '$types';
+import type { Asset, Config, Exportable, HTMLFile, PreviewSettings, Variable, Views } from 'types';
 
 import yaml from 'js-yaml';
 import createSettingsBlock from '$lib/generator/createSettingsBlock';

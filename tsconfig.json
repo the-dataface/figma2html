@@ -20,7 +20,9 @@
 		"paths": {
 			"$lib": ["lib"],
 			"$lib/*": ["lib/*"],
-			"$types": ["types.ts"]
+			"$components": ["ui/components"],
+			"$components/*": ["ui/components/*"],
+			"$types": ["types/index.ts"]
 		},
 		"allowSyntheticDefaultImports": true,
 		"resolveJsonModule": true,

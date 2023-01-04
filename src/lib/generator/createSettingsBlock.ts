@@ -1,4 +1,4 @@
-import type { Extension, FileType, Scale, Size } from '$types';
+import type { Extension, FileType, Scale, Size } from 'types';
 
 export default (config: {
 	extension: Extension;

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import HoverIcon from '$lib/components/Inputs/HoverIcon.svelte';
+	import HoverIcon from '$components/Inputs/HoverIcon.svelte';
 
 	const dispatch = createEventDispatcher();
 

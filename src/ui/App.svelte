@@ -14,16 +14,16 @@
 		Views
 	} from '$types';
 
-	import Panel from '$lib/components/Layout/Panel.svelte';
+	import Panel from '$components/Layout/Panel.svelte';
 
-	import ErrorMessage from '$lib/components/ErrorMessage.svelte';
-	import Footer from '$lib/components/Footer.svelte';
+	import ErrorMessage from '$components/ErrorMessage.svelte';
+	import Footer from '$components/Footer.svelte';
 
-	import File from '$lib/components/Controls/File.svelte';
-	import Images from '$lib/components/Controls/Images.svelte';
-	import Page from '$lib/components/Controls/Page.svelte';
-	import Preview from '$lib/components/Controls/Preview.svelte';
-	import Text from '$lib/components/Controls/Text.svelte';
+	import File from '$components/Controls/File.svelte';
+	import Images from '$components/Controls/Images.svelte';
+	import Page from '$components/Controls/Page.svelte';
+	import Preview from '$components/Controls/Preview.svelte';
+	import Text from '$components/Controls/Text.svelte';
 
 	let errorMessage;
 	let errorTimeout;

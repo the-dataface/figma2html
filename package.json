@@ -24,12 +24,14 @@
 		"dev": "vite",
 		"build": "vite build",
 		"preview": "vite preview",
-		"check": "svelte-check --tsconfig ./tsconfig.json",
-		"postbuild": "tsc -p tsconfig.json && tsc-alias"
+		"__check": "svelte-check --tsconfig ./tsconfig.json",
+		"__postbuild": "tsc -p tsconfig.json && tsc-alias"
 	},
 	"devDependencies": {
 		"@figma/plugin-typings": "1.57.1",
+		"@rollup/plugin-commonjs": "^24.0.0",
 		"@rollup/plugin-dsv": "^3.0.1",
+		"@rollup/plugin-node-resolve": "^15.0.1",
 		"@sveltejs/vite-plugin-svelte": "^2.0.2",
 		"@tsconfig/svelte": "^3.0.0",
 		"autoprefixer": "^10.4.13",
