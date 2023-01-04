@@ -24,8 +24,7 @@
 		"dev": "vite",
 		"build": "vite build",
 		"preview": "vite preview",
-		"__check": "svelte-check --tsconfig ./tsconfig.json",
-		"__postbuild": "tsc -p tsconfig.json && tsc-alias"
+		"check": "svelte-check --tsconfig ./tsconfig.json"
 	},
 	"devDependencies": {
 		"@figma/plugin-typings": "1.57.1",

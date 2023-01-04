@@ -2,15 +2,15 @@ import { resolve } from 'path';
 
 import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
-import { viteSingleFile } from 'vite-plugin-singlefile';
+// import { viteSingleFile } from 'vite-plugin-singlefile';
 
-import dsv from '@rollup/plugin-dsv';
+// import dsv from '@rollup/plugin-dsv';
 import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-	plugins: [svelte(), dsv(), viteSingleFile()],
+	plugins: [svelte()],
 	resolve: {
 		alias: {
 			$lib: resolve(__dirname, 'src/lib'),
@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => ({
 		assetsInlineLimit: 100000000,
 		chunkSizeWarningLimit: 100000000,
 		cssCodeSplit: false,
-		exmptyOutDir: true,
+		emptyOutDir: true,
 		minify: false,
 		outDir: resolve(__dirname, 'dist'),
 		sourcemap: mode === 'development',
