@@ -1,6 +1,6 @@
-import styleProps from 'lib/generator/styleProps';
-import dashify from 'lib/utils/dashify';
-import trim from 'lib/utils/trim';
+import styleProps from '$lib/generator/styleProps';
+import dashify from '$lib/utils/dashify';
+import trim from '$lib/utils/trim';
 
 export default (textFrames, frameWidth, frameHeight) => {
 	const props = [
