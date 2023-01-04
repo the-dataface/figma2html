@@ -1,9 +1,6 @@
-export const createGroupFromFrame = (
-	frameNode: FrameNode
-): GroupNode | null => {
+export const createGroupFromFrame = (frameNode: FrameNode): GroupNode | null => {
 	if (!frameNode || !frameNode.parent) return null;
-	if (!Array.isArray(frameNode.children) || !frameNode.children.length)
-		return null;
+	if (!Array.isArray(frameNode.children) || !frameNode.children.length) return null;
 
 	const parent: any = frameNode.parent;
 	if (parent.type === 'INSTANCE') return null;

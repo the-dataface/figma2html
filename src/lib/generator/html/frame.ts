@@ -1,11 +1,10 @@
+import convertTextFrames from 'lib/generator/convertTextFrames';
+import css from 'lib/generator/css/index';
 import roundTo from 'lib/utils/roundTo';
 import stringify from 'lib/utils/stringify';
 import trim from 'lib/utils/trim';
 
-import css from 'lib/generator/css/index';
 import span from './span';
-
-import convertTextFrames from 'lib/generator/convertTextFrames';
 
 export default ({ node, filename, widthRange, altText, config, variables }) => {
 	let inlineStyle = '';
@@ -42,16 +41,14 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 	// if responsiveness is fixed, set the width to the max width
 	if (!config.fluid) inlineStyle += `width: ${width}px;`;
 
-	frameContent.html += `\n\t<!-- Frame: ${filename
-		.split('/')
-		.slice(-1)} -->\n`;
+	frameContent.html += `\n\t<!-- Frame: ${filename.split('/').slice(-1)} -->\n`;
 	frameContent.html += `\t<div ${stringify.attrs({
 		id: id,
 		class: `${frameClass.replace(':', '-')} frame artboard`,
 		'data-aspect-ratio': roundTo(aspectRatio, 3),
 		'data-min-width': range[0],
 		'data-max-width': range[1],
-		style: inlineStyle,
+		style: inlineStyle
 	})}>`;
 
 	frameContent.html += `\n\t\t<div ${stringify.attrs({
@@ -59,20 +56,20 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 		style: stringify.styles({
 			padding: '0 0 0 0',
 			'min-width': width > 0 ? `${width}px` : 'auto',
-			'max-width': range[1] ? `${range[1]}px` : 'none',
-		}),
+			'max-width': range[1] ? `${range[1]}px` : 'none'
+		})
 	})}></div>`;
 
 	frameContent.html += `\n\t\t<picture>\n\t\t\t<source ${stringify.attrs({
 		srcset: filename + '.' + extension,
-		type: 'image/' + extension,
+		type: 'image/' + extension
 	})}>\n\t\t\t<img ${stringify.attrs({
 		id: 'img-' + id,
 		class: 'f2h-img',
 		alt: altText,
 		'data-src': filename + '.' + extension,
 		src: 'data:image/gif;base64,R0lGODlhCgAKAIAAAB8fHwAAACH5BAEAAAAALAAAAAAKAAoAAAIIhI+py+0PYysAOw==',
-		loading: 'lazy',
+		loading: 'lazy'
 	})}/>\n\t\t</picture>\n`;
 
 	if (textData) {
@@ -83,16 +80,17 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 		pStyle = baseStyles
 			.sort(
 				(a, b) =>
-					baseStyles.filter((v) => v === a).length -
-					baseStyles.filter((v) => v === b).length
+					baseStyles.filter((v) => v === a).length - baseStyles.filter((v) => v === b).length
 			)
 			.pop();
 
 		// add pStyle to css
 		if (config.styleTextSegments)
 			if (pStyle)
-				frameContent.css += `\n\t#${id} ${pStyle.tag
-					} { ${pStyle.style.replaceAll('undefined', '')} }`;
+				frameContent.css += `\n\t#${id} ${pStyle.tag} { ${pStyle.style.replaceAll(
+					'undefined',
+					''
+				)} }`;
 
 		textData.forEach((text) => {
 			let el = ``;
@@ -107,13 +105,11 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 				top: text.y,
 				left: text.x,
 				opacity: text.opacity,
-				width: text.width,
+				width: text.width
 			};
 
 			// if (text.rotation !== 0) {
-			style[
-				'transform'
-			] = `translate(${text.translate}) rotate(${text.rotation}deg)`;
+			style['transform'] = `translate(${text.translate}) rotate(${text.rotation}deg)`;
 			style['transform-origin'] = 'left top';
 			style['text-align'] = text.horizontalAlignment.toLowerCase();
 			// }
@@ -121,8 +117,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 			let els = [];
 			text.segments.forEach((segment, i) => {
 				// did the last line end with a line break?
-				const prevEndsNewLine =
-					text?.segments[i - 1]?.characters.endsWith('\n');
+				const prevEndsNewLine = text.segments?.[i - 1]?.characters.endsWith('\n');
 
 				// does this line end with a line break?
 				const thisEndsNewLine = segment?.characters.endsWith('\n');
@@ -130,27 +125,18 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 				// does this line include a line break?
 				const thisIncludesNewLine = segment?.characters.includes('\n');
 
-				const notNewElement =
-					!!i &&
-					!prevEndsNewLine &&
-					!(thisIncludesNewLine && !thisEndsNewLine);
+				const notNewElement = !!i && !prevEndsNewLine && !(thisIncludesNewLine && !thisEndsNewLine);
 
 				if (notNewElement) {
 					els[els.length - 1].segments.push(segment);
 				} else {
 					els.push({
 						tag:
-							config.applyHtags &&
-								['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(
-									trim(text.class)
-								)
+							config.applyHtags && ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(trim(text.class))
 								? trim(text.class)
 								: 'p',
 						segments: [segment],
-						newElement:
-							!!i &&
-							(!prevEndsNewLine ||
-								(thisIncludesNewLine && !thisEndsNewLine)),
+						newElement: !!i && (!prevEndsNewLine || (thisIncludesNewLine && !thisEndsNewLine))
 					});
 				}
 			});
@@ -158,20 +144,18 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 			// if text.customAttributes array contains an object with key 'class', add it to the class
 			if (text.customAttributes.length) {
 				text.customAttributes.forEach((attr) => {
-					if (attr.key === 'class')
-						elClass += ` ${attr.value.join(' ')}`;
+					if (attr.key === 'class') elClass += ` ${attr.value.join(' ')}`;
 					else elAttributes += ` ${attr.key}="${attr.value}"`;
 				});
 			}
 
-			el += `<div class="${elClass}" ${elAttributes} style="${stringify.styles(
-				style
-			)} ${effect}">`;
+			el += `<div class="${elClass}" ${elAttributes} style="${stringify.styles(style)} ${effect}">`;
 
 			els.forEach((element) => {
 				el += `\n\t\t\t<${element.tag} ${stringify.attrs({
-					class: `${text.elId} ${text.class} ${text.customClasses ? text.customClasses.join(' ') : ''
-						}`,
+					class: `${text.elId} ${text.class} ${
+						text.customClasses ? text.customClasses.join(' ') : ''
+					}`
 				})}>`;
 
 				element.segments.forEach((segment) => {
@@ -183,14 +167,10 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 				if (config.styleTextSegments) {
 					// if text.baseStyle is not the same as pStyle, append text.baseStyle to frameContent.css
 					if (text.baseStyle.style !== pStyle.style)
-						frameContent.css += `\n\t#${id} .${text.elId
-							}${text.class.replaceAll(
-								' ',
-								'.'
-							)} { ${text.baseStyle.style.replaceAll(
-								'undefined',
-								''
-							)} }`;
+						frameContent.css += `\n\t#${id} .${text.elId}${text.class.replaceAll(
+							' ',
+							'.'
+						)} { ${text.baseStyle.style.replaceAll('undefined', '')} }`;
 				}
 			});
 

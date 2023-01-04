@@ -1,4 +1,4 @@
-import { Extension, Size, FileType, Scale } from '../../types';
+import { Extension, FileType, Scale, Size } from '../../types';
 
 export default (config: {
 	extension: Extension;
@@ -12,19 +12,19 @@ export default (config: {
 		return {
 			settings: {
 				format: extension.value,
-				constraint: { type: 'SCALE', value },
+				constraint: { type: 'SCALE', value }
 			},
 			destSize: {
 				width: srcSize.width * value,
-				height: srcSize.height * value,
-			},
+				height: srcSize.height * value
+			}
 		};
 	} else {
 		return {
 			settings: {
-				format: extension.value,
+				format: extension.value
 			},
-			destSize: srcSize,
+			destSize: srcSize
 		};
 	}
 };
