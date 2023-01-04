@@ -1,4 +1,4 @@
-![Cover Art](/src/img/coverArt.png)
+![Cover Art](/public/coverArt.png)
 
 # figma2html
 

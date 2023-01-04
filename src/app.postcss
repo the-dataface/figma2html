@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.setting div {
+	color: var(--figma-color-text) !important;
+}
+
+input,
+textarea,
+.setting button {
+	/* border: 1px solid var(--figma-color-border) !important; */
+	border: none !important;
+	background-color: var(--figma-color-bg-secondary) !important;
+	border-radius: 4px !important;
+	color: var(--figma-color-text) !important;
+}
+
+.setting button {
+	height: 36px !important;
+}
+
+.input input,
+.setting button {
+	height: 36px !important;
+}
+
+svg {
+	fill: var(--figma-color-text) !important;
+}
+
+button svg {
+	fill: var(--figma-color-text-secondary) !important;
+}
+
+.content button {
+	background-color: var(--figma-color-bg-secondary) !important;
+	border-radius: 4px !important;
+	height: 40px !important;
+	margin-top: 8px !important;
+}
+
+.content button:hover {
+	background-color: var(--figma-color-bg-tertiary) !important;
+}
+
+.content button:focus {
+	outline: 1px solid var(--figma-color-border-selected);
+}
+
+.content button .label,
+.content button .placeholder {
+	margin-top: 0 !important;
+}
+
+.content button .caret svg path {
+	fill: var(--figma-color-text-secondary) !important;
+}
+
+.content button:hover .caret svg path,
+.figma-dark .content ul li .label,
+.content button .label,
+.content button .placeholder {
+	fill: var(--figma-color-text) !important;
+}
+
+.content ul li .label {
+	color: var(--figma-color-bg) !important;
+}

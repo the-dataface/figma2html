@@ -1,9 +1,8 @@
-<script lang="ts" type="module">
-	import './app.css';
-
+<script lang="ts">
+	import './app.postcss';
 	import { onMount } from 'svelte';
 	import JSZip from 'jszip/dist/jszip.min.js';
-	import {
+	import type {
 		Asset,
 		Config,
 		Extension,
@@ -421,69 +420,5 @@
 
 	.control-panel {
 		border-right: 1px solid var(--figma-color-border);
-	}
-
-	:global(.setting div) {
-		color: var(--figma-color-text) !important;
-	}
-
-	:global(input, textarea, .setting button) {
-		/* border: 1px solid var(--figma-color-border) !important; */
-		border: none !important;
-		background-color: var(--figma-color-bg-secondary) !important;
-		border-radius: 4px !important;
-		color: var(--figma-color-text) !important;
-	}
-
-	:global(.setting button) {
-		height: 36px !important;
-	}
-
-	:global(.input input, .setting button) {
-		height: 36px !important;
-	}
-
-	:global(svg) {
-		fill: var(--figma-color-text) !important;
-	}
-
-	:global(button svg) {
-		fill: var(--figma-color-text-secondary) !important;
-	}
-
-	:global(.content button) {
-		background-color: var(--figma-color-bg-secondary) !important;
-		border-radius: 4px !important;
-		height: 40px !important;
-		margin-top: 8px !important;
-	}
-
-	:global(.content button:hover) {
-		background-color: var(--figma-color-bg-tertiary) !important;
-	}
-
-	:global(.content button:focus) {
-		outline: 1px solid var(--figma-color-border-selected);
-	}
-
-	:global(.content button .label, .content button .placeholder) {
-		color: var(--figma-color-text) !important;
-		margin-top: 0 !important;
-	}
-
-	:global(.content button .caret svg path) {
-		fill: var(--figma-color-text-secondary) !important;
-	}
-
-	:global(.content button:hover .caret svg path) {
-		fill: var(--figma-color-text) !important;
-	}
-
-	:global(.content ul li .label) {
-		color: var(--figma-color-bg) !important;
-	}
-
-	:global(.figma-dark .content ul li .label) {
-		color: var(--figma-color-text) !important;
 	}
 </style>
