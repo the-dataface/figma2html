@@ -24,16 +24,9 @@
 		},
 		"allowSyntheticDefaultImports": true,
 		"resolveJsonModule": true,
-		"sourceMap": true
+		"sourceMap": false
 	},
-	"include": [
-		"src/**/*.d.ts",
-		"src/**/*.ts",
-		"src/**/*.js",
-		"src/**/*.svelte",
-		"code.ts",
-		"src/main.ts"
-	],
+	"include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
 	"exclude": ["node_modules", "dist"],
 	"references": [{ "path": "./tsconfig.node.json" }]
 }

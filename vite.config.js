@@ -22,24 +22,9 @@ export default defineConfig(({ command, mode }) => ({
 		cssCodeSplit: false,
 		brotliSize: false,
 		rollupOptions: {
-			input: [resolve('index.html'), resolve('code.ts')],
 			output: {
-				preserveModules: false,
 				inlineDynamicImports: false
 			}
 		}
-		// rollupOptions: [
-		// 	{ input: './index.html', output: { inlineDynamicImports: true } },
-		// 	{ input: './code.ts', output: { inlineDynamicImports: true } }
-		// ]
-		// {
-		// 	input: {
-		// 		index: './index.html',
-		// 		code: './code.ts'
-		// 	},
-		// 	output: {
-		// 		inlineDynamicImports: false
-		// 	}
-		// }
 	}
 }));
