@@ -1,12 +1,11 @@
-import yaml from 'js-yaml';
+import { Asset, Config, Exportable, HTMLFile, PreviewSettings, Variable, Views } from './types';
 
+import yaml from 'js-yaml';
 import createSettingsBlock from 'lib/generator/createSettingsBlock';
 import { createGroupsFromFrames } from 'lib/generator/group';
 import html from 'lib/generator/html/wrapper';
 import dashify from 'lib/utils/dashify';
 import log from 'lib/utils/log';
-
-import { Asset, Config, Exportable, HTMLFile, PreviewSettings, Variable, Views } from './types';
 
 /**
  * ignore invisible nodes. speeds up document traversal
@@ -14,45 +13,50 @@ import { Asset, Config, Exportable, HTMLFile, PreviewSettings, Variable, Views }
  */
 figma.skipInvisibleInstanceChildren = true;
 
+/**
+ * show the UI.
+ * __html__ references the string in /manifest.json.
+ * https://www.figma.com/plugin-docs/api/global-objects/#html
+ * */
 figma.showUI(__html__, { width: 560, height: 500, themeColors: true });
 
-const defaultVariables = {
-	hed: 'figma2html'
-};
-
-const defaultViews = {
-	file: true,
-	images: false,
-	page: false,
-	text: false,
-	preview: true
-};
-
-const defaultSize = { w: 960, h: 500 };
-
-const configDefaults = {
-	syntax: dashify(figma.currentPage.name),
-	scale: { value: 2, label: '2x', selected: true },
-	extension: { value: 'PNG', label: 'png', selected: true },
-	fileType: { value: 'html', label: 'html', selected: true },
-	includeResizer: true,
-	testingMode: false,
-	maxWidth: null,
-	fluid: true,
-	centerHtmlOutput: false,
-	imagePath: 'img',
-	altText: null,
-	applyStyleNames: true,
-	applyHtags: true,
-	styleTextSegments: true,
-	includeGoogleFonts: true,
-	customScript: null
+/**
+ * DEFAULT VARIABLES
+ */
+const defaults = {
+	config: {
+		syntax: dashify(figma.currentPage.name),
+		scale: { value: 2, label: '2x', selected: true },
+		extension: { value: 'PNG', label: 'png', selected: true },
+		fileType: { value: 'html', label: 'html', selected: true },
+		includeResizer: true,
+		testingMode: false,
+		maxWidth: null,
+		fluid: true,
+		centerHtmlOutput: false,
+		imagePath: 'img',
+		altText: null,
+		applyStyleNames: true,
+		applyHtags: true,
+		styleTextSegments: true,
+		includeGoogleFonts: true,
+		customScript: null
+	},
+	size: { w: 960, h: 500 },
+	variables: { hed: 'figma2html' },
+	views: {
+		file: true,
+		images: false,
+		page: false,
+		text: false,
+		preview: true
+	}
 };
 
 class StoredViews {
 	static get = async (): Promise<Views> => {
 		const _views = await figma.clientStorage.getAsync('views');
-		return _views ?? defaultViews;
+		return _views ?? defaults.views;
 	};
 
 	static set = async (_views: Views): Promise<Views> => {
@@ -68,7 +72,7 @@ class StoredViews {
 class StoredSize {
 	static get = async () => {
 		const _size = await figma.clientStorage.getAsync('size');
-		return _size ?? defaultSize;
+		return _size ?? defaults.size;
 	};
 
 	static set = async (_size: { w: number; h: number }) => {
@@ -104,15 +108,15 @@ class StoredVariables {
 				variables: null
 			});
 
-			return defaultVariables;
+			return defaults.variables;
 		}
 	};
 
 	static writeVariables = async (): Promise<void> => {
 		// write an example variables array to a text node on the current page
 
-		let storedVariables: object;
-		let xPos: number;
+		let variables = defaults.variables;
+		let xPos = 0;
 
 		// remove existing variables text node if found
 		const existingVariables = figma.currentPage.findChild(
@@ -124,7 +128,7 @@ class StoredVariables {
 			xPos = existingVariables.x;
 
 			let characters = existingVariables.characters;
-			storedVariables = yaml.load(characters);
+			variables = yaml.load(characters);
 
 			existingVariables.remove();
 		}
@@ -141,6 +145,8 @@ class StoredVariables {
 				return Math.max(max, node.x + node.width);
 			}, 0);
 
+			xPos = maxRight + 100;
+
 			// get furthest point to the top
 			const minTop = nodes.reduce((min, node) => {
 				return Math.min(min, node.y);
@@ -148,40 +154,40 @@ class StoredVariables {
 
 			// create the node
 			let textNode = figma.createText();
-			textNode.characters = yaml.dump(storedVariables || defaultVariables);
-			textNode.x = xPos || maxRight + 100;
+			textNode.characters = yaml.dump(variables);
+			textNode.x = xPos;
 			textNode.y = minTop;
 			textNode.name = 'f2h-variables';
 
 			figma.ui.postMessage({
 				type: 'variables',
-				variables: storedVariables || defaultVariables
+				variables: variables
 			});
 		});
 	};
 }
 
 class StoredConfig {
+	// get the stored config
 	static get = async (): Promise<Config> => {
 		const _config = await figma.clientStorage.getAsync('config');
-		return _config ?? configDefaults;
+		return _config ?? defaults.config;
 	};
 
+	// set the stored config
 	static set = async (_config: Config): Promise<Config> => {
-		// set the stored config
 		await figma.clientStorage.setAsync('config', _config);
 		return _config;
 	};
 
+	// clear the stored config
 	static clear = async (): Promise<void> => {
-		// clear the stored config
 		await figma.clientStorage.deleteAsync('config');
 		return;
 	};
 
+	// write the config to a text node on the current page
 	static writeSettings = async (config): Promise<void> => {
-		// write the config to a text node on the current page
-
 		let xPos: number;
 
 		// remove existing settings text node if found
@@ -190,9 +196,8 @@ class StoredConfig {
 		) as TextNode;
 
 		if (settings) {
-			// save xPos if settings node exists
+			// save position if settings node exists
 			xPos = settings.x;
-
 			settings.remove();
 		}
 
@@ -208,6 +213,8 @@ class StoredConfig {
 				return Math.max(max, node.x + node.width);
 			}, 0);
 
+			xPos = maxRight + 100;
+
 			// get furthest point to the top
 			const minTop = nodes.reduce((min, node) => {
 				return Math.min(min, node.y);
@@ -216,7 +223,7 @@ class StoredConfig {
 			// create the node
 			let textNode = figma.createText();
 			textNode.characters = yaml.dump(formatConfig(config));
-			textNode.x = xPos || maxRight + 100;
+			textNode.x = xPos;
 			textNode.y = minTop;
 			textNode.name = 'f2h-settings';
 		});
