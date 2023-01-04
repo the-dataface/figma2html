@@ -17,7 +17,8 @@ export default (segment, variables, styleTextSegments) => {
 	if (!segment.isBaseStyle && styleTextSegments) el += `<span style="${segment.styleString}">`;
 
 	// if segment.isOtherWeight is not false, then add a span with inline styles
-	if (segment.isOtherWeight && styleTextSegments) el += `<span style="font-weight: ${segment.isOtherWeight}">`;
+	if (segment.isOtherWeight && styleTextSegments)
+		el += `<span style="font-weight: ${segment.isOtherWeight}">`;
 
 	// if segment isItalic is true, add an i tag
 	if (segment.isItalic) el += `<i>`;

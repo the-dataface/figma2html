@@ -10,7 +10,7 @@ export default (fontList) => {
 		SemiBold: 600,
 		Bold: 700,
 		ExtraBold: 800,
-		Black: 900,
+		Black: 900
 	};
 
 	// group fontList array by family
@@ -31,8 +31,7 @@ export default (fontList) => {
 			// if fontFamilies does include an object with the family name equal to the font family, push the font value to the array of values
 			fontFamilies.forEach((f) => {
 				if (f.family === family) {
-					if (!f.weights.includes(styleWeight))
-						f.weights.push(styleWeight);
+					if (!f.weights.includes(styleWeight)) f.weights.push(styleWeight);
 				}
 			});
 		}

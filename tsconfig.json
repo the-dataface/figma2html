@@ -1,19 +1,19 @@
 {
-  "compilerOptions": {
-    "outDir": "build",
-    "target": "ES2019",
-    "moduleResolution": "node",
-    "lib": ["ES2019", "dom"],
-    "typeRoots": [
-      "./node_modules/@types",
-      "./node_modules/@figma",
-      "./src/constants",
-      "./src/types"
-    ],
-    "paths": {
-      "*": ["./src/*"],
-    },
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-  }
+	"compilerOptions": {
+		"outDir": "build",
+		"target": "ES2019",
+		"moduleResolution": "node",
+		"lib": ["ES2021", "dom"],
+		"typeRoots": [
+			"./node_modules/@types",
+			"./node_modules/@figma",
+			"./src/constants",
+			"./src/types"
+		],
+		"paths": {
+			"*": ["./src/*"]
+		},
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true
+	}
 }

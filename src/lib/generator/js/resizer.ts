@@ -16,15 +16,11 @@ export default (containerId, isSvelte) => {
 		const updateImgSrc = (img) => {
 			const src = img.getAttribute('data-src');
 
-			if (src && img.getAttribute('src') != src)
-				img.setAttribute('src', src);
+			if (src && img.getAttribute('src') != src) img.setAttribute('src', src);
 		};
 
 		const onIntersectionChange = (entries) => {
-			const isIntersecting = entries.reduce(
-				(memo, entry) => memo || entry.isIntersecting,
-				false
-			);
+			const isIntersecting = entries.reduce((memo, entry) => memo || entry.isIntersecting, false);
 
 			if (isIntersecting) {
 				waiting = false;
@@ -33,9 +29,7 @@ export default (containerId, isSvelte) => {
 		};
 
 		const selectChildren = (selector, parent) =>
-			parent
-				? Array.prototype.slice.call(parent.querySelectorAll(selector))
-				: [];
+			parent ? Array.prototype.slice.call(parent.querySelectorAll(selector)) : [];
 
 		// based on underscore.js
 		const throttle = (func, wait) => {
@@ -74,14 +68,8 @@ export default (containerId, isSvelte) => {
 				let minwidth = el.getAttribute('data-min-width');
 				let maxwidth = el.getAttribute('data-max-width');
 
-				if (
-					+minwidth <= width &&
-					(+maxwidth >= width || maxwidth === null)
-				) {
-					if (!waiting)
-						selectChildren(`.${nameSpace}f2h-img`, el).forEach(
-							updateImgSrc
-						);
+				if (+minwidth <= width && (+maxwidth >= width || maxwidth === null)) {
+					if (!waiting) selectChildren(`.${nameSpace}f2h-img`, el).forEach(updateImgSrc);
 					el.style.display = 'block';
 				} else {
 					el.style.display = 'none';
@@ -95,7 +83,7 @@ export default (containerId, isSvelte) => {
 					update();
 				} else {
 					observer = new IntersectionObserver(onIntersectionChange, {
-						rootMargin: '400px 400px',
+						rootMargin: '400px 400px'
 					});
 					observer.observe(container);
 				}

@@ -5,16 +5,15 @@ export default ({ containerId, config, frameCss }) => {
 	// add max-width to styles
 	selectors[id] = {
 		'max-width': config.maxWidth ? `${config.maxWidth}px` : 'none',
-		margin: config.centerHtmlOutput ? '0 auto' : '0',
+		margin: config.centerHtmlOutput ? '0 auto' : '0'
 	};
 
 	// center content
 	if (config.centerHtmlOutput) {
 		selectors[`${id} .f2h-frame`] = {
-			margin: '0 auto',
+			margin: '0 auto'
 		};
 	}
-
 
 	// default <p> styles
 	selectors[`${id} p, ${id} .body`] = { margin: '0' };
@@ -22,19 +21,19 @@ export default ({ containerId, config, frameCss }) => {
 	// image placement
 	selectors[`${id} .f2h-img`] = {
 		width: '100% !important',
-		top: '0',
+		top: '0'
 	};
 
 	selectors[`${id} .f2h-symbol`] = {
-		'box-sizing': 'border-box',
+		'box-sizing': 'border-box'
 	};
 
 	selectors[`${id} :where(.frame, .f2h-text, .f2h-symbol)`] = {
-		position: 'absolute',
+		position: 'absolute'
 	};
 
 	selectors[`${id} :where(.f2h-link, .f2h-img)`] = {
-		display: 'block',
+		display: 'block'
 	};
 
 	let computedStyles = Object.entries(selectors)

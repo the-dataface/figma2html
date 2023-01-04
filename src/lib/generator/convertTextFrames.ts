@@ -1,5 +1,5 @@
-import dashify from 'lib/utils/dashify';
 import styleProps from 'lib/generator/styleProps';
+import dashify from 'lib/utils/dashify';
 import trim from 'lib/utils/trim';
 
 export default (textFrames, frameWidth, frameHeight) => {
@@ -16,7 +16,7 @@ export default (textFrames, frameWidth, frameHeight) => {
 		'fillStyleId',
 		'listOptions',
 		'indentation',
-		'hyperlink',
+		'hyperlink'
 	];
 
 	// return array of text frame style + class data
@@ -43,37 +43,26 @@ export default (textFrames, frameWidth, frameHeight) => {
 			const isBaseStyle =
 				i === 0
 					? true
-					: stylesObject['font-family'] ===
-					textSegments[0].stylesObject['font-family'] &&
-					stylesObject['font-size'] ===
-					textSegments[0].stylesObject['font-size'] &&
-					stylesObject['letter-spacing'] ===
-					textSegments[0].stylesObject['letter-spacing'] &&
-					stylesObject['color'] ===
-					textSegments[0].stylesObject['color'] &&
-					stylesObject['line-height'] ===
-					textSegments[0].stylesObject['line-height'] &&
-					stylesObject['mix-blend-mode'] ===
-					textSegments[0].stylesObject['mix-blend-mode'] &&
-					stylesObject['text-decoration'] ===
-					textSegments[0].stylesObject['text-decoration'] &&
-					stylesObject['text-transform'] ===
-					textSegments[0].stylesObject['text-transform'];
+					: stylesObject['font-family'] === textSegments[0].stylesObject['font-family'] &&
+					  stylesObject['font-size'] === textSegments[0].stylesObject['font-size'] &&
+					  stylesObject['letter-spacing'] === textSegments[0].stylesObject['letter-spacing'] &&
+					  stylesObject['color'] === textSegments[0].stylesObject['color'] &&
+					  stylesObject['line-height'] === textSegments[0].stylesObject['line-height'] &&
+					  stylesObject['mix-blend-mode'] === textSegments[0].stylesObject['mix-blend-mode'] &&
+					  stylesObject['text-decoration'] === textSegments[0].stylesObject['text-decoration'] &&
+					  stylesObject['text-transform'] === textSegments[0].stylesObject['text-transform'];
 
 			// is this segment's font-weight 700 (bold) (only if isBaseStyle is false)?
 			const isBold = isBaseStyle && stylesObject['font-weight'] === 700;
 
 			// is this segment's font-weight neither 400 or 700 (only if isBaseStyle is false)?
 			const isOtherWeight =
-				isBaseStyle &&
-					stylesObject['font-weight'] !== 400 &&
-					stylesObject['font-weight'] !== 700
+				isBaseStyle && stylesObject['font-weight'] !== 400 && stylesObject['font-weight'] !== 700
 					? stylesObject['font-weight']
 					: false;
 
 			// is this segment's font-style italic (only if isBaseStyle is false)?
-			const isItalic =
-				isBaseStyle && stylesObject['font-style'] === 'italic';
+			const isItalic = isBaseStyle && stylesObject['font-style'] === 'italic';
 
 			textSegments.push({
 				characters: seg.characters,
@@ -86,27 +75,21 @@ export default (textFrames, frameWidth, frameHeight) => {
 				isBaseStyle,
 				isBold,
 				isOtherWeight,
-				isItalic,
+				isItalic
 			});
 		});
 
 		if (styleId && typeof styleId !== 'symbol' && styleObject)
-			elClass += ` ${dashify(
-				styleObject.name.split('/')[
-				styleObject.name.split('/').length - 1
-				]
-			)}`;
+			elClass += ` ${dashify(styleObject.name.split('/')[styleObject.name.split('/').length - 1])}`;
 
 		// get base style and change font-weight to 400 and style to normal
-		const tag = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(trim(elClass))
-			? trim(elClass)
-			: 'p';
+		const tag = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(trim(elClass)) ? trim(elClass) : 'p';
 
 		const baseStyle = {
 			tag,
 			style: textSegments[0].styleString
 				.replace('font-weight: 700', 'font-weight: 400')
-				.replace('font-style: italic', 'font-style: normal'),
+				.replace('font-style: italic', 'font-style: normal')
 		};
 
 		// turn layer name into custom attributes if it starts with [f2h]
@@ -120,7 +103,7 @@ export default (textFrames, frameWidth, frameHeight) => {
 					value: attr
 						.split(':')[1]
 						.split(',')
-						.map((v) => v.trim()),
+						.map((v) => v.trim())
 				});
 			});
 		}
@@ -170,7 +153,7 @@ export default (textFrames, frameWidth, frameHeight) => {
 			opacity: textFrame.opacity,
 			translate: `${translateX}%, ${translateY}%`,
 			rotation: textFrame.rotation * -1,
-			effect: textFrame.effects,
+			effect: textFrame.effects
 		};
 	});
 };

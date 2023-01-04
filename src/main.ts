@@ -6,61 +6,75 @@ import html from 'lib/generator/html/wrapper';
 import dashify from 'lib/utils/dashify';
 import log from 'lib/utils/log';
 
-import {
-	Asset,
-	Config,
-	Exportable,
-	HTMLFile,
-	PreviewSettings,
-	Variable,
-	Views,
-} from './types';
+import { Asset, Config, Exportable, HTMLFile, PreviewSettings, Variable, Views } from './types';
+
+/**
+ * ignore invisible nodes. speeds up document traversal
+ * @see figma.skipInvisibleInstanceChildren = true
+ */
+figma.skipInvisibleInstanceChildren = true;
 
 figma.showUI(__html__, { width: 560, height: 500, themeColors: true });
 
 const defaultVariables = {
-	hed: 'This is the headline',
+	hed: 'figma2html'
+};
+
+const defaultViews = {
+	file: true,
+	images: false,
+	page: false,
+	text: false,
+	preview: true
+};
+
+const defaultSize = { w: 960, h: 500 };
+
+const configDefaults = {
+	syntax: dashify(figma.currentPage.name),
+	scale: { value: 2, label: '2x', selected: true },
+	extension: { value: 'PNG', label: 'png', selected: true },
+	fileType: { value: 'html', label: 'html', selected: true },
+	includeResizer: true,
+	testingMode: false,
+	maxWidth: null,
+	fluid: true,
+	centerHtmlOutput: false,
+	imagePath: 'img',
+	altText: null,
+	applyStyleNames: true,
+	applyHtags: true,
+	styleTextSegments: true,
+	includeGoogleFonts: true,
+	customScript: null
 };
 
 class StoredViews {
 	static get = async (): Promise<Views> => {
 		const _views = await figma.clientStorage.getAsync('views');
-
-		if (!_views) {
-			return {
-				file: true,
-				images: false,
-				page: false,
-				text: false,
-				preview: true
-			};
-		} else return _views;
+		return _views ?? defaultViews;
 	};
 
 	static set = async (_views: Views): Promise<Views> => {
 		await figma.clientStorage.setAsync('views', _views);
 		return _views;
-	}
+	};
 
 	static clear = async (): Promise<void> => {
 		await figma.clientStorage.deleteAsync('views');
-	}
+	};
 }
 
 class StoredSize {
 	static get = async () => {
 		const _size = await figma.clientStorage.getAsync('size');
-		if (!_size) {
-			return { w: 960, h: 500 };
-		} else {
-			return _size;
-		}
-	}
+		return _size ?? defaultSize;
+	};
 
-	static set = async (_size: { w: number, h: number }) => {
+	static set = async (_size: { w: number; h: number }) => {
 		await figma.clientStorage.setAsync('size', _size);
 		return _size;
-	}
+	};
 
 	static clear = async (): Promise<void> => {
 		await figma.clientStorage.deleteAsync('size');
@@ -70,9 +84,9 @@ class StoredSize {
 class StoredVariables {
 	static get = async (): Promise<Variable> => {
 		// get the stored variables
-		const variablesNode = figma.currentPage.findOne(
+		const variablesNode = figma.currentPage.findChild(
 			(node) => node.type === 'TEXT' && node.name === 'f2h-variables'
-		);
+		) as TextNode;
 
 		if (!!variablesNode?.characters) {
 			const variables = yaml.load(variablesNode.characters);
@@ -80,14 +94,14 @@ class StoredVariables {
 
 			figma.ui.postMessage({
 				type: 'variables',
-				variables: variables,
+				variables: variables
 			});
 
 			return variables;
 		} else {
 			figma.ui.postMessage({
 				type: 'variables',
-				variables: null,
+				variables: null
 			});
 
 			return defaultVariables;
@@ -97,13 +111,13 @@ class StoredVariables {
 	static writeVariables = async (): Promise<void> => {
 		// write an example variables array to a text node on the current page
 
-		let storedVariables;
-		let xPos;
+		let storedVariables: object;
+		let xPos: number;
 
 		// remove existing variables text node if found
-		const existingVariables = figma.currentPage.findOne(
+		const existingVariables = figma.currentPage.findChild(
 			(node) => node.type === 'TEXT' && node.name === 'f2h-variables'
-		);
+		) as TextNode;
 
 		if (!!existingVariables?.characters) {
 			// save xPos of existing variables text node if it exists
@@ -117,10 +131,9 @@ class StoredVariables {
 
 		// load Inter for variables text node
 		figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
-			// get all frames with names including "#" or named "settings"
+			// get all frames with names starting with "#" or named "f2h-settings"
 			const nodes = figma.currentPage.findAll(
-				(node) =>
-					node.name.includes('#') || node.name === 'f2h-settings'
+				(node) => node.name.startsWith('#') || node.name === 'f2h-settings'
 			);
 
 			// get furthest point to the right
@@ -135,16 +148,14 @@ class StoredVariables {
 
 			// create the node
 			let textNode = figma.createText();
-			textNode.characters = yaml.dump(
-				storedVariables || defaultVariables
-			);
+			textNode.characters = yaml.dump(storedVariables || defaultVariables);
 			textNode.x = xPos || maxRight + 100;
 			textNode.y = minTop;
 			textNode.name = 'f2h-variables';
 
 			figma.ui.postMessage({
 				type: 'variables',
-				variables: storedVariables || defaultVariables,
+				variables: storedVariables || defaultVariables
 			});
 		});
 	};
@@ -152,32 +163,8 @@ class StoredVariables {
 
 class StoredConfig {
 	static get = async (): Promise<Config> => {
-		// get the stored config
 		const _config = await figma.clientStorage.getAsync('config');
-
-		// set up config defaults if none found
-		if (!_config) {
-			return {
-				syntax: dashify(figma.currentPage.name),
-				scale: { value: 2, label: "2x", selected: true },
-				extension: { value: 'PNG', label: 'png', selected: true },
-				fileType: { value: 'html', label: 'html', selected: true },
-				includeResizer: true,
-				testingMode: false,
-				maxWidth: null,
-				fluid: true,
-				centerHtmlOutput: false,
-				imagePath: 'img',
-				altText: null,
-				applyStyleNames: true,
-				applyHtags: true,
-				styleTextSegments: true,
-				includeGoogleFonts: true,
-				customScript: null
-			};
-		} else {
-			return _config;
-		}
+		return _config ?? configDefaults;
 	};
 
 	static set = async (_config: Config): Promise<Config> => {
@@ -189,17 +176,18 @@ class StoredConfig {
 	static clear = async (): Promise<void> => {
 		// clear the stored config
 		await figma.clientStorage.deleteAsync('config');
+		return;
 	};
 
 	static writeSettings = async (config): Promise<void> => {
 		// write the config to a text node on the current page
 
-		let xPos;
+		let xPos: number;
 
 		// remove existing settings text node if found
-		const settings = figma.currentPage.findOne(
+		const settings = figma.currentPage.findChild(
 			(node) => node.type === 'TEXT' && node.name === 'f2h-settings'
-		);
+		) as TextNode;
 
 		if (settings) {
 			// save xPos if settings node exists
@@ -210,10 +198,9 @@ class StoredConfig {
 
 		// load Inter for settings text node
 		figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
-			// get all frames with names including "#"
+			// get all frames with names starting with "#" or that are the variables block
 			const nodes = figma.currentPage.findAll(
-				(node) =>
-					node.name.includes('#') || node.name === 'f2h-variables'
+				(node) => node.name.startsWith('#') || node.name === 'f2h-variables'
 			);
 
 			// get furthest point to the right
@@ -237,9 +224,9 @@ class StoredConfig {
 
 	static loadSettings = async (): Promise<void> => {
 		// find text node named "settings" and load
-		const settingsNode = figma.currentPage.findOne(
-			(node) => node.name === 'f2h-settings' && node.type === 'TEXT'
-		);
+		const settingsNode = figma.currentPage.findChild(
+			(node) => node.type === 'TEXT' && node.name === 'f2h-settings'
+		) as TextNode;
 
 		if (!!settingsNode?.characters) {
 			const config = parseConfig(yaml.load(settingsNode.characters));
@@ -254,15 +241,27 @@ const formatConfig = (__config) => {
 	__config.scale = __config.scale.value;
 
 	return __config;
-}
+};
 
 const parseConfig = (__config) => {
-	__config.extension = { value: __config.extension, label: __config.extension.toLowerCase(), selected: true };
-	__config.fileType = { value: __config.fileType, label: __config.fileType, selected: true };
-	__config.scale = { value: __config.scale, label: `${__config.scale}x`, selected: true };
+	__config.extension = {
+		value: __config.extension,
+		label: __config.extension.toLowerCase(),
+		selected: true
+	};
+	__config.fileType = {
+		value: __config.fileType,
+		label: __config.fileType,
+		selected: true
+	};
+	__config.scale = {
+		value: __config.scale,
+		label: `${__config.scale}x`,
+		selected: true
+	};
 
 	return __config;
-}
+};
 
 class TempFrame {
 	frame: FrameNode | undefined;
@@ -289,30 +288,24 @@ const tempFrame = new TempFrame();
 const getExportables = (): Exportable[] => {
 	const nodes = figma.currentPage.findAll(
 		(node) =>
-			node.name.match(/^#\d+px$/) &&
-			node.type === 'FRAME' &&
-			node.parent === figma.currentPage
+			node.name.match(/^#\d+px$/) && node.type === 'FRAME' && node.parent === figma.currentPage
 	);
 
-	return nodes.map(({ id, name, width, height }) => {
-		return {
-			id,
-			parentName: name,
-			size: { width, height },
-		};
-	});
+	const exportables = nodes.map(({ id, name, width, height }) => ({
+		id,
+		parentName: name,
+		size: { width, height }
+	}));
+
+	return exportables;
 };
 
 // create html file
-const getFile = async (
-	config: Config,
-	assets,
-	variables: Variable
-): Promise<HTMLFile> => {
+const getFile = async (config: Config, assets, variables: Variable): Promise<HTMLFile> => {
 	return {
 		filename: config.syntax,
 		extension: config.fileType,
-		data: html({ config, assets, variables }),
+		data: html({ config, assets, variables })
 	};
 };
 
@@ -331,7 +324,7 @@ const getAssets = async (
 			extension: config.extension,
 			size: undefined,
 			data: new Uint8Array(),
-			node: undefined,
+			node: undefined
 		};
 
 		let originalNode = figma.getNodeById(exportable.id) as FrameNode;
@@ -353,17 +346,14 @@ const getAssets = async (
 		asset.node = grouplessNode;
 		// asset.node = originalNode;
 
-		const filename = `${config.imagePath}/${exportable.parentName.replace(
-			'#',
-			''
-		)}`;
+		const filename = `${config.imagePath}/${exportable.parentName.replace('#', '')}`;
 		asset.filename = filename;
 
 		// generate image data
 		const baseExportConfig = {
 			extension: config.extension,
 			scale: config.scale,
-			srcSize: exportable.size,
+			srcSize: exportable.size
 		};
 
 		const { destSize } = createSettingsBlock(baseExportConfig);
@@ -374,16 +364,14 @@ const getAssets = async (
 			previewSettings.isFinal
 				? baseExportConfig
 				: {
-					extension: { value: 'JPG', label: 'jpg', selected: false },
-					scale: { value: 1, label: '1x', selected: false },
-					srcSize: previewSettings.thumbSize,
-				}
+						extension: { value: 'JPG', label: 'jpg', selected: false },
+						scale: { value: 1, label: '1x', selected: false },
+						srcSize: previewSettings.thumbSize
+				  }
 		);
 
 		try {
-			asset.data = await (<ExportMixin>modifiedNode).exportAsync(
-				settings
-			);
+			asset.data = await (<ExportMixin>modifiedNode).exportAsync(settings);
 		} catch (exportable) {
 			log(exportable);
 		}
@@ -398,7 +386,8 @@ const getAssets = async (
 
 const withModificationsForText = (node: FrameNode): FrameNode => {
 	// find all frame nodes within the frame
-	const allNodes = node.findAll((node) => node.type === 'FRAME');
+	// const allNodes = node.findAllWithCriteria({ types: ['FRAME'] });
+	const allNodes = node.findAll((node) => node.type === 'FRAME') as FrameNode[];
 
 	// find all frame nodes within the frame that contain text layers
 	const allTextNodes = allNodes.filter((node) => {
@@ -416,28 +405,19 @@ const withModificationsForText = (node: FrameNode): FrameNode => {
 	return node;
 };
 
-const withModificationsForExport = (
-	node: FrameNode,
-	config: Config
-): FrameNode => {
-	const textNodes = node.findAll((c) => c.type === 'TEXT');
+const withModificationsForExport = (node: FrameNode, config: Config): FrameNode => {
+	// const textNodes = node.findAllWithCriteria({ types: ['TEXT'] });
+	const textNodes = node.findAll((node) => node.type === 'TEXT') as TextNode[];
 
-	if (!config.testingMode) {
-		// hide all text layers if testingMode is false
-		textNodes.forEach((node) => (node.visible = false));
-	} else {
-		// fade all text layers if testingMode is true
-		textNodes.forEach((node) => (node.opacity = 0.5));
-	}
+	config.testingMode
+		? textNodes.forEach((node) => (node.opacity = 0.5)) // fade all text layers if testingMode is true
+		: textNodes.forEach((node) => (node.visible = false)); // hide all text layers if testingMode is false
 
 	return node;
 };
 
 // Inspired by Naftali Beder https://github.com/naftalibeder/figma-frame-exporter
-const refreshPreview = async (
-	config: Config | undefined,
-	variables: Variable | undefined
-) => {
+const refreshPreview = async (config: Config | undefined, variables: Variable | undefined) => {
 	const exportables = getExportables();
 
 	let exampleAssets: Asset[] = [];
@@ -446,7 +426,7 @@ const refreshPreview = async (
 	if (config) {
 		exampleAssets = await getAssets(exportables, config, {
 			isFinal: false,
-			thumbSize: { width: 32, height: 32 },
+			thumbSize: { width: 32, height: 32 }
 		});
 		exampleFile = await getFile(config, exampleAssets, variables);
 	}
@@ -459,8 +439,8 @@ const refreshPreview = async (
 			nodeCount: exportables.length,
 			exampleAssets,
 			exampleFile,
-			loading: false,
-		},
+			loading: false
+		}
 	});
 };
 
@@ -476,7 +456,7 @@ const generateExport = async (config: Config, variables: Variable) => {
 	figma.ui.postMessage({
 		type: 'export',
 		assets,
-		file,
+		file
 	});
 };
 
@@ -506,7 +486,7 @@ figma.ui.onmessage = async (message) => {
 				type: 'load',
 				config: storedConfig,
 				variables: storedVariables,
-				views: storedViews,
+				views: storedViews
 			});
 
 			await refreshPreview(storedConfig, storedVariables);
@@ -553,7 +533,7 @@ figma.ui.onmessage = async (message) => {
 				config: storedConfig,
 				variables: storedVariables,
 				views: storedViews,
-				size: storedSize,
+				size: storedSize
 			});
 
 			await refreshPreview(storedConfig, storedVariables);
@@ -573,7 +553,7 @@ figma.ui.onmessage = async (message) => {
 				type: 'load',
 				config: storedConfig,
 				variables: storedVariables,
-				views: storedViews,
+				views: storedViews
 			});
 			await refreshPreview(storedConfig, storedVariables);
 			break;

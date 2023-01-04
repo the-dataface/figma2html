@@ -1,20 +1,18 @@
-import dsv from '@rollup/plugin-dsv';
-import json from '@rollup/plugin-json';
-import terser from '@rollup/plugin-terser';
-import htmlBundle from '@rollup/plugin-html';
+import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
+import dsv from '@rollup/plugin-dsv';
+import htmlBundle from '@rollup/plugin-html';
+import json from '@rollup/plugin-json';
 import resolve from '@rollup/plugin-node-resolve';
+import terser from '@rollup/plugin-terser';
 import typescript from '@rollup/plugin-typescript';
-
-import svg from 'rollup-plugin-svg';
-import svelte from 'rollup-plugin-svelte';
-import postcss from 'rollup-plugin-postcss';
-import livereload from 'rollup-plugin-livereload';
-
-import sveltePreprocess from 'svelte-preprocess';
-
-import cssnano from 'cssnano';
 import childProcess from 'child_process';
+import cssnano from 'cssnano';
+import livereload from 'rollup-plugin-livereload';
+import postcss from 'rollup-plugin-postcss';
+import svelte from 'rollup-plugin-svelte';
+import svg from 'rollup-plugin-svg';
+import sveltePreprocess from 'svelte-preprocess';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -24,56 +22,61 @@ export default [
 		output: {
 			format: 'iife',
 			name: 'ui',
-			file: 'build/bundle.js',
+			file: 'build/bundle.js'
 		},
 		plugins: [
 			svelte({
-				dev: !production,
 				preprocess: sveltePreprocess({
 					sourceMap: !production,
-					postcss: true,
+					postcss: true
 				}),
 				compilerOptions: {
-					dev: !production,
-				},
+					dev: !production
+				}
 			}),
 			resolve({
 				browser: true,
-				dedupe: (importee) =>
-					importee === 'svelte' || importee.startsWith('svelte/'),
-				extensions: ['.svelte', '.mjs', '.js', '.json', '.node'],
+				dedupe: (importee) => importee === 'svelte' || importee.startsWith('svelte/'),
+				extensions: ['.svelte', '.mjs', '.js', '.json', '.node']
 			}),
 			typescript(),
 			commonjs(),
+			babel({ babelHelpers: 'bundled' }),
 			svg(),
 			dsv(),
 			json(),
 			postcss({
 				extensions: ['.css'],
-				plugins: [cssnano()],
+				plugins: [cssnano()]
 			}),
 			htmlBundle({
 				fileName: 'index.html',
 				target: 'build/index.html',
-				title: 'figma2html',
+				title: 'figma2html'
 			}),
 			!production && serve(),
 			!production && livereload('build'),
-			production && terser(),
+			production && terser()
 		],
 		watch: {
-			clearScreen: false,
-		},
+			clearScreen: false
+		}
 	},
 	{
 		input: 'src/main.ts',
 		output: {
 			file: 'build/main.js',
 			format: 'cjs',
-			name: 'main',
+			name: 'main'
 		},
-		plugins: [typescript(), commonjs(), json(), production && terser()],
-	},
+		plugins: [
+			typescript(),
+			commonjs(),
+			babel({ babelHelpers: 'bundled' }),
+			json(),
+			production && terser()
+		]
+	}
 ];
 
 function serve() {
@@ -86,9 +89,9 @@ function serve() {
 
 				childProcess.spawn('npm', ['run', 'start', '--', '--dev'], {
 					stdio: ['ignore', 'inherit', 'inherit'],
-					shell: true,
+					shell: true
 				});
 			}
-		},
+		}
 	};
 }
