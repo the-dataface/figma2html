@@ -1,48 +1,25 @@
-![Cover Art](/src/img/coverArt.png)
+![figma2html in action](/src/img/coverArt.png)
 
 # figma2html
 
-Export Figma frames to responsive HTML and CSS. A Figma version of [ai2html](http://ai2html.org), with some extra features.
+Export Figma frames to responsive HTML and CSS. A Figma version of [ai2html](http://ai2html.org), with additional features. Created by [The DataFace](https://www.thedataface.com).
 
-## Development
+## Table of Contents
 
-### Requirements
+- [figma2html](#figma2html)
+  - [Table of Contents](#table-of-contents)
+  - [Instructions](#instructions)
+  - [How it Works](#how-it-works)
+  - [Options + Features](#options--features)
+    - [File settings](#file-settings)
+    - [Image settings](#image-settings)
+    - [Page settings](#page-settings)
+    - [Text settings](#text-settings)
+    - [Variable Text](#variable-text)
+  - [Contributing + Feedback](#contributing--feedback)
+  - [Acknowledgements](#acknowledgements)
+  - [License](#license)
 
-- [Node and NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) - The runtime and package manager
-- [Figma Desktop](https://www.figma.com/downloads/) - Required for running plug-ins in development
-
-### Steps
-
-#### Clone this repo
-
-```bash
-git clone https://github.com/the-dataface/figma2html.git
-```
-
-#### Build plugin
-
-There should be a `build` folder with three files: `bundle.js`, `index.html`, `main.js`, which are required to run the plugin in development. If you make updates locally, run `npm run build` in a terminal to rebuild the project.
-
-#### Import plugin
-
-1. From Figma's top menu bar: `Plugins` > `Development` > `Import plugin from manifest`. Select the `manifest.json` file in the cloned `figma2html` directory.
-
-#### Run plugin
-
-From the quick actions bar:
-
-1. `cmd + /` to open the quick actions bar
-2. Type `figma2html` and hit enter on the plugin
-
-From menu:
-
-1. From Figma's top menu: `Plugins` > `Development` > `figma2html`
-
-From resources:
-
-1. `shift + I` top open the resources panel
-2. Click `Plugins`
-3. Search for `figma2html` and click run
 
 ## Instructions
 
@@ -99,20 +76,32 @@ Check out [this demo Figma file](https://www.figma.com/file/THVkWmLhe7TJD16hj0ID
 
 ### Variable Text
 
-You can include variable text within your exportable frames. To do so, you need a text node on the current page named `f2h-variables`. Click the button in the plugin dialog to generate an example node. The text node should be written in YAML with key/value pairs like this:
+Variable text is supported for exportable frames (frames prefixed with `#`). To use variables, add a top-level text node on the target page named `f2h-variables`. The plugin's UI offers a button to generate an example variables text node. The text node should be written in [YAML](https://yaml.org/) with key/value pairs:
 
 ```yaml
-hed: This is a headline
+hed: figma2html
+dek: Export Figma frames to responsive HTML and CSS. A Figma version of ai2html, with some extra features.
 ```
 
-Based on the above example, the plugin will ok for any strings in your exportable frames that match the key, wrapped in curly brackets (i.e. `{{hed}}`), and replace it with `This is a headline`.
+To use a variable, wrap a key (e.g. `hed`) in double curly brackets (e.g. `{{hed}}`) in a _visible_ text node. The exported files with replace the key with the appropriate value (e.g. `{{hed}}` -> `figma2html`).
 
-Note that it does not replace the text in your artwork, just in the exported html. Running the plugin will reformat the variables text node.
+This replacement occurs on the exported files and not on Figma itself, leaving Figma files untouched with `{{key}}` variables and simplifying future edits. Running the plugin will format the variables text node.
 
-## Support + Feedback
+## Contributing + Feedback
 
-We hope you find this plugin as useful as we do. We're always open to feedback, bug reports and feature suggestions. Feel free to comment on the Figma plugin community page, [open an issue](https://github.com/the-dataface/figma2html/issues) on this repo, or shoot us an email at [sam@thedataface.com](mailto:sam@thedataface.com?subject=FIGMA2HTML").
+We welcome feedback, bug reports and feature requests in the form of [Issues](https://github.com/the-dataface/figma2html/issues) or [PRs](https://www.github.com/the-dataface/figma2html/pulls). Alternatively, comments can be left on the Figma plugin community pae
 
-## Thanks
+Further information on contributing can be found in [CONTRIBUTING.md](https://www.github.com/the-dataface/figma2html/blob/main/CONTRIBUTING.md).
 
-Many thanks to the [ai2html](http://ai2html.org) team at _The New York Times_, both for inspiration and the code on which this plugin is based. Contributors from the DataFace team include [Sam Vickars](https://twitter.com/samvickars), [Sawyer Click](https://twitter.com/sawyerdabear), and [Michael Hester](https://twitter.com/immichaelhester). The plugin uses some input elements from Thomas Lowry's [Figma Plugin DS Svelte](https://github.com/thomas-lowry/figma-plugin-ds-svelte) library.
+## Acknowledgements
+
+Figma2html is not possible without [ai2html](https://www.ai2html.org), created by [Archie Tse](https://twitter.com/archietse) at _The New York Times_. Figma2html sprung from the same codebase, modified in time to add additional features specific to the Figma API.
+
+The plugin uses some components and ideas from [Thomas Lowry](https://www.github.com/thomas-lowry)'s [Figma Plugin DS Svelte](https://www.github.com/thomas-lowry/figma-plugin-ds-svelte) library.
+
+The core team from The DataFace features [Sam Vickars](https://www.twitter.com/samvickars), [Sawyer Click](https://www.sawyer.codes), and [Michael Hester](https://www.twitter.com/immichaelhester). 
+
+
+## License
+
+[MIT](https://www.github.com/the-dataface/figma2html/blob/main/LICENSE)
