@@ -24,8 +24,8 @@ Export Figma frames to responsive HTML and CSS. A Figma version of [ai2html](htt
 ## Instructions
 
 1. Create your artwork
-   - Size your frames based on the breakpoints you need for your website (note that breakpoints will be based on the width of your frames and height doesn’t matter).
-   - Name the frames your want to export in this format: `#[width]px` (i.e. `#640px`).
+   - Size frames according to the desired breakpoints. (note: breakpoints are based on width and not height).
+   - Name frames using the following format: `#[width]px` (e.g. `#640px`).
    - If you're using a Google Font that's built in to Figma, you'll have the option to automatically include the appropriate Google Fonts tag in your exported HTML. Otherwise, you can add your webfonts to your project yourself or include a custom script or link any custom CSS in the `Page settings` panel.'
 2. Run the plugin and configure your settings
    - In the plugin dialog, you can you load your preconfigured settings from a YAML text node named `f2h-settings` on the current page in your Figma doc, or you can write your current settings to a YAML text node.
