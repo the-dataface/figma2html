@@ -137,7 +137,8 @@ class StoredVariables {
 		figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
 			// get all frames with names starting with "#" or named "f2h-settings"
 			const nodes = figma.currentPage.findAll(
-				(node) => node.name.startsWith('#') || node.name === 'f2h-settings'
+				(node) =>
+					(node.name.startsWith('#') && node.name.endsWith('px')) || node.name === 'f2h-settings'
 			);
 
 			// get furthest point to the right
@@ -205,7 +206,8 @@ class StoredConfig {
 		figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
 			// get all frames with names starting with "#" or that are the variables block
 			const nodes = figma.currentPage.findAll(
-				(node) => node.name.startsWith('#') || node.name === 'f2h-variables'
+				(node) =>
+					(node.name.startsWith('#') && node.name.endsWith('px')) || node.name === 'f2h-variables'
 			);
 
 			// get furthest point to the right
