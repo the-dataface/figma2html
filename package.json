@@ -2,8 +2,8 @@
 	"name": "figma2html",
 	"description": "Export Figma frames as images with text elements rendered as HTML",
 	"scripts": {
-		"build": "rollup -c",
 		"dev": "rollup -c -w",
+		"build": "rollup -c",
 		"start": "sirv build"
 	},
 	"author": {

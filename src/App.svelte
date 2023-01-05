@@ -1,9 +1,5 @@
 <script lang="ts" type="module">
-	import './app.css';
-
-	import { onMount } from 'svelte';
-	import JSZip from 'jszip/dist/jszip.min.js';
-	import {
+	import type {
 		Asset,
 		Config,
 		Extension,
@@ -15,11 +11,11 @@
 		Views
 	} from './types';
 
+	import { onMount } from 'svelte';
+	import JSZip from 'jszip/dist/jszip.min.js';
 	import Panel from './lib/components/Layout/Panel.svelte';
-
 	import ErrorMessage from './lib/components/ErrorMessage.svelte';
 	import Footer from './lib/components/Footer.svelte';
-
 	import File from './lib/components/Controls/File.svelte';
 	import Images from './lib/components/Controls/Images.svelte';
 	import Page from './lib/components/Controls/Page.svelte';
@@ -135,6 +131,8 @@
 
 	window.onmessage = async (event: MessageEvent) => {
 		const message = event.data.pluginMessage;
+		if (!message) return;
+		
 		const type = message.type;
 
 		if (type === 'load') {

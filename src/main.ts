@@ -1,11 +1,11 @@
 import { Asset, Config, Exportable, HTMLFile, PreviewSettings, Variable, Views } from './types';
 
 import yaml from 'js-yaml';
-import createSettingsBlock from 'lib/generator/createSettingsBlock';
-import { createGroupsFromFrames } from 'lib/generator/group';
-import html from 'lib/generator/html/wrapper';
-import dashify from 'lib/utils/dashify';
-import log from 'lib/utils/log';
+import createSettingsBlock from './lib/generator/createSettingsBlock';
+import { createGroupsFromFrames } from './lib/generator/group';
+import html from './lib/generator/html/wrapper';
+import dashify from './lib/utils/dashify';
+import log from './lib/utils/log';
 
 /**
  * ignore invisible nodes. speeds up document traversal
@@ -172,7 +172,7 @@ class StoredConfig {
 	// get the stored config
 	static get = async (): Promise<Config> => {
 		const _config = await figma.clientStorage.getAsync('config');
-		return _config ?? defaults.config;
+		return _config || defaults.config;
 	};
 
 	// set the stored config
