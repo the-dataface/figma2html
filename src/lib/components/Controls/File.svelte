@@ -1,7 +1,10 @@
 <script>
 	import { createEventDispatcher, getContext } from 'svelte';
+	import { fly } from 'svelte/transition';
+	import { backOut } from 'svelte/easing';
 	import slugify from 'slugify';
 
+	import { AlertTriangleIcon } from 'svelte-feather-icons';
 	import Checkbox from '../Inputs/Checkbox.svelte';
 	import Input from '../Inputs/Input.svelte';
 	import Select from '../Inputs/Select.svelte';
@@ -19,8 +22,11 @@
 		<div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
 			<h3 class="m-0 text-xs">File name</h3>
 			{#if !$name || $name === ''}
-				<div class="flex items-center gap-1 text-red-600 text-xs">
-					<i class="fa-sharp fa-solid fa-circle-exclamation" />
+				<div
+					class="flex items-center gap-1 text-figma-bg-danger text-xs"
+					transition:fly={{ x: 50, duration: 300, easing: backOut }}
+				>
+					<AlertTriangleIcon size="12" />
 					<p class="text-xs">Required</p>
 				</div>
 			{/if}

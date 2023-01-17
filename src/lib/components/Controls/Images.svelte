@@ -1,6 +1,9 @@
 <script>
 	import { getContext } from 'svelte';
+	import { fly } from 'svelte/transition';
+	import { backOut } from 'svelte/easing';
 
+	import { AlertTriangleIcon } from 'svelte-feather-icons';
 	import Input from '../Inputs/Input.svelte';
 	import Select from '../Inputs/Select.svelte';
 	import TextArea from '../Inputs/TextArea.svelte';
@@ -52,9 +55,12 @@
 	<div>
 		<div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
 			<h3 class="m-0 text-xs">Alt text</h3>
-			{#if !alt || alt === ''}
-				<div class="flex items-center gap-1 text-red-600 text-xs">
-					<i class="fa-sharp fa-solid fa-circle-exclamation" />
+			{#if !$alt || $alt === ''}
+				<div
+					class="flex items-center gap-1 text-figma-bg-danger text-xs"
+					transition:fly={{ x: 50, duration: 300, easing: backOut }}
+				>
+					<AlertTriangleIcon size="12" />
 					<p class="text-xs">Required</p>
 				</div>
 			{/if}

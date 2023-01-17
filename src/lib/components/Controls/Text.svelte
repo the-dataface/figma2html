@@ -1,6 +1,7 @@
 <script>
 	import { createEventDispatcher, getContext } from 'svelte';
 
+	import { TypeIcon } from 'svelte-feather-icons';
 	import Checkbox from '../Inputs/Checkbox.svelte';
 	import Button from '../Inputs/Button.svelte';
 
@@ -38,7 +39,7 @@
 			class="bg-figma-bg-secondary hover:bg-figma-bg-tertiary"
 			on:click={() => dispatch('write-variables')}
 		>
-			<i class="mr-2 text-xs fa-sharp fa-solid fa-text" />
+			<TypeIcon size="12" class="mr-2" />
 			<p class="m-0 text-xs">Generate variable text</p>
 		</Button>
 	{/if}
