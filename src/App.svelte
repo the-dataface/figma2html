@@ -2,17 +2,21 @@
 	import type {
 		Asset,
 		Config,
-		Extension,
-		FileType,
+		Format,
+		Output,
 		HTMLFile,
 		Loading,
 		Scale,
-		Size,
-		Views
+		Panels,
+		PostMessage
 	} from './types';
 
-	import { onMount } from 'svelte';
+	// for utility classes
+	// import { GlobalCSS } from 'figma-plugin-ds-svelte';
+
+	import { onMount, setContext } from 'svelte';
 	import JSZip from 'jszip/dist/jszip.min.js';
+
 	import Panel from './lib/components/Layout/Panel.svelte';
 	import ErrorMessage from './lib/components/ErrorMessage.svelte';
 	import Footer from './lib/components/Footer.svelte';
@@ -21,283 +25,195 @@
 	import Page from './lib/components/Controls/Page.svelte';
 	import Preview from './lib/components/Controls/Preview.svelte';
 	import Text from './lib/components/Controls/Text.svelte';
+	import { writable } from 'svelte/store';
 
-	let errorMessage;
-	let errorTimeout;
-	let loading = false;
+	// GlobalCSS;
 
-	let views = {};
+	const error = writable({ message: undefined, timeout: undefined } as {
+		message: string;
+		timeout: number;
+	});
 
-	interface FileTypeOption {
-		value: FileType;
-		label: string;
-		group: string | null;
-		selected: boolean;
-	}
+	// LOADING STATE
+	const loading = writable(false as Loading);
 
-	let fileType: FileType | undefined = undefined;
-	let fileTypeOptions: FileTypeOption[] = [
-		{ value: 'html', label: 'html', group: null, selected: false },
-		{ value: 'svelte', label: 'svelte', group: null, selected: false } // TO DO
-	];
+	// PANELS OPEN
+	let panels = {} as Panels;
 
-	$: {
-		fileTypeOptions.forEach((o, i) => {
-			fileTypeOptions[i].selected = o.value === fileType;
-		});
-	}
+	// CONFIG
+	const output = writable('html' as Output);
+	const format = writable('PNG' as Format);
+	const scale = writable('1' as Scale);
+	const name = writable(undefined as string | undefined);
+	const includeResizer = writable(true as boolean);
+	const fluid = writable(true as boolean);
+	const testingMode = writable(false as boolean);
+	const centered = writable(false as boolean);
+	const applyStyleNames = writable(false as boolean);
+	const applyHtags = writable(false as boolean);
+	const styleTextSegments = writable(true as boolean);
+	const includeGoogleFonts = writable(true as boolean);
+	const maxWidth = writable(undefined as number | undefined);
+	const imagePath = writable(undefined as string | undefined);
+	const alt = writable(undefined as string | undefined);
+	const customScript = writable(undefined as string | undefined);
 
-	interface ExtensionOption {
-		value: Extension;
-		label: string;
-		group: string | null;
-		selected: boolean;
-	}
+	const preview = writable({
+		total: 0 as number,
+		assets: [] as Asset[],
+		file: undefined as HTMLFile | undefined
+	} as {
+		total: number;
+		assets: Asset[];
+		file: HTMLFile | undefined;
+	});
 
-	let extension: Extension | undefined = undefined;
-	let extensionOptions: ExtensionOption[] = [
-		{ value: 'PNG', label: 'png', group: null, selected: false },
-		{ value: 'JPG', label: 'jpg', group: null, selected: false },
-		{ value: 'SVG', label: 'svg', group: null, selected: false }
-	];
+	const variables = writable(false as boolean);
 
-	$: {
-		extensionOptions.forEach((o, i) => {
-			extensionOptions[i].selected = o.value === extension;
-		});
-	}
+	const buildConfig = (): Config => ({
+		name: $name,
+		scale: $scale,
+		format: $format,
+		output: $output,
+		includeResizer: $includeResizer,
+		testingMode: $testingMode,
+		maxWidth: $maxWidth,
+		fluid: $fluid,
+		centered: $centered,
+		imagePath: $imagePath,
+		alt: $alt,
+		applyStyleNames: $applyStyleNames,
+		applyHtags: $applyHtags,
+		styleTextSegments: $styleTextSegments,
+		includeGoogleFonts: $includeGoogleFonts,
+		customScript: $customScript
+	});
 
-	interface ScaleOption {
-		value: Scale;
-		label: string;
-		selected: boolean;
-	}
-
-	let scale: Scale | undefined = undefined;
-	let scaleOptions: ScaleOption[] = [
-		{ value: 1, label: '1x', selected: false },
-		{ value: 2, label: '2x', selected: false },
-		{ value: 4, label: '4x', selected: false }
-	];
-
-	$: {
-		scaleOptions.forEach((o, i) => {
-			scaleOptions[i].selected = o.value === scale;
-		});
-	}
-
-	let syntax: string | undefined = undefined;
-	let includeResizer = true;
-	let fluid = true;
-	let testingMode = false;
-	let centerHtmlOutput = false;
-	let applyStyleNames = false;
-	let applyHtags = false;
-	let styleTextSegments = true;
-	let includeGoogleFonts = true;
-	let maxWidth: number | undefined = undefined;
-	let imagePath: string | undefined = undefined;
-	let altText: string | undefined = undefined;
-	let customScript: string | undefined = undefined;
-
-	let nodeCount = 0;
-	let exampleAssets: Asset[] = [];
-	let exampleFile: HTMLFile;
-
-	$: showLoader = false;
-
-	let showVariablesButton = false;
-
-	const buildConfig = (): Config => {
-		return {
-			syntax,
-			scale,
-			extension,
-			fileType,
-			includeResizer,
-			testingMode,
-			maxWidth,
-			fluid,
-			centerHtmlOutput,
-			imagePath,
-			altText,
-			applyStyleNames,
-			applyHtags,
-			styleTextSegments,
-			includeGoogleFonts,
-			customScript
-		};
-	};
+	// send messages to our plugin
+	const postMessage = (message: PostMessage) => parent.postMessage({ pluginMessage: message }, '*');
 
 	window.onmessage = async (event: MessageEvent) => {
 		const message = event.data.pluginMessage;
 		if (!message) return;
-		
-		const type = message.type;
+		switch (message.type) {
+			case 'load':
+				let config: Config = message.config;
+				panels = message.panels;
 
-		if (type === 'load') {
-			const config = message.config as Config;
-			views = message.views as Views;
+				variables.set(Object.keys(message.variables).length > 0);
 
-			syntax = config.syntax;
-			extension = config.extension;
-			scale = config.scale;
-			fileType = config.fileType;
-			includeResizer = config.includeResizer;
-			testingMode = config.testingMode;
-			maxWidth = config.maxWidth;
-			fluid = config.fluid;
-			centerHtmlOutput = config.centerHtmlOutput;
-			imagePath = config.imagePath;
-			altText = config.altText;
-			applyStyleNames = config.applyStyleNames;
-			applyHtags = config.applyHtags;
-			styleTextSegments = config.styleTextSegments;
-			includeGoogleFonts = config.includeGoogleFonts;
-			customScript = config.customScript;
-		} else if (type === 'preview') {
-			const preview = message.preview;
-			nodeCount = preview.nodeCount;
-			exampleAssets = preview.exampleAssets;
-			exampleFile = preview.exampleFile;
-			exampleAssets = await buildPreviewImages(exampleAssets);
-			loading = message.loading as Loading;
-		} else if (type === 'loading') {
-			loading = message.loading as Loading;
-		} else if (type === 'export') {
-			const url = await buildZipArchive(message.assets, message.file);
-			const link = document.createElement('a');
-			link.href = url;
-			link.download = `${syntax}.zip`;
-			link.click();
+				// config
+				name.set(config.name);
+				format.set(config.format);
+				scale.set(config.scale);
+				output.set(config.output);
+				includeResizer.set(config.includeResizer);
+				testingMode.set(config.testingMode);
+				maxWidth.set(config.maxWidth);
+				fluid.set(config.fluid);
+				centered.set(config.centered);
+				imagePath.set(config.imagePath);
+				alt.set(config.alt);
+				applyStyleNames.set(config.applyStyleNames);
+				applyHtags.set(config.applyHtags);
+				styleTextSegments.set(config.styleTextSegments);
+				includeGoogleFonts.set(config.includeGoogleFonts);
+				customScript.set(config.customScript);
+				return;
 
-			setTimeout(() => {
-				loading = false;
-			}, 1500);
-		} else if (type === 'variables') {
-			showVariablesButton = message.variables === null;
-		} else if (type === 'error') {
-			setErrorMessage(message.message);
+			case 'preview':
+				preview.set({
+					total: message.preview.total,
+					assets: await buildPreviewImages(message.preview.assets),
+					file: message.preview.file
+				});
+				loading.set(message.loading);
+				return;
+
+			case 'loading':
+				loading.set(message.loading);
+				return;
+
+			case 'export':
+				let link = document.createElement('a');
+				link.href = await buildZipArchive(message.assets, message.file);
+				link.download = `${$name}.zip`;
+				link.click();
+				setTimeout(() => loading.set(false), 1500);
+				return;
+
+			case 'write-variables':
+				variables.set(message.variables === null);
+				return;
+
+			case 'error':
+				setErrorMessage(message.message);
+				return;
 		}
 	};
 
-	interface PostMessage {
-		type:
-			| 'init'
-			| 'load'
-			| 'config'
-			| 'export'
-			| 'reset'
-			| 'saveSettings'
-			| 'loadSettings'
-			| 'writeVariables';
-		config?: Config | null;
-	}
-
-	const postMessage = (message: PostMessage) => parent.postMessage({ pluginMessage: message }, '*');
-
-	onMount(() => postMessage({ type: 'init' }));
-
 	const onChangeConfig = () => postMessage({ type: 'config', config: buildConfig() });
+
 	const onSelectExport = () => {
-		if (!altText || altText === '') {
-			setErrorMessage('Please enter an alt text');
-			views.images = true;
+		if (!$alt || $alt === '') {
+			setErrorMessage('Please enter alt text');
+			panels.images = true;
 			return;
 		}
 
-		if (!syntax || syntax === '') {
+		if (!$name || $name === '') {
 			setErrorMessage('File name cannot be empty');
 			return;
 		}
 
-		loading = true;
+		loading.set(true);
 		postMessage({ type: 'export', config: buildConfig() });
 	};
-	const onReset = () => postMessage({ type: 'reset' });
 
-	const onChangeView = () => {
-		parent.postMessage(
-			{
-				pluginMessage: {
-					type: 'view',
-					views: views
-				}
-			},
-			'*'
-		);
-	};
+	const onResetSettings = () => postMessage({ type: 'reset-settings' });
 
-	const onSaveSettings = () => {
-		parent.postMessage(
-			{
-				pluginMessage: {
-					type: 'saveSettings'
-				}
-			},
-			'*'
-		);
-	};
+	const onSaveSettings = () =>
+		parent.postMessage({ pluginMessage: { type: 'save-settings' } }, '*');
+
+	const onLoadSettings = () =>
+		parent.postMessage({ pluginMessage: { type: 'load-settings' } }, '*');
+
+	const onWriteVariables = () =>
+		parent.postMessage({ pluginMessage: { type: 'write-variables' } }, '*');
+
+	const onTogglePanel = () =>
+		parent.postMessage({ pluginMessage: { type: 'panels', panels: panels } }, '*');
 
 	const setErrorMessage = (message: string) => {
-		clearTimeout(errorTimeout);
-		errorMessage = message;
+		clearTimeout($error.timeout);
+		$error.message = message;
 
-		// clear error message after 5 seconds
-		errorTimeout = setTimeout(() => {
-			errorMessage = undefined;
+		// clear error message after 3 seconds
+		$error.timeout = setTimeout(() => {
+			$error.message = undefined;
 		}, 3000);
-	};
-
-	const onLoadSettings = () => {
-		parent.postMessage(
-			{
-				pluginMessage: {
-					type: 'loadSettings'
-				}
-			},
-			'*'
-		);
-	};
-
-	const onWriteVariables = () => {
-		parent.postMessage(
-			{
-				pluginMessage: {
-					type: 'writeVariables'
-				}
-			},
-			'*'
-		);
 	};
 
 	const buildPreviewImages = async (assets: Asset[]): Promise<Asset[]> => {
 		assets.forEach((asset) => {
-			let blob = new Blob([asset.data], { type: `image/png` });
+			const blob = new Blob([asset.data], { type: `image/png` });
 			const url = window.URL.createObjectURL(blob);
 			asset.url = url;
 		});
-
 		return assets;
 	};
 
 	const buildZipArchive = async (assets: Asset[], file: HTMLFile): Promise<string> => {
-		let zip = new JSZip();
+		const zip = new JSZip();
 
 		assets.forEach((asset) => {
-			const extensionLower = asset.extension.value.toLowerCase();
-			let blob = new Blob([asset.data], {
-				type: `image/${extensionLower}`
-			});
-			zip.file(`${asset.filename}.${extensionLower}`, blob, {
-				base64: true
-			});
+			const formatLower = asset.format.toLowerCase();
+			const blob = new Blob([asset.data], { type: `image/${formatLower}` });
+			zip.file(`${asset.filename}.${formatLower}`, blob, { base64: true });
 		});
 
-		let fileBlob = new Blob([file.data], { type: `string` });
-		zip.file(`${file.filename}.${file.extension.value.toLowerCase()}`, fileBlob, {
-			base64: true
-		});
+		const fileBlob = new Blob([file.data], { type: `string` });
+		zip.file(`${file.filename}.${file.output.toLowerCase()}`, fileBlob, { base64: true });
 
 		const blob = await zip.generateAsync({ type: 'blob' });
 		const url = window.URL.createObjectURL(blob);
@@ -305,183 +221,83 @@
 		return url;
 	};
 
-	let resizing = false;
+	onMount(() => postMessage({ type: 'init' }));
 
-	const resizeWindow = (e) => {
-		if (!resizing) return;
+	// SVG's are scalable by default. Revert scale config to default
+	$: if ($format === 'SVG') scale.set('1');
 
-		const size = {
-			w: Math.max(50, Math.floor(e.clientX + 5)),
-			h: Math.max(50, Math.floor(e.clientY + 5))
-		};
-
-		parent.postMessage({ pluginMessage: { type: 'resize', size: size } }, '*');
-	};
-
-	const resizeDown = (e) => {
-		resizing = true;
-		// e.preventDefault();
-		window.addEventListener('mousemove', resizeWindow, true);
-		window.addEventListener('mouseup', resizeUp, true);
-	};
-
-	const resizeUp = () => {
-		resizing = false;
-		window.removeEventListener('mousemove', resizeWindow, true);
-		window.removeEventListener('mouseup', null);
-	};
+	setContext('App', {
+		loading,
+		error,
+		preview,
+		config: {
+			name,
+			format,
+			scale,
+			output,
+			includeResizer,
+			testingMode,
+			maxWidth,
+			fluid,
+			centered,
+			imagePath,
+			alt,
+			applyStyleNames,
+			applyHtags,
+			styleTextSegments,
+			includeGoogleFonts,
+			customScript
+		}
+	});
 </script>
 
-<div
-	id="corner"
-	class="fixed bottom-0 right-0 cursor-se-resize w-4 h-4 z-[999] overflow-hidden"
-	on:mousedown={resizeDown}
-	on:mouseup={resizeUp}
->
-	<i
-		class="ml-0.5 absolute text-xs text-gray-300 -rotate-45 -translate-x-1/4 -translate-y-1/4 fa-sharp fa-solid fa-grip-dots top-1/2 left-1/2"
-	/>
-</div>
+<h1 class="sr-only">figma2html</h1>
 
-<div class="flex w-full overflow-hidden content">
-	<div class="flex flex-col w-1/3 min-h-full pb-12 control-panel">
-		{#if views}
-			<Panel title="File settings" bind:expanded={views.file} on:changeView={onChangeView}>
-				<File
-					bind:fileType
-					bind:testingMode
-					bind:menuItems={fileTypeOptions}
-					bind:syntax
-					bind:errorMessage
-					on:changeConfig={onChangeConfig}
-					on:sendError={() => setErrorMessage(errorMessage)}
-				/>
+<div class="grid grid-cols-3 w-full h-full overflow-hidden text-figma-text bg-figma-bg content">
+	<div
+		class="flex flex-col col-span-1 h-[100vh_-_48px] overflow-y-scroll pb-12 border-r border-solid border-figma-border"
+	>
+		{#if panels}
+			<Panel title="File settings" open={panels.file} on:toggle={onTogglePanel}>
+				<File on:change={onChangeConfig} on:error={() => setErrorMessage($error.message)} />
 			</Panel>
-			<Panel title="Image settings" bind:expanded={views.images} on:changeView={onChangeView}>
-				<Images
-					bind:scaleOptions
-					bind:scale
-					bind:extensionOptions
-					bind:extension
-					bind:imagePath
-					bind:altText
-					on:changeConfig={onChangeConfig}
-				/>
+			<Panel title="Image settings" bind:open={panels.images} on:toggle={onTogglePanel}>
+				<Images on:change={onChangeConfig} />
 			</Panel>
-			<Panel title="Page settings" bind:expanded={views.page} on:changeView={onChangeView}>
-				<Page
-					bind:includeResizer
-					bind:centerHtmlOutput
-					bind:fluid
-					bind:maxWidth
-					bind:customScript
-					on:changeConfig={onChangeConfig}
-				/>
+			<Panel title="Page settings" bind:open={panels.page} on:toggle={onTogglePanel}>
+				<Page on:change={onChangeConfig} />
 			</Panel>
-			<Panel title="Text settings" bind:expanded={views.text} on:changeView={onChangeView}>
-				<Text
-					bind:showVariablesButton
-					bind:styleTextSegments
-					bind:applyStyleNames
-					bind:applyHtags
-					bind:includeGoogleFonts
-					on:changeConfig={onChangeConfig}
-					on:writeVariables={onWriteVariables}
-				/>
+			<Panel
+				border={false}
+				title="Text settings"
+				bind:open={panels.text}
+				on:togglePanel={onTogglePanel}
+			>
+				<Text on:change={onChangeConfig} on:write-variables={onWriteVariables} />
 			</Panel>
 		{/if}
 	</div>
-	<div class="sticky w-2/3 h-full pb-12">
-		<Panel title="Output" bind:expanded={views.preview} on:changeView={onChangeView}>
-			<Preview bind:exampleAssets bind:exampleFile bind:scale bind:showLoader />
+
+	<div class="col-start-2 col-span-2 h-[100vh_-_48px] pb-12 overflow-y-scroll">
+		<Panel title="Output" bind:open={panels.preview} on:togglePanel={onTogglePanel}>
+			<Preview />
 		</Panel>
 	</div>
 </div>
 
-{#if errorMessage}
-	<ErrorMessage {errorMessage} />
-{/if}
-
 <Footer
-	on:reset={onReset}
 	on:export={onSelectExport}
-	on:save={onSaveSettings}
-	on:load={onLoadSettings}
-	bind:nodeCount
+	on:reset-settings={onResetSettings}
+	on:save-settings={onSaveSettings}
+	on:load-settings={onLoadSettings}
 />
+
+{#if $error.message}
+	<ErrorMessage />
+{/if}
 
 <style>
 	.content {
-		color: var(--figma-color-text);
-		background-color: var(--figma-color-bg);
 		min-height: calc(100% + 48px);
-	}
-
-	.control-panel {
-		border-right: 1px solid var(--figma-color-border);
-	}
-
-	:global(.setting div) {
-		color: var(--figma-color-text) !important;
-	}
-
-	:global(input, textarea, .setting button) {
-		/* border: 1px solid var(--figma-color-border) !important; */
-		border: none !important;
-		background-color: var(--figma-color-bg-secondary) !important;
-		border-radius: 4px !important;
-		color: var(--figma-color-text) !important;
-	}
-
-	:global(.setting button) {
-		height: 36px !important;
-	}
-
-	:global(.input input, .setting button) {
-		height: 36px !important;
-	}
-
-	:global(svg) {
-		fill: var(--figma-color-text) !important;
-	}
-
-	:global(button svg) {
-		fill: var(--figma-color-text-secondary) !important;
-	}
-
-	:global(.content button) {
-		background-color: var(--figma-color-bg-secondary) !important;
-		border-radius: 4px !important;
-		height: 40px !important;
-		margin-top: 8px !important;
-	}
-
-	:global(.content button:hover) {
-		background-color: var(--figma-color-bg-tertiary) !important;
-	}
-
-	:global(.content button:focus) {
-		outline: 1px solid var(--figma-color-border-selected);
-	}
-
-	:global(.content button .label, .content button .placeholder) {
-		color: var(--figma-color-text) !important;
-		margin-top: 0 !important;
-	}
-
-	:global(.content button .caret svg path) {
-		fill: var(--figma-color-text-secondary) !important;
-	}
-
-	:global(.content button:hover .caret svg path) {
-		fill: var(--figma-color-text) !important;
-	}
-
-	:global(.content ul li .label) {
-		color: var(--figma-color-bg) !important;
-	}
-
-	:global(.figma-dark .content ul li .label) {
-		color: var(--figma-color-text) !important;
 	}
 </style>

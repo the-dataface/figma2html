@@ -6,27 +6,27 @@ import trim from 'lib/utils/trim';
 
 import span from './span';
 
-export default ({ node, filename, widthRange, altText, config, variables }) => {
+export default ({ node, filename, widthRange, alt, config, variables }) => {
 	let inlineStyle = '';
-	let pStyle;
 
 	const frameContent = { html: '', css: '', js: '' };
 
-	const width = +node.name.replace('#', '').replace('px', '');
+	const width = +node.name.match('#(.*)px')[1];
 	const height = node.height;
 	const aspectRatio = width / height;
-	const range = widthRange.ranges[widthRange.widths.indexOf(width)];
+	const [minWidth, maxWidth] = widthRange.ranges[widthRange.widths.indexOf(width)];
 
+	const frameWidth = node.width;
 	const frameHeight = node.height;
 	const frameClass = `f2h-frame`;
 	const id = `f2h-frame-${width}`;
-	const extension = config.extension.value.toLowerCase();
+	const format = config.format.toLowerCase();
 
 	frameContent.css += `\t${css.frame(id)}`;
 
 	// find all text nodes within the frame
-	const textFrames = node.findAll((child) => child.type === 'TEXT');
-	const textData = convertTextFrames(textFrames, node.width, frameHeight);
+	const textFrames = node.findAllWithCriteria({ types: ['TEXT'] });
+	const textData = convertTextFrames(textFrames, frameWidth, frameHeight);
 
 	// set layout mode to none
 	node.layoutMode = 'NONE';
@@ -47,8 +47,8 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 		id: id,
 		class: `${frameClass.replace(':', '-')} frame artboard`,
 		'data-aspect-ratio': roundTo(aspectRatio, 3),
-		'data-min-width': range[0],
-		'data-max-width': range[1],
+		'data-min-width': minWidth,
+		'data-max-width': maxWidth,
 		style: inlineStyle
 	})}>`;
 
@@ -57,24 +57,24 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 		style: stringify.styles({
 			padding: '0 0 0 0',
 			'min-width': width > 0 ? `${width}px` : 'auto',
-			'max-width': range[1] ? `${range[1]}px` : 'none'
+			'max-width': maxWidth ? `${maxWidth}px` : 'none'
 		})
 	})}></div>`;
 
 	frameContent.html += `\n\t\t<picture>\n\t\t\t<source ${stringify.attrs({
-		srcset: filename + '.' + extension,
-		type: 'image/' + extension
+		srcset: filename + '.' + format,
+		type: 'image/' + format
 	})}>\n\t\t\t<img ${stringify.attrs({
 		id: 'img-' + id,
 		class: 'f2h-img',
-		alt: altText,
-		'data-src': filename + '.' + extension,
+		alt: alt,
+		'data-src': filename + '.' + format,
 		src: 'data:image/gif;base64,R0lGODlhCgAKAIAAAB8fHwAAACH5BAEAAAAALAAAAAAKAAoAAAIIhI+py+0PYysAOw==',
 		loading: 'lazy',
 		draggable: 'false',
 		decoding: 'async',
-		width: width,
-		height: height
+		width: width.toFixed(2),
+		height: height.toFixed(2)
 	})}/>\n\t\t</picture>\n`;
 
 	if (textData) {
@@ -82,7 +82,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 		const baseStyles = textData.map((text) => text.baseStyle);
 
 		// get the most frequent value in baseStyles and make pStyle equal to it
-		pStyle = baseStyles
+		const pStyle = baseStyles
 			.sort(
 				(a, b) =>
 					baseStyles.filter((v) => v === a).length - baseStyles.filter((v) => v === b).length
@@ -99,6 +99,7 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 
 		textData.forEach((text) => {
 			let el = ``;
+			// TODO: make elClass part of elAttributes
 			let elClass = 'f2h-text';
 			let elAttributes = '';
 
@@ -132,9 +133,8 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 
 				const notNewElement = !!i && !prevEndsNewLine && !(thisIncludesNewLine && !thisEndsNewLine);
 
-				if (notNewElement) {
-					els[els.length - 1].segments.push(segment);
-				} else {
+				if (notNewElement) els[els.length - 1].segments.push(segment);
+				else {
 					els.push({
 						tag:
 							config.applyHtags && ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(trim(text.class))
@@ -147,12 +147,10 @@ export default ({ node, filename, widthRange, altText, config, variables }) => {
 			});
 
 			// if text.customAttributes array contains an object with key 'class', add it to the class
-			if (text.customAttributes.length) {
-				text.customAttributes.forEach((attr) => {
-					if (attr.key === 'class') elClass += ` ${attr.value.join(' ')}`;
-					else elAttributes += ` ${attr.key}="${attr.value}"`;
-				});
-			}
+			text.customAttributes.forEach((attr) => {
+				if (attr.key === 'class') elClass += ` ${attr.value.join(' ')}`;
+				else elAttributes += ` ${attr.key}="${attr.value}"`;
+			});
 
 			el += `<div class="${elClass}" ${elAttributes} style="${stringify.styles(style)} ${effect}">`;
 

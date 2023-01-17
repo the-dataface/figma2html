@@ -1,111 +1,94 @@
-<script>
-  import { createEventDispatcher } from "svelte";
+<script lang="ts">
+	import { createEventDispatcher, getContext } from 'svelte';
+	import {
+		SaveIcon,
+		UploadCloudIcon,
+		RotateCcwIcon,
+		HelpCircleIcon,
+		AlertCircleIcon,
+		XIcon,
+		InfoIcon
+	} from 'svelte-feather-icons';
+	import Button from './Inputs/Button.svelte';
+	import DatafaceLogo from './DatafaceLogo.svelte';
+	import WindowResize from './WindowResize.svelte';
 
-  import Menu from "./Menu.svelte";
-  import HoverIcon from "./Inputs/HoverIcon.svelte";
+	const { error, preview } = getContext('App');
 
-  export let nodeCount = 0;
+	const dispatch = createEventDispatcher();
 
-  const dispatch = createEventDispatcher();
-
-  let menuOpen = false;
-
-  const onToggleMenu = () => (menuOpen = !menuOpen);
-
-  const onExport = () => dispatch("export");
-  const onSave = () => dispatch("save");
-  const onLoad = () => dispatch("load");
-  const onReset = () => dispatch("reset");
+	let isMenuOpen = false;
 </script>
 
-<div class="footer fixed bottom-0 left-0 w-full h-12 flex justify-between items-center z-20">
-  <div class="h-full flex items-center gap-2">
-    <button class="primary" disabled={nodeCount === 0} on:click={onExport}>Export {nodeCount > 0 ? nodeCount + 1 : 0} assets</button>
-    
-    <HoverIcon text={true} on:click={onReset}>
-      <button class="secondary" on:click={onReset}>
-        <i class="mr-2 fa-sharp fa-solid fa-rotate" />
-        <p class="m-0">Reset to defaults</p>
-      </button>
-    </HoverIcon>
+<footer
+	class="fixed bottom-0 left-0 w-full h-12 flex justify-between items-center z-20 overflow-y-hidden border-t border-solid border-figma-border bg-figma-bg"
+>
+	<h2>
+		<button
+			id="export"
+			class="h-full flex items-center flex-nowrap cursor-pointer bg-none rounded-none border-none py-2 px-4 text-2xs font-bold text-figma-bg disabled:cursor-not-allowed disabled:hover:opacity-100 active:bg-figma-bg-success-pressed hover:bg-figma-bg-success-hover"
+			class:bg-figma-bg-success={$preview.total > 0}
+			class:bg-figma-bg-danger={$preview.total === 0}
+			disabled={$preview.total === 0}
+			on:click={() => dispatch('export')}
+		>
+			Export {$preview.total > 0 ? $preview.total + 1 : 0} assets
+		</button>
+	</h2>
 
-    <HoverIcon text={true} on:click={onSave}>
-      <button class="secondary" on:click={onSave}>
-        <i class="mr-2 fa-sharp fa-solid fa-floppy-disk" />
-        <p class="m-0">Save settings</p>
-      </button>
-    </HoverIcon>
+	<div class="flex gap-2 mx-2">
+		{#each [{ id: 'reset', icon: RotateCcwIcon, text: 'Reset settings', onClick: () => dispatch('reset-settings') }, { id: 'save', icon: SaveIcon, text: 'Save settings', onClick: () => dispatch('save-settings') }, { id: 'load', icon: UploadCloudIcon, text: 'Load settings', onClick: () => dispatch('load-settings') }] as { id, icon, text, onClick }}
+			<Button
+				{id}
+				class="text-figma-text h-full flex items-center flex-nowrap gap-1 cursor-pointer bg-none rounded-none border-none text-2xs"
+				on:click={onClick}
+			>
+				<svelte:component this={icon} size="16" />
+				{text}
+			</Button>
+		{/each}
+	</div>
 
-    <HoverIcon text={true} on:click={onLoad}>
-      <button class="secondary" on:click={onLoad}>
-        <i class="mr-2 fa-sharp fa-solid fa-file-import" />
-        <p class="m-0">Load settings</p>
-      </button>
-    </HoverIcon>
-  </div>
-  <button class="ellipses" on:click={onToggleMenu}>
-    <i class="mx-2 fa-sharp fa-solid fa-ellipsis" />
-  </button>
-</div>
+	<DatafaceLogo size={{ w: 48, h: 48 }} class="ml-auto" />
 
-{#if menuOpen}
-  <Menu />
-{/if}
+	<details
+		id="menu"
+		class="h-full flex items-center flex-nowrap cursor-pointer bg-none rounded-none text-2xs text-figma-text select-none group"
+		title="Menu"
+		bind:open={isMenuOpen}
+	>
+		<summary
+			class="no-marker w-full h-full flex items-center justify-center border-l border-solid border-figma-border p-2 hover:text-figma-text-secondary active:text-figma-text-tertiary"
+		>
+			<svelte:component
+				this={isMenuOpen ? XIcon : InfoIcon}
+				size="16"
+				class="transition-opacity duration-100 ease-out"
+			/>
+		</summary>
+		<div
+			class="menu-pane fixed right-2 bottom-14 rounded-lg flex flex-col p-1 border border-solid border-figma-border bg-figma-bg"
+		>
+			{#each [{ href: 'https://github.com/the-dataface/figma2html', icon: HelpCircleIcon, text: 'About' }, { href: 'https://github.com/the-dataface/figma2html/issues', icon: AlertCircleIcon, text: 'Report Issue' }] as { href, icon, text }}
+				<a
+					class="flex items-center p-2 text-sm text-figma-text hover:text-figma-text-secondary active:text-figma-text-tertiary"
+					{href}
+					target="_blank"
+					rel="noreferrer"
+				>
+					<svelte:component this={icon} size="18" class="mr-2 fill-figma-bg" />
+					{text}
+				</a>
+			{/each}
+		</div>
+	</details>
 
+	<WindowResize />
+</footer>
+
+<!-- TODO: make the menu use <details>/<summary> -->
 <style>
-  .footer {
-    border-top: 1px solid var(--figma-color-border);
-    background: var(--figma-color-bg);
-  }
-
-  .footer button {
-    height: 100%;
-    color: var(--figma-color-text);
-    padding: 0;
-    display: flex;
-    align-items: center;
-    flex-wrap: none;
-    cursor: pointer;
-    background: none;
-    border-radius: 0;
-    border: none;
-  }
-
-  .footer button:hover {
-    opacity: 0.8;
-  }
-
-  .footer button.primary {
-    padding: 8px 16px;
-    background: var(--figma-color-bg-success);
-    color: var(--figma-color-bg);
-    font-weight: bold;
-  }
-
-  :global(.figma-dark .footer button.primary) {
-    color: var(--figma-color-text) !important;
-  }
-
-  .footer button.primary:disabled {
-    cursor: not-allowed;
-    background: var(--figma-color-bg-secondary) !important;
-  }
-
-  .footer button.secondary {
-    font-size: 11px;
-    color: var(--figma-color-text-secondary);
-  }
-
-  .footer button.secondary p {
-    margin-left: -4px;
-  }
-
-  .footer button.secondary:hover {
-    opacity: 0.8;
-  }
-
-  .footer button.ellipses {
-    padding: 8px 8px;
-    border-left: 1px solid var(--figma-color-border);
-  }
+	:global(html.figma-dark) button#export {
+		color: var(--figma-color-text) !important;
+	}
 </style>

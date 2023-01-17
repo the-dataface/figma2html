@@ -1,0 +1,32 @@
+<script lang="ts">
+	import { Maximize2Icon } from 'svelte-feather-icons';
+
+	let resizing = false;
+
+	const resizeWindow = (e) => {
+		if (!resizing) return;
+		const [w, h] = [e.clientX, e.clientY].map((d) => Math.max(50, Math.floor(d + 5)));
+		parent.postMessage({ pluginMessage: { type: 'resize', size: { w, h } } }, '*');
+	};
+
+	const resizeUp = () => {
+		resizing = false;
+		window.removeEventListener('mousemove', resizeWindow, true);
+		window.removeEventListener('mouseup', null);
+	};
+
+	const resizeDown = (e) => {
+		resizing = true;
+		window.addEventListener('mousemove', resizeWindow, true);
+		window.addEventListener('mouseup', resizeUp, true);
+	};
+</script>
+
+<div
+	id="resize"
+	class="cursor-se-resize h-full p-2 flex justify-center items-center overflow-hidden text-figma-text border-l border-solid border-figma-border hover:text-figma-text-secondary active:text-figma-text-tertiary"
+	on:mousedown={resizeDown}
+	on:mouseup={resizeUp}
+>
+	<Maximize2Icon size="16" class="rotate-90" />
+</div>

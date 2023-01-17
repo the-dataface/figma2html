@@ -1,107 +1,73 @@
 <script>
-  import { createEventDispatcher } from "svelte";
+	import { getContext } from 'svelte';
 
-  import Input from "../Inputs/Input.svelte";
-  import SelectMenu from "../Inputs/SelectMenu.svelte";
-  import TextArea from "../Inputs/TextArea.svelte";
+	import Input from '../Inputs/Input.svelte';
+	import Select from '../Inputs/Select.svelte';
+	import TextArea from '../Inputs/TextArea.svelte';
 
-  const dispatch = createEventDispatcher();
-
-  export let altText = undefined;
-  export let extension = undefined;
-  export let extensionOptions = [];
-  export let imagePath = undefined;
-  export let scale = undefined;
-  export let scaleOptions = [];
+	const {
+		config: { alt, format, imagePath, scale }
+	} = getContext('App');
 </script>
 
 <div class="w-full flex flex-col gap-2">
-  <div class="flex gap-2">
-    <div class="flex-grow">
-      <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
-        <h5 class="m-0 text-xs">Scale</h5>
-      </div>
-      <div class="input-row">
-        <div class="w-full" class:disabled={extension.value === "SVG"}>
-          <SelectMenu
-            menuItems={scaleOptions}
-            bind:value={scale}
-            on:change={() => dispatch("changeConfig")}
-            disabled={extension.value === "SVG"}
-          />
-        </div>
-      </div>
-    </div>
-    <div class="flex-grow">
-      <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
-        <h5 class="m-0 text-xs">Format</h5>
-      </div>
-      <div class="input-row">
-        <div class="w-full">
-          <SelectMenu menuItems={extensionOptions} bind:value={extension} on:change={() => dispatch("changeConfig")} />
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="flex gap-2">
+		<div class="flex-grow">
+			<div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+				<h3 class="m-0 text-xs">Scale</h3>
+			</div>
+			<div class="flex flex-start w-full">
+				<div class="w-full">
+					<Select id="scale" disabled={$format === 'SVG'} bind:value={$scale} on:change />
+				</div>
+			</div>
+		</div>
+		<div class="flex-grow">
+			<div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+				<h3 class="m-0 text-xs">Format</h3>
+			</div>
+			<div class="flex flex-start w-full">
+				<div class="w-full">
+					<Select id="format" bind:value={$format} on:change />
+				</div>
+			</div>
+		</div>
+	</div>
 
-  <div>
-    <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
-      <h5 class="m-0 text-xs">Path</h5>
-    </div>
-    <div class="input-row">
-      <div class="w-full">
-        <Input
-          bind:value={imagePath}
-          placeholder="Enter an image path to include in your export."
-          on:change={() => dispatch("changeConfig")}
-        />
-      </div>
-    </div>
-  </div>
+	<div>
+		<div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+			<h3 class="m-0 text-xs">Path</h3>
+		</div>
+		<div class="flex flex-start w-full">
+			<div class="w-full">
+				<Input
+					placeholder="Enter an image path to include in your export."
+					bind:value={$imagePath}
+					on:change
+				/>
+			</div>
+		</div>
+	</div>
 
-  <div>
-    <div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
-      <h5 class="m-0 text-xs">Alt text</h5>
-      {#if !altText || altText === ""}
-        <div class="flex items-center gap-1 text-red-600 text-xs">
-          <i class="fa-sharp fa-solid fa-circle-exclamation" />
-          <p class="text-xs">Required</p>
-        </div>
-      {/if}
-    </div>
-    <div class="input-row">
-      <div class="w-full">
-        <TextArea
-          bind:value={altText}
-          placeholder="Enter alternate text to apply to your images."
-          on:change={() => dispatch("changeConfig")}
-          className={altText === "" ? "required" : ""}
-        />
-      </div>
-    </div>
-  </div>
+	<div>
+		<div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+			<h3 class="m-0 text-xs">Alt text</h3>
+			{#if !alt || alt === ''}
+				<div class="flex items-center gap-1 text-red-600 text-xs">
+					<i class="fa-sharp fa-solid fa-circle-exclamation" />
+					<p class="text-xs">Required</p>
+				</div>
+			{/if}
+		</div>
+		<div class="flex flex-start w-full">
+			<div class="w-full">
+				<TextArea
+					required
+					placeholder="Enter alternate text to apply to your images."
+					bind:value={$alt}
+					on:change
+				/>
+			</div>
+		</div>
+	</div>
 </div>
-
-<style>
-  .input-row {
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-  }
-
-  .toggle-button {
-    border: none !important;
-    background-color: var(--figma-color-bg-secondary) !important;
-    color: var(--figma-color-text) !important;
-  }
-
-  .toggle-button.active {
-    border: 2px solid var(--figma-color-bg-success) !important;
-  }
-
-  .disabled {
-    pointer-events: none;
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-</style>
