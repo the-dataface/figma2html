@@ -1,7 +1,7 @@
 export default (fontList) => {
-	if (!fontList) return;
+	if (!fontList || fontList.length === 0) return;
 
-	let weightLookup = {
+	const weightLookup = {
 		Thin: 100,
 		ExtraLight: 200,
 		Light: 300,
@@ -13,42 +13,58 @@ export default (fontList) => {
 		Black: 900
 	};
 
+	// master list
 	// group fontList array by family
-	let fontFamilies = [];
-	fontList.forEach((font) => {
-		let family = font.family,
-			weight =
-				font.style === 'Italic'
-					? weightLookup['Regular']
-					: weightLookup[font.style.replace(' Italic', '')],
-			style = font.style.includes('Italic') ? '1,' : '0,',
-			styleWeight = `${style}${weight}`;
+	const typefaces = new Map<string, Set<string>>();
 
-		// if fontFamilies does not include an object with the family name equal to the font family, push an object with the family name equal to the font family and an array of all the unique font values
-		if (!fontFamilies.some((f) => f.family === family)) {
-			fontFamilies.push({ family, weights: [styleWeight] });
-		} else {
-			// if fontFamilies does include an object with the family name equal to the font family, push the font value to the array of values
-			fontFamilies.forEach((f) => {
-				if (f.family === family) {
-					if (!f.weights.includes(styleWeight)) f.weights.push(styleWeight);
-				}
-			});
-		}
-	});
+	for (const { family, style } of [...fontList]) {
+		const googleStyle = style.includes('Italic') ? '1,' : '0,';
+		const weight =
+			style === 'Italic' ? weightLookup['Regular'] : weightLookup[style.replace(' Italic', '')];
+		const styleWeight = `${googleStyle}${weight}`;
 
-	let families = '';
-	fontFamilies.forEach((f) => {
-		let name = `${f.family.replace(/\s/g, '+')}:ital,wght@`;
+		// initiate a new Map/Set if the family doesn't exist already
+		!typefaces.has(family)
+			? typefaces.set(family, new Set([styleWeight]))
+			: typefaces.get(family).add(styleWeight);
+	}
 
-		families += `family=${name}${f.weights.sort().join(';')}&`;
-	});
+	const urls = [...typefaces]
+		.map(
+			([typeface, variations]) =>
+				`family=${typeface.replace(/\s/g, '+')}:ital,wght@${[...variations].sort().join(';')}`
+		)
+		.join('&');
 
-	let fontScript = `
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?${families}display=swap" rel="stylesheet">
-  `;
+	// 	let families = '';
+	// 	fontFamilies.forEach((f) => {
+	// 		let name = `${f.family.replace(/\s/g, '+')}:ital,wght@`;
+	// 		families += `family=${name}${f.weights.sort().join(';')}&`;
+	// 	});
+	// 	let fontScript = `
+	//   <link rel="preconnect" href="https://fonts.googleapis.com">
+	//   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	//   <link href="https://fonts.googleapis.com/css2?${families}display=swap" rel="stylesheet">
+	// `;
 
-	return fontScript;
+	// write a small script to append these directly to the head of the document.
+	// we don't ship a <head> natively to all for embeds to be easier. this grabs the DOM's head
+	return `<script>
+	  const apiLink = document.createElement('link');
+		apiLink.rel = 'preconnect';
+		apiLink.href = 'https://fonts.googleapis.com';
+
+		const gstaticLink = document.createElement('link');
+		gstaticLink.rel = 'preconnect';
+		gstaticLink.href = 'https://fonts.gstatic.com';
+		gstaticLink.crossorigin = true
+
+		const fontLink = document.createElement('link');
+		fontLink.rel = 'stylesheet';
+		fontLink.href = 'https://fonts.googleapis.com/css2?${urls}&display=swap';
+
+		document.head.appendChild(apiLink);
+		document.head.appendChild(gstaticLink);
+		document.head.appendChild(fontLink);
+	</script>`;
 };
