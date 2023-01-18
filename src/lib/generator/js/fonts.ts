@@ -36,20 +36,9 @@ export default (fontList) => {
 		)
 		.join('&');
 
-	// 	let families = '';
-	// 	fontFamilies.forEach((f) => {
-	// 		let name = `${f.family.replace(/\s/g, '+')}:ital,wght@`;
-	// 		families += `family=${name}${f.weights.sort().join(';')}&`;
-	// 	});
-	// 	let fontScript = `
-	//   <link rel="preconnect" href="https://fonts.googleapis.com">
-	//   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	//   <link href="https://fonts.googleapis.com/css2?${families}display=swap" rel="stylesheet">
-	// `;
-
 	// write a small script to append these directly to the head of the document.
 	// we don't ship a <head> natively to all for embeds to be easier. this grabs the DOM's head
-	return `<script>
+	return `
 	  const apiLink = document.createElement('link');
 		apiLink.rel = 'preconnect';
 		apiLink.href = 'https://fonts.googleapis.com';
@@ -66,5 +55,5 @@ export default (fontList) => {
 		document.head.appendChild(apiLink);
 		document.head.appendChild(gstaticLink);
 		document.head.appendChild(fontLink);
-	</script>`;
+	`;
 };

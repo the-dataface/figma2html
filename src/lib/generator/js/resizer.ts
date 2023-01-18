@@ -1,9 +1,8 @@
 import trim from 'lib/utils/trim';
 
-export default (containerId, isSvelte) => {
+export default (containerId, output) => {
 	// The resizer function is embedded in the HTML page -- external variables must
 	// be passed in.
-
 	const resizer = (containerId) => {
 		if (!('querySelector' in document)) return;
 
@@ -108,7 +107,5 @@ export default (containerId, isSvelte) => {
 		resizer.toString().replace(/ {2}/g, '\t')
 	)})("${containerId}", {namespace: "", setup: window.setupInteractive || window.getComponent});`;
 
-	if (isSvelte)
-		return `<script>\n\t import { onMount } from 'svelte'; \n\t onMount(() => {\n\t\t${resizerJs}\n\t\t});\n</script>`;
-	else return `<script>\n\t ${resizerJs}\n </script>`;
+	return resizerJs;
 };
