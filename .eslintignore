@@ -4,5 +4,5 @@ node_modules
 dist
 build
 coverage
-**.d.ts
+*.d.ts
 !**/*.{ts,tsx,js,jsx,svelte}
