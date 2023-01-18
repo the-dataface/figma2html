@@ -15,7 +15,7 @@
 		window.removeEventListener('mouseup', null);
 	};
 
-	const resizeDown = (e) => {
+	const resizeDown = () => {
 		resizing = true;
 		window.addEventListener('mousemove', resizeWindow, true);
 		window.addEventListener('mouseup', resizeUp, true);

@@ -1,8 +1,9 @@
 .DS_Store
-.vscode
 node_modules
 /build
+/.github
+/.githooks
+/.vscode
 .env
 .env.*
 !.env.example
-package-lock.json

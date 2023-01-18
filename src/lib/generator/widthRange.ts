@@ -1,9 +1,9 @@
 export default (assets) => {
-	let widthRange = { min: 0, max: 0, widths: [], ranges: [] };
+	const widthRange = { min: 0, max: 0, widths: [], ranges: [] };
 
 	assets.forEach((asset) => {
 		// let width = asset.node.width;
-		let width = +asset.node.name.replace('#', '').replace('px', '');
+		const width = +asset.node.name.replace('#', '').replace('px', '');
 		widthRange.widths.push(width);
 	});
 
@@ -11,7 +11,7 @@ export default (assets) => {
 	widthRange.widths.sort((a, b) => a - b);
 
 	widthRange.widths.forEach((width, i) => {
-		let range = [];
+		const range = [];
 		if (i == 0) {
 			range.push(0, widthRange.widths[1] - 1);
 		} else if (i < widthRange.widths.length - 1) {

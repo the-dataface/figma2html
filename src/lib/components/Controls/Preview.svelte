@@ -2,15 +2,11 @@
 	import { getContext } from 'svelte';
 	import { FileTextIcon } from 'svelte-feather-icons';
 	import PreviewCard from '../Layout/PreviewCard.svelte';
-	// import Overlay from '../Overlay.svelte';
 
-	const { loading, preview } = getContext('App');
+	const { preview } = getContext('App');
 </script>
 
 <div class="relative grid w-full gap-2 md:grid-cols-2">
-	<!-- {#if $loading}
-		<Overlay />
-	{/if} -->
 	{#if $preview.assets.length > 0 && $preview.file}
 		<PreviewCard title={$preview.file.filename} format={$preview.file.output.toLowerCase()}>
 			<svelte:fragment slot="icon">

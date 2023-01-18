@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 	import { getContext } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { backOut } from 'svelte/easing';

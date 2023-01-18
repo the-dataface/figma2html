@@ -65,8 +65,8 @@ export default (containerId, isSvelte) => {
 
 			// Set frame visibility based on container width
 			frames.forEach(function (el) {
-				let minwidth = el.getAttribute('data-min-width');
-				let maxwidth = el.getAttribute('data-max-width');
+				const minwidth = el.getAttribute('data-min-width');
+				const maxwidth = el.getAttribute('data-max-width');
 
 				if (+minwidth <= width && (+maxwidth >= width || maxwidth === null)) {
 					if (!waiting) selectChildren(`.${nameSpace}f2h-img`, el).forEach(updateImgSrc);

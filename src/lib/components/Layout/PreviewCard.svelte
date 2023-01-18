@@ -1,19 +1,18 @@
-<script lang="ts">
+<script>
 	import { getContext } from 'svelte';
-	import type { Format, Size } from '../../../types';
+
+	export let size = undefined;
+	export let format = undefined;
+	export let src = undefined;
+	export let title = undefined;
 
 	const {
 		config: { scale }
 	} = getContext('App');
-
-	export let size: Size = undefined;
-	export let format: Format = undefined;
-	export let src: string = undefined;
-	export let title: string = undefined;
 </script>
 
 <div
-	class="border-soliod container flex w-full items-center gap-2 rounded-lg border border-figma-border p-2"
+	class="container flex w-full items-center gap-2 rounded-lg border border-solid border-figma-border p-2"
 >
 	<div class="flex h-16 w-16 items-center justify-center rounded-md">
 		{#if $$slots.icon}

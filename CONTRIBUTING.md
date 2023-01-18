@@ -71,5 +71,5 @@ Via resources:
 ## Making a Pull Request
 
 - All pull requests should be made against the `main` branch.
-- Code should be in working condition before a review is requested unless help is needed.
+- Code should be in working condition before a review is requested unless help is needed. Ensure that the code is formatted with `npm run format` and that there are no linting errors with `npm run lint`.
 - Commits should follow the [conventional commits style](https://www.conventionalcommits.org/), which helps generate changelogs and ensure proper versioning.

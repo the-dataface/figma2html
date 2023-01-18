@@ -4,9 +4,8 @@
 	"scripts": {
 		"dev": "rollup -c -w",
 		"build": "rollup -c",
-		"start": "sirv build",
-		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"lint": "prettier --check . && eslint . --fix"
 	},
 	"author": {
 		"name": "Sam Vickars",
@@ -36,6 +35,8 @@
 		"@rollup/plugin-node-resolve": "^15.0.1",
 		"@rollup/plugin-terser": "^0.2.1",
 		"@rollup/plugin-typescript": "10.0.1",
+		"@typescript-eslint/eslint-plugin": "^5.48.2",
+		"@typescript-eslint/parser": "^5.48.2",
 		"autoprefixer": "^10.4.13",
 		"caniuse-lite": "1.0.30001441",
 		"cssnano": "^5.1.14",
@@ -43,7 +44,6 @@
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte3": "^4.0.0",
 		"figma-plugin-ds": "1.0.1",
-		"figma-plugin-ds-svelte": "1.4.3",
 		"postcss": "^8.4.20",
 		"postcss-load-config": "^4.0.1",
 		"prettier": "^2.8.3",

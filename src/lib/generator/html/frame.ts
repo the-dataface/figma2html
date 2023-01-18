@@ -104,7 +104,7 @@ export default ({ node, filename, widthRange, alt, config, variables }) => {
 			let elAttributes = '';
 
 			let effect = '';
-			if (!!text.effect.length) effect = css.textEffect(text.effect);
+			if (text.effect.length > 0) effect = css.textEffect(text.effect);
 
 			// base styles
 			const style = {
@@ -120,7 +120,7 @@ export default ({ node, filename, widthRange, alt, config, variables }) => {
 			style['text-align'] = text.horizontalAlignment.toLowerCase();
 			// }
 
-			let els = [];
+			const els = [];
 			text.segments.forEach((segment, i) => {
 				// did the last line end with a line break?
 				const prevEndsNewLine = text.segments?.[i - 1]?.characters.endsWith('\n');

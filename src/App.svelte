@@ -1,4 +1,4 @@
-<script lang="ts" type="module">
+<script lang="ts">
 	import type {
 		Asset,
 		Config,
@@ -10,9 +10,6 @@
 		Panels,
 		PostMessage
 	} from './types';
-
-	// for utility classes
-	// import { GlobalCSS } from 'figma-plugin-ds-svelte';
 
 	import { onMount, setContext } from 'svelte';
 	import JSZip from 'jszip/dist/jszip.min.js';
@@ -96,8 +93,8 @@
 		const message = event.data.pluginMessage;
 		if (!message) return;
 		switch (message.type) {
-			case 'load':
-				let config: Config = message.config;
+			case 'load': {
+				const config: Config = message.config;
 				panels = message.panels;
 
 				variables.set(Object.keys(message.variables).length > 0);
@@ -119,36 +116,46 @@
 				styleTextSegments.set(config.styleTextSegments);
 				includeGoogleFonts.set(config.includeGoogleFonts);
 				customScript.set(config.customScript);
-				return;
+				break;
+			}
 
-			case 'preview':
+			case 'preview': {
 				preview.set({
 					total: message.preview.total,
 					assets: await buildPreviewImages(message.preview.assets),
 					file: message.preview.file
 				});
 				loading.set(message.loading);
-				return;
+				break;
+			}
 
-			case 'loading':
+			case 'loading': {
 				loading.set(message.loading);
-				return;
+				break;
+			}
 
-			case 'export':
-				let link = document.createElement('a');
+			case 'export': {
+				const link = document.createElement('a');
 				link.href = await buildZipArchive(message.assets, message.file);
 				link.download = `${$name}.zip`;
 				link.click();
 				setTimeout(() => loading.set(false), 1500);
-				return;
+				break;
+			}
 
-			case 'write-variables':
+			case 'write-variables': {
 				variables.set(message.variables === null);
-				return;
+				break;
+			}
 
-			case 'error':
+			case 'error': {
 				setErrorMessage(message.message);
-				return;
+				break;
+			}
+
+			default: {
+				break;
+			}
 		}
 	};
 

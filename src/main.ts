@@ -1,7 +1,7 @@
 import yaml from 'js-yaml';
 
 import createSettingsBlock from './lib/generator/createSettingsBlock';
-import { createGroupsFromFrames } from './lib/generator/group';
+// import { createGroupsFromFrames } from './lib/generator/group';
 import html from './lib/generator/html/wrapper';
 import slugify from 'slugify';
 import log from './lib/utils/log';
@@ -144,7 +144,7 @@ class Stored {
 
 			const variablesText = variablesFrame?.children?.[0] as TextNode;
 
-			if (!!variablesText?.characters) {
+			if (variablesText?.characters) {
 				const variables = yaml.load(variablesText.characters);
 				Stored.variables.write();
 
@@ -167,8 +167,8 @@ class Stored {
 		static write = async (): Promise<void> => {
 			// write an example variables array to a text node on the current page
 			let variables: object = defaults.variables;
-			let x: number = 0;
-			let y: number = 0;
+			let x = 0;
+			let y = 0;
 
 			// remove existing variables text node if found
 			const existingVariablesFrame = figma.currentPage.findChild(
@@ -177,7 +177,7 @@ class Stored {
 
 			const existingVariablesText = existingVariablesFrame?.children?.[0] as TextNode;
 
-			if (!!existingVariablesText?.characters) {
+			if (existingVariablesText?.characters) {
 				// save xPos of existing variables text node if it exists
 				x = existingVariablesText.x;
 				const characters = existingVariablesText.characters;
@@ -244,8 +244,8 @@ class Stored {
 
 		// write the config to a text node on the current page
 		static write = async (config): Promise<void> => {
-			let x: number = 0;
-			let y: number = 0;
+			let x = 0;
+			let y = 0;
 
 			// remove existing settings text node if found
 			const settings = figma.currentPage.findChild(
@@ -290,7 +290,7 @@ class Stored {
 
 			const settingsNode = settingsFrame.children[0] as TextNode;
 
-			if (!!settingsNode?.characters) {
+			if (settingsNode?.characters) {
 				const config = yaml.load(settingsNode.characters);
 				await Stored.config.set(config);
 			}
@@ -310,7 +310,6 @@ class TempFrame {
 		this.frame = figma.createFrame();
 		this.frame.name = '[figma2html]';
 		this.frame.clipsContent = false;
-		this.frame = this.frame;
 	};
 
 	remove = () => {
@@ -367,9 +366,9 @@ const getAssets = async (
 	// create a temporary frame to export
 	tempFrame.create();
 
-	let assets: Asset[] = [];
+	const assets: Asset[] = [];
 
-	for (let exportable of exportables) {
+	for (const exportable of exportables) {
 		const asset: Asset = {
 			filename: `${config.imagePath}${
 				config.imagePath.endsWith('/') ? '' : '/'
@@ -380,7 +379,7 @@ const getAssets = async (
 			node: undefined
 		};
 
-		let originalNode = figma.getNodeById(exportable.id) as FrameNode;
+		const originalNode = figma.getNodeById(exportable.id) as FrameNode;
 
 		// Convert all frames within this frame that contain text layers to groups
 		let grouplessNode = originalNode.clone();
@@ -388,7 +387,7 @@ const getAssets = async (
 		grouplessNode = withModificationsForText(grouplessNode);
 
 		// Hide all text layers.
-		let modifiedNode = withModificationsForExport(grouplessNode, config);
+		const modifiedNode = withModificationsForExport(grouplessNode, config);
 
 		if (tempFrame.frame) {
 			tempFrame.frame.appendChild(grouplessNode);
@@ -438,13 +437,14 @@ const getAssets = async (
 
 // TODO: can this function be folded into getAssets?
 const withModificationsForText = (node: FrameNode): FrameNode => {
+	// TODO: @svickars - I'm not sure what this is doing. Can you explain?
 	// find all frame nodes within the frame
-	const frameNodes = node.findAllWithCriteria({ types: ['FRAME'] });
+	// const frameNodes = node.findAllWithCriteria({ types: ['FRAME'] });
 
 	// find all frame nodes within the frame that contain text layers
-	const textNodes = frameNodes.filter((node) => {
-		return node.findAllWithCriteria({ types: ['TEXT'] }).length > 0;
-	});
+	// const textNodes = frameNodes.filter((node) => {
+	// 	return node.findAllWithCriteria({ types: ['TEXT'] }).length > 0;
+	// });
 
 	// // find all frame nodes within the frame with a child node of type TEXT
 	// const allTextNodes = allNodes.filter((node) =>
@@ -452,7 +452,7 @@ const withModificationsForText = (node: FrameNode): FrameNode => {
 	// );
 
 	// convert all frames to groups for positioning
-	const groups: GroupNode[] = createGroupsFromFrames(frameNodes);
+	// const groups: GroupNode[] = createGroupsFromFrames(frameNodes);
 
 	return node;
 };
@@ -461,9 +461,9 @@ const withModificationsForExport = (node: FrameNode, config: Config): FrameNode 
 	const textNodes = node.findAllWithCriteria({ types: ['TEXT'] });
 
 	// fade all text layers if testingMode is true
-	if (config.testingMode) for (let node of textNodes) node.opacity = 0.5;
+	if (config.testingMode) for (const node of textNodes) node.opacity = 0.5;
 	// hide all text layers if testingMode is false
-	else for (let node of textNodes) node.visible = false;
+	else for (const node of textNodes) node.visible = false;
 
 	return node;
 };
@@ -513,7 +513,7 @@ figma.ui.onmessage = async (message) => {
 	let size: Size;
 
 	switch (message.type) {
-		case 'init':
+		case 'init': {
 			figma.ui.postMessage({ type: 'loading', loading: true });
 
 			size = await Stored.size.get();
@@ -531,30 +531,34 @@ figma.ui.onmessage = async (message) => {
 			figma.ui.postMessage({ type: 'load', config, variables, panels });
 			await refreshPreview(config, variables);
 			break;
+		}
 
 		case 'panel':
 			if (message.panels) panels = await Stored.panels.set(message.panels);
 			break;
 
-		case 'resize':
+		case 'resize': {
 			if (message.size) size = await Stored.size.set(message.size);
 			figma.ui.resize(size.w, size.h);
 			break;
+		}
 
-		case 'config':
+		case 'config': {
 			figma.ui.postMessage({ type: 'loading', loading: true });
 			config = await Stored.config.set(message.config);
 			variables = await Stored.variables.get();
 			if (message.panels) panels = await Stored.panels.set(message.panels);
 			await refreshPreview(config, variables);
 			break;
+		}
 
-		case 'export':
+		case 'export': {
 			variables = await Stored.variables.get();
 			await generateExport(message.config, variables);
 			break;
+		}
 
-		case 'reset-settings':
+		case 'reset-settings': {
 			await Stored.config.clear();
 			await Stored.size.clear();
 			await Stored.panels.clear();
@@ -570,14 +574,16 @@ figma.ui.onmessage = async (message) => {
 
 			await refreshPreview(config, variables);
 			break;
+		}
 
-		case 'save-settings':
+		case 'save-settings': {
 			config = await Stored.config.get();
 			await Stored.config.write(config);
 			log('Writing stored config');
 			break;
+		}
 
-		case 'load-settings':
+		case 'load-settings': {
 			await Stored.config.load();
 			config = await Stored.config.get();
 			variables = await Stored.variables.get();
@@ -586,11 +592,17 @@ figma.ui.onmessage = async (message) => {
 			figma.ui.postMessage({ type: 'load-settings', config, variables, panels });
 			await refreshPreview(config, variables);
 			break;
+		}
 
-		case 'write-variables':
+		case 'write-variables': {
 			await Stored.variables.write();
 			log('Writing example variables');
 			break;
+		}
+
+		default: {
+			break;
+		}
 	}
 };
 

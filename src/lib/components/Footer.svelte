@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 	import { createEventDispatcher, getContext } from 'svelte';
 	import {
 		SaveIcon,
@@ -13,7 +13,7 @@
 	import DatafaceLogo from './DatafaceLogo.svelte';
 	import WindowResize from './WindowResize.svelte';
 
-	const { error, preview } = getContext('App');
+	const { preview } = getContext('App');
 
 	const dispatch = createEventDispatcher();
 

@@ -24,16 +24,16 @@ const hTag = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
 export default (textFrames, frameWidth: number, frameHeight: number) => {
 	// return array of text frame style + class data
 	return textFrames.map((textFrame, i: number) => {
+		const elId = `f2h-text-${i}`;
 		const textSegments = [];
 		const customAttributes = [];
 
-		let elClass: string = ``;
-		let elId: string = `f2h-text-${i}`;
+		let elClass = ``;
 		let customClasses: string;
-		let x: number = 0;
-		let y: number = 0;
-		let translateX: number = 0;
-		let translateY: number = 0;
+		let x = 0;
+		let y = 0;
+		let translateX = 0;
+		let translateY = 0;
 
 		// check all fields
 		const segments = textFrame.getStyledTextSegments(fields) as StyledTextSegment[];
@@ -120,6 +120,7 @@ export default (textFrames, frameWidth: number, frameHeight: number) => {
 
 		// get x positioning based on horizontal alignment
 		switch (textFrame.textAlignHorizontal) {
+			case 'JUSTIFIED':
 			case 'LEFT':
 				x = (textFrame.x / frameWidth) * 100;
 				translateX = 0;
@@ -131,10 +132,6 @@ export default (textFrames, frameWidth: number, frameHeight: number) => {
 			case 'RIGHT':
 				x = ((textFrame.x + textFrame.width) / frameWidth) * 100;
 				translateX = -100;
-				break;
-			case 'JUSTIFIED':
-				x = (textFrame.x / frameWidth) * 100;
-				translateX = 0;
 				break;
 		}
 
