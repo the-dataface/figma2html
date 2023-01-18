@@ -55,14 +55,14 @@ const defaults = {
 	}
 };
 
+// TODO: should these frames be `locked` to prevent accidental deletion?
 interface NewConfigFrame {
 	name: string;
 	x?: number;
 	y?: number;
 	text: object;
-	locked?: boolean;
 }
-const newConfigFrame = ({ name, x = 0, y = 0, text, locked = false }: NewConfigFrame) => {
+const newConfigFrame = ({ name, x = 0, y = 0, text }: NewConfigFrame) => {
 	const frameNode = figma.createFrame();
 	frameNode.name = name;
 	frameNode.x = x;
@@ -73,7 +73,6 @@ const newConfigFrame = ({ name, x = 0, y = 0, text, locked = false }: NewConfigF
 	frameNode.verticalPadding = 4;
 	frameNode.horizontalPadding = 6;
 	frameNode.cornerRadius = 4;
-	frameNode.locked = locked;
 	const textNode = figma.createText();
 	textNode.characters = yaml.dump(text).trim();
 	frameNode.appendChild(textNode);
@@ -266,8 +265,7 @@ class Stored {
 					name: 'f2h-settings',
 					text: config,
 					x,
-					y,
-					locked: true
+					y
 				});
 			});
 		};
@@ -558,9 +556,11 @@ figma.ui.onmessage = async (message) => {
 			panels = await Stored.panels.get();
 			size = await Stored.size.get();
 
+			console.log({ config });
+
 			figma.ui.resize(size.w, size.h);
 
-			figma.ui.postMessage({ type: 'load-settings', config, variables, panels, size });
+			figma.ui.postMessage({ type: 'load', config, variables, panels, size });
 
 			await refreshPreview(config, variables);
 			break;
@@ -579,7 +579,7 @@ figma.ui.onmessage = async (message) => {
 			variables = await Stored.variables.get();
 			panels = await Stored.panels.get();
 			log('Loaded stored config');
-			figma.ui.postMessage({ type: 'load-settings', config, variables, panels });
+			figma.ui.postMessage({ type: 'load', config, variables, panels });
 			await refreshPreview(config, variables);
 			break;
 		}

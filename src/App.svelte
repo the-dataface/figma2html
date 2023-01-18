@@ -53,7 +53,28 @@
 
 	const variables = writable(false as boolean);
 
-	const buildConfig = (): Config => ({
+	// ingest config data from plugin
+	const receiveConfig = (config: Config) => {
+		name.set(config.name);
+		format.set(config.format);
+		scale.set(config.scale);
+		output.set(config.output);
+		includeResizer.set(config.includeResizer);
+		testingMode.set(config.testingMode);
+		maxWidth.set(config.maxWidth);
+		fluid.set(config.fluid);
+		centered.set(config.centered);
+		imagePath.set(config.imagePath);
+		alt.set(config.alt);
+		applyStyleNames.set(config.applyStyleNames);
+		applyHtags.set(config.applyHtags);
+		styleTextSegments.set(config.styleTextSegments);
+		includeGoogleFonts.set(config.includeGoogleFonts);
+		customScript.set(config.customScript);
+	};
+
+	// send config data to plugin
+	const sendConfig = (): Config => ({
 		name: $name,
 		scale: $scale,
 		format: $format,
@@ -82,26 +103,8 @@
 			case 'load': {
 				const config: Config = message.config;
 				panels = message.panels;
-
 				variables.set(Object.keys(message.variables).length > 0);
-
-				// config
-				name.set(config.name);
-				format.set(config.format);
-				scale.set(config.scale);
-				output.set(config.output);
-				includeResizer.set(config.includeResizer);
-				testingMode.set(config.testingMode);
-				maxWidth.set(config.maxWidth);
-				fluid.set(config.fluid);
-				centered.set(config.centered);
-				imagePath.set(config.imagePath);
-				alt.set(config.alt);
-				applyStyleNames.set(config.applyStyleNames);
-				applyHtags.set(config.applyHtags);
-				styleTextSegments.set(config.styleTextSegments);
-				includeGoogleFonts.set(config.includeGoogleFonts);
-				customScript.set(config.customScript);
+				receiveConfig(config);
 				break;
 			}
 
@@ -145,7 +148,7 @@
 		}
 	};
 
-	const onChangeConfig = () => postMessage({ type: 'config', config: buildConfig() });
+	const onChangeConfig = () => postMessage({ type: 'config', config: sendConfig() });
 
 	const onSelectExport = () => {
 		if (!$alt || $alt === '') {
@@ -160,7 +163,7 @@
 		}
 
 		loading.set(true);
-		postMessage({ type: 'export', config: buildConfig() });
+		postMessage({ type: 'export', config: sendConfig() });
 	};
 
 	const onResetSettings = () => postMessage({ type: 'reset-settings' });
