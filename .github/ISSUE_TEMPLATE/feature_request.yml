@@ -1,5 +1,5 @@
 name: "\U0001F680 Feature Request"
-description: Request a new Svelte feature
+description: Request a new figma2html feature
 labels: [enhancement]
 body:
   - type: markdown
