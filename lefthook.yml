@@ -7,7 +7,7 @@ pre-commit:
   commands:
     prettier:
       glob: '*'
-      run: npx prettier --ignore-unknown --write {staged_files}
+      run: npx prettier --ignore-unknown --write {staged_files} && git add {staged_files}
 
 pre-push:
   commands:
