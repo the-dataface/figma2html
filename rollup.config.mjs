@@ -117,7 +117,7 @@ function serve() {
 		writeBundle() {
 			if (!started) {
 				started = true;
-				childProcess.spawn('npm', ['run', 'dev'], {
+				childProcess.spawn('npm', ['run', 'start', '--', '--dev'], {
 					stdio: ['ignore', 'inherit', 'inherit'],
 					shell: true
 				});

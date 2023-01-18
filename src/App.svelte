@@ -249,51 +249,47 @@
 
 <h1 class="sr-only">figma2html</h1>
 
-<div class="content grid h-full w-full grid-cols-3 overflow-hidden bg-figma-bg text-figma-text">
-	<div
-		class="col-span-1 flex h-[100vh_-_48px] flex-col overflow-y-scroll border-r border-solid border-figma-border pb-12"
-	>
-		{#if panels}
-			<Panel title="File settings" open={panels.file} on:toggle={onTogglePanel}>
-				<File on:change={onChangeConfig} on:error={() => setErrorMessage($error.message)} />
+<article class="flex h-screen flex-col flex-nowrap">
+	<div class="grid w-full flex-auto grid-cols-3 overflow-hidden bg-figma-bg text-figma-text">
+		<div
+			class="col-span-1 flex flex-col overflow-y-scroll border-r border-solid border-figma-border"
+		>
+			{#if panels}
+				<Panel title="File settings" open={panels.file} on:toggle={onTogglePanel}>
+					<File on:change={onChangeConfig} on:error={() => setErrorMessage($error.message)} />
+				</Panel>
+				<Panel title="Image settings" bind:open={panels.images} on:toggle={onTogglePanel}>
+					<Images on:change={onChangeConfig} />
+				</Panel>
+				<Panel title="Page settings" bind:open={panels.page} on:toggle={onTogglePanel}>
+					<Page on:change={onChangeConfig} />
+				</Panel>
+				<Panel
+					border={false}
+					title="Text settings"
+					bind:open={panels.text}
+					on:togglePanel={onTogglePanel}
+				>
+					<Text on:change={onChangeConfig} on:write-variables={onWriteVariables} />
+				</Panel>
+			{/if}
+		</div>
+
+		<div class="col-span-2 col-start-2 overflow-y-scroll">
+			<Panel title="Output" bind:open={panels.preview} on:togglePanel={onTogglePanel}>
+				<Preview />
 			</Panel>
-			<Panel title="Image settings" bind:open={panels.images} on:toggle={onTogglePanel}>
-				<Images on:change={onChangeConfig} />
-			</Panel>
-			<Panel title="Page settings" bind:open={panels.page} on:toggle={onTogglePanel}>
-				<Page on:change={onChangeConfig} />
-			</Panel>
-			<Panel
-				border={false}
-				title="Text settings"
-				bind:open={panels.text}
-				on:togglePanel={onTogglePanel}
-			>
-				<Text on:change={onChangeConfig} on:write-variables={onWriteVariables} />
-			</Panel>
-		{/if}
+		</div>
 	</div>
 
-	<div class="col-span-2 col-start-2 h-[100vh_-_48px] overflow-y-scroll pb-12">
-		<Panel title="Output" bind:open={panels.preview} on:togglePanel={onTogglePanel}>
-			<Preview />
-		</Panel>
-	</div>
-</div>
-
-<Footer
-	on:export={onSelectExport}
-	on:reset-settings={onResetSettings}
-	on:save-settings={onSaveSettings}
-	on:load-settings={onLoadSettings}
-/>
+	<Footer
+		on:export={onSelectExport}
+		on:reset-settings={onResetSettings}
+		on:save-settings={onSaveSettings}
+		on:load-settings={onLoadSettings}
+	/>
+</article>
 
 {#if $error.message}
 	<ErrorMessage />
 {/if}
-
-<style>
-	.content {
-		min-height: calc(100% + 48px);
-	}
-</style>

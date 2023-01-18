@@ -187,6 +187,9 @@ module.exports = {
 			},
 			fontSize: {
 				'2xs': '0.6875rem'
+			},
+			height: {
+				footer: 'var(--footer)'
 			}
 		}
 	},

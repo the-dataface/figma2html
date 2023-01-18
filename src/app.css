@@ -2,62 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+	--footer: 3rem;
+}
+
 summary.no-marker {
 	@apply list-none outline-none;
 }
 summary.no-marker::-webkit-details-marker {
 	@apply hidden;
 }
-
-/* .setting div {
-	color: var(--figma-color-text) !important;
-}
-
-.setting button {
-	height: 36px !important;
-}
-
-.input input,
-.setting button {
-	height: 36px !important;
-}
-
-.content button {
-	background-color: var(--figma-color-bg-secondary) !important;
-	border-radius: 4px !important;
-	height: 40px !important;
-	margin-top: 8px !important;
-}
-
-.content button:hover {
-	background-color: var(--figma-color-bg-tertiary) !important;
-}
-
-.content button:focus {
-	outline: 1px solid var(--figma-color-border-selected);
-}
-
-.content button .label,
-.content button .placeholder {
-	color: var(--figma-color-text) !important;
-	margin-top: 0 !important;
-}
-
-.content button .caret svg path {
-	fill: var(--figma-color-text-secondary) !important;
-}
-
-.content button:hover .caret svg path {
-	fill: var(--figma-color-text) !important;
-}
-
-.content ul li .label {
-	color: var(--figma-color-bg) !important;
-}
-
-.figma-dark .content ul li .label {
-	color: var(--figma-color-text) !important;
-} */
 
 input[type='text'],
 select,

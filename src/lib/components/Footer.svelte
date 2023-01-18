@@ -21,7 +21,7 @@
 </script>
 
 <footer
-	class="fixed bottom-0 left-0 z-20 flex h-12 w-full items-center justify-between overflow-y-hidden border-t border-solid border-figma-border bg-figma-bg"
+	class="flex-0 relative z-20 flex h-footer w-full flex-shrink-0 flex-grow-0 items-center justify-between overflow-y-hidden border-t border-solid border-figma-border bg-figma-bg"
 >
 	<h2>
 		<button
