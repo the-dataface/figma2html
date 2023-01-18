@@ -17,7 +17,7 @@
 	<input
 		{id}
 		type="text"
-		class="w-full relative cursor-text {classes}"
+		class="relative w-full cursor-text {classes}"
 		class:borders
 		class:invalid
 		{name}
@@ -34,7 +34,7 @@
 		on:blur
 	/>
 	{#if invalid}
-		<div class="error text-figma-text-danger text-2xs font-normal tracking-tighter">
+		<div class="error text-2xs font-normal tracking-tighter text-figma-text-danger">
 			{errorMessage}
 		</div>
 	{/if}

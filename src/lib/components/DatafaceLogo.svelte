@@ -16,7 +16,7 @@
 </script>
 
 <a
-	class="relative group {classes}"
+	class="group relative {classes}"
 	{href}
 	target="_blank"
 	rel="noreferrer"
@@ -35,7 +35,7 @@
 		{src}
 	/>
 	<div
-		class="text-white absolute inset-0 w-full h-full flex justify-center items-center translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0"
+		class="absolute inset-0 flex h-full w-full translate-y-full items-center justify-center text-white transition-transform duration-300 ease-out group-hover:translate-y-0"
 	>
 		<ExternalLinkIcon size={`${size.w / 3}`} />
 	</div>

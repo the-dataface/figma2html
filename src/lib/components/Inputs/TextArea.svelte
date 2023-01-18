@@ -19,7 +19,7 @@
 		{disabled}
 		{required}
 		{placeholder}
-		class="w-full h-16 min-h-[4rem] p-2 resize-y overflow-y-auto cursor-text bg-figma-bg-secondary"
+		class="h-16 min-h-[4rem] w-full cursor-text resize-y overflow-y-auto bg-figma-bg-secondary p-2"
 		bind:value
 		on:input
 		on:change

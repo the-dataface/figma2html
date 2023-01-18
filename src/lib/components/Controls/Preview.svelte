@@ -7,7 +7,7 @@
 	const { loading, preview } = getContext('App');
 </script>
 
-<div class="w-full grid md:grid-cols-2 gap-2 relative">
+<div class="relative grid w-full gap-2 md:grid-cols-2">
 	<!-- {#if $loading}
 		<Overlay />
 	{/if} -->

@@ -13,9 +13,9 @@
 	<!-- TODO: do we need to dispatch here? -->
 	<details class="w-full px-4" bind:open on:toggle>
 		<summary
-			class="no-marker flex items-center gap-2 py-4 select-none transition-opacity hover:opacity-80 cursor-pointer"
+			class="no-marker flex cursor-pointer select-none items-center gap-2 py-4 transition-opacity hover:opacity-80"
 		>
-			<div class="h-4 flex items-center justify-center px-2 aspect-square">
+			<div class="flex aspect-square h-4 items-center justify-center px-2">
 				<span class="transition-transform duration-300 ease-out" class:rotate-90={open}>
 					&rightarrow;
 				</span>

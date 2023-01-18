@@ -253,9 +253,9 @@
 
 <h1 class="sr-only">figma2html</h1>
 
-<div class="grid grid-cols-3 w-full h-full overflow-hidden text-figma-text bg-figma-bg content">
+<div class="content grid h-full w-full grid-cols-3 overflow-hidden bg-figma-bg text-figma-text">
 	<div
-		class="flex flex-col col-span-1 h-[100vh_-_48px] overflow-y-scroll pb-12 border-r border-solid border-figma-border"
+		class="col-span-1 flex h-[100vh_-_48px] flex-col overflow-y-scroll border-r border-solid border-figma-border pb-12"
 	>
 		{#if panels}
 			<Panel title="File settings" open={panels.file} on:toggle={onTogglePanel}>
@@ -278,7 +278,7 @@
 		{/if}
 	</div>
 
-	<div class="col-start-2 col-span-2 h-[100vh_-_48px] pb-12 overflow-y-scroll">
+	<div class="col-span-2 col-start-2 h-[100vh_-_48px] overflow-y-scroll pb-12">
 		<Panel title="Output" bind:open={panels.preview} on:togglePanel={onTogglePanel}>
 			<Preview />
 		</Panel>

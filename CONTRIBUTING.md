@@ -1,6 +1,5 @@
 # Contributing
 
-
 ## Table of Contents
 
 - [Contributing](#contributing)
@@ -14,7 +13,6 @@
     - [Run plugin](#run-plugin)
   - [Making a Pull Request](#making-a-pull-request)
 
-
 ## Requirements
 
 - [git](https://www.github.com/git-guides/install-git) - A version manager.
@@ -23,7 +21,6 @@
 - [Figma Desktop](https://www.figma.com/downloads/) - Required for running plug-ins in development.
 - Knowledge of the [Figma API](https://www.figma.com/plugin-docs) and [TypeScript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
 - (Optional) Knowledge of [Tailwind](https://tailwindcss.com)
-
 
 ## Getting started
 
@@ -45,13 +42,13 @@ npm install
 
 ### Build plugin
 
-After making updates locally, run `npm run build` in a terminal to bundle the project. There should be a `build` folder with three files: `bundle.js`, `index.html`, `main.js`. There are required to run the plugin. 
+After making updates locally, run `npm run build` in a terminal to bundle the project. There should be a `build` folder with three files: `bundle.js`, `index.html`, `main.js`. There are required to run the plugin.
 
 To watch for updates, run `npm run dev` in a terminal. This will start a server that will livereload the aforementioned files and let you develop while testing your Figma file.
 
 ### Import plugin
 
-1. From Figma's top menu bar: `Plugins` > `Development` > `Import plugin from manifest`. 
+1. From Figma's top menu bar: `Plugins` > `Development` > `Import plugin from manifest`.
 2. Select the `manifest.json` file in the cloned `figma2html` directory.
 
 ### Run plugin

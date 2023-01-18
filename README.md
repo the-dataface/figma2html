@@ -20,7 +20,6 @@ Export Figma frames to responsive HTML and CSS. A Figma version of [ai2html](htt
   - [Acknowledgements](#acknowledgements)
   - [License](#license)
 
-
 ## Instructions
 
 1. Create your artwork
@@ -99,8 +98,7 @@ Figma2html is not possible without [ai2html](https://www.ai2html.org), created b
 
 The plugin uses some components and ideas from [Thomas Lowry](https://www.github.com/thomas-lowry)'s [Figma Plugin DS Svelte](https://www.github.com/thomas-lowry/figma-plugin-ds-svelte) library.
 
-The core team from The DataFace features [Sam Vickars](https://www.twitter.com/samvickars), [Sawyer Click](https://www.sawyer.codes), and [Michael Hester](https://www.twitter.com/immichaelhester). 
-
+The core team from The DataFace features [Sam Vickars](https://www.twitter.com/samvickars), [Sawyer Click](https://www.sawyer.codes), and [Michael Hester](https://www.twitter.com/immichaelhester).
 
 ## License
 

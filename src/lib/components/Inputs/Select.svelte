@@ -28,8 +28,8 @@
 	$: options = types[id];
 </script>
 
-<div class="w-full relative {classes}">
-	<div class="absolute right-2 inset-y-0 grid place-items-center h-full pointer-events-none">
+<div class="relative w-full {classes}">
+	<div class="pointer-events-none absolute inset-y-0 right-2 grid h-full place-items-center">
 		<ChevronDownIcon size="16" />
 	</div>
 	<select {id} class="w-full cursor-pointer" {disabled} bind:value on:change>

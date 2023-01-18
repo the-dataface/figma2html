@@ -11,9 +11,9 @@
 	const dispatch = createEventDispatcher();
 </script>
 
-<div class="container group flex gap-2 relative items-center cursor-pointer">
+<div class="group container relative flex cursor-pointer items-center gap-2">
 	<input
-		class="opacity-0 cursor-pointer absolute inset-0 h-full w-full peer"
+		class="peer absolute inset-0 h-full w-full cursor-pointer opacity-0"
 		type="checkbox"
 		{id}
 		bind:value
@@ -27,19 +27,19 @@
 		}}
 	/>
 	<div
-		class="checkmark w-6 h-6 relative flex-shrink-0 flex-grow-0 rounded pointer-events-none flex items-center justify-center border border-solid border-figma-border bg-figma-bg-danger peer-checked:bg-figma-bg-success"
+		class="checkmark pointer-events-none relative flex h-6 w-6 flex-shrink-0 flex-grow-0 items-center justify-center rounded border border-solid border-figma-border bg-figma-bg-danger peer-checked:bg-figma-bg-success"
 	>
 		{#key checked}
 			<span
-				class="text-sm text-white font-bold absolute inset-0 h-full w-full flex items-center justify-center"
+				class="absolute inset-0 flex h-full w-full items-center justify-center text-sm font-bold text-white"
 				in:fly={{ y: checked ? -2 : 2, duration: 300, easing: backOut }}
 			>
 				{@html checked ? '&check;' : '&cross;'}
 			</span>
 		{/key}
 	</div>
-	<label for={id} class="select-none cursor-pointer flex-grow">
-		<h3 class="m-0 text-xs pointer-events-none">
+	<label for={id} class="flex-grow cursor-pointer select-none">
+		<h3 class="pointer-events-none m-0 text-xs">
 			{label}
 		</h3>
 	</label>

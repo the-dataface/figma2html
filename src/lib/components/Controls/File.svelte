@@ -17,13 +17,13 @@
 	const dispatch = createEventDispatcher();
 </script>
 
-<div class="w-full flex flex-col gap-2">
+<div class="flex w-full flex-col gap-2">
 	<div>
-		<div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+		<div class="mt-2 mb-2.5 flex items-center justify-between text-[10px]">
 			<h3 class="m-0 text-xs">File name</h3>
 			{#if !$name || $name === ''}
 				<div
-					class="flex items-center gap-1 text-figma-bg-danger text-xs"
+					class="flex items-center gap-1 text-xs text-figma-bg-danger"
 					transition:fly={{ x: 50, duration: 300, easing: backOut }}
 				>
 					<AlertTriangleIcon size="12" />
@@ -59,10 +59,10 @@
 	</div>
 
 	<div>
-		<div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+		<div class="mt-2 mb-2.5 flex items-center justify-between text-[10px]">
 			<h3 class="m-0 text-xs">File type</h3>
 		</div>
-		<div class="flex flex-start w-full">
+		<div class="flex-start flex w-full">
 			<div class="w-full">
 				<Select id="file-type" bind:value={$output} on:change />
 			</div>

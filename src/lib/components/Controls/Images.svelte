@@ -13,23 +13,23 @@
 	} = getContext('App');
 </script>
 
-<div class="w-full flex flex-col gap-2">
+<div class="flex w-full flex-col gap-2">
 	<div class="flex gap-2">
 		<div class="flex-grow">
-			<div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+			<div class="mt-2 mb-2.5 flex items-center justify-between text-[10px]">
 				<h3 class="m-0 text-xs">Scale</h3>
 			</div>
-			<div class="flex flex-start w-full">
+			<div class="flex-start flex w-full">
 				<div class="w-full">
 					<Select id="scale" disabled={$format === 'SVG'} bind:value={$scale} on:change />
 				</div>
 			</div>
 		</div>
 		<div class="flex-grow">
-			<div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+			<div class="mt-2 mb-2.5 flex items-center justify-between text-[10px]">
 				<h3 class="m-0 text-xs">Format</h3>
 			</div>
-			<div class="flex flex-start w-full">
+			<div class="flex-start flex w-full">
 				<div class="w-full">
 					<Select id="format" bind:value={$format} on:change />
 				</div>
@@ -38,10 +38,10 @@
 	</div>
 
 	<div>
-		<div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+		<div class="mt-2 mb-2.5 flex items-center justify-between text-[10px]">
 			<h3 class="m-0 text-xs">Path</h3>
 		</div>
-		<div class="flex flex-start w-full">
+		<div class="flex-start flex w-full">
 			<div class="w-full">
 				<Input
 					placeholder="Enter an image path to include in your export."
@@ -53,11 +53,11 @@
 	</div>
 
 	<div>
-		<div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+		<div class="mt-2 mb-2.5 flex items-center justify-between text-[10px]">
 			<h3 class="m-0 text-xs">Alt text</h3>
 			{#if !$alt || $alt === ''}
 				<div
-					class="flex items-center gap-1 text-figma-bg-danger text-xs"
+					class="flex items-center gap-1 text-xs text-figma-bg-danger"
 					transition:fly={{ x: 50, duration: 300, easing: backOut }}
 				>
 					<AlertTriangleIcon size="12" />
@@ -65,7 +65,7 @@
 				</div>
 			{/if}
 		</div>
-		<div class="flex flex-start w-full">
+		<div class="flex-start flex w-full">
 			<div class="w-full">
 				<TextArea
 					required

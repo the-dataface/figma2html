@@ -24,7 +24,7 @@
 
 <div
 	id="resize"
-	class="cursor-se-resize h-full p-2 flex justify-center items-center overflow-hidden text-figma-text border-l border-solid border-figma-border hover:text-figma-text-secondary active:text-figma-text-tertiary"
+	class="flex h-full cursor-se-resize items-center justify-center overflow-hidden border-l border-solid border-figma-border p-2 text-figma-text hover:text-figma-text-secondary active:text-figma-text-tertiary"
 	on:mousedown={resizeDown}
 	on:mouseup={resizeUp}
 >

@@ -13,7 +13,7 @@
 	const dispatch = createEventDispatcher();
 </script>
 
-<div class="w-full flex flex-col gap-2">
+<div class="flex w-full flex-col gap-2">
 	<Checkbox
 		label="Style text segments"
 		bind:value={$styleTextSegments}

@@ -10,7 +10,7 @@
 	} = getContext('App');
 </script>
 
-<div class="w-full flex flex-col gap-2">
+<div class="flex w-full flex-col gap-2">
 	<Checkbox
 		label="Include resizer script"
 		bind:value={$includeResizer}
@@ -22,7 +22,7 @@
 
 	<div class="flex gap-2">
 		<div class="flex-grow">
-			<div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+			<div class="mt-2 mb-2.5 flex items-center justify-between text-[10px]">
 				<h3 class="m-0 text-xs">Add max width (px)</h3>
 			</div>
 			<div class="input-row">
@@ -34,10 +34,10 @@
 	</div>
 
 	<div>
-		<div class="flex justify-between items-center text-[10px] mt-2 mb-2.5">
+		<div class="mt-2 mb-2.5 flex items-center justify-between text-[10px]">
 			<h3 class="m-0 text-xs">Custom script</h3>
 		</div>
-		<div class="flex flex-start w-full">
+		<div class="flex-start flex w-full">
 			<div class="w-full">
 				<TextArea
 					placeholder="Enter a custom script to be included in the exported HTML file here."

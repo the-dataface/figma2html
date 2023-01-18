@@ -29,10 +29,10 @@
 
 <div class="wrapper">
 	<div class="input {classes}">
-		<div class="relative icon">
+		<div class="icon relative">
 			<input class="opacity-0" type="color" bind:value on:change {disabled} class:disabled />
 			<div
-				class="absolute w-4 h-4 transform -translate-x-1/2 -translate-y-1/2 border rounded-full pointer-events-none dot top-1/2 left-1/2"
+				class="dot pointer-events-none absolute top-1/2 left-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 transform rounded-full border"
 				style:background-color={value}
 			/>
 		</div>

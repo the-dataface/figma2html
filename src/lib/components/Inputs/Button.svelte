@@ -7,7 +7,7 @@
 
 <button
 	{id}
-	class="flex items-center justify-center py-4 px-[11px] cursor-pointer h-4 transition-all rounded-full bg-figma-bg hover:bg-figma-bg-secondary {classes}"
+	class="flex h-4 cursor-pointer items-center justify-center rounded-full bg-figma-bg py-4 px-[11px] transition-all hover:bg-figma-bg-secondary {classes}"
 	on:click
 >
 	<slot />
