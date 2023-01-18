@@ -14,6 +14,8 @@ import svelte from 'rollup-plugin-svelte';
 import svg from 'rollup-plugin-svg';
 import sveltePreprocess from 'svelte-preprocess';
 
+import pkg from './package.json' assert { type: 'json' };
+
 const production = !process.env.ROLLUP_WATCH;
 
 export default [
@@ -52,7 +54,7 @@ export default [
 			htmlBundle({
 				fileName: 'index.html',
 				target: 'build/index.html',
-				title: 'figma2html',
+				title: pkg.name,
 				attributes: {
 					html: { lang: 'en' },
 					link: null,
@@ -61,7 +63,7 @@ export default [
 				meta: [
 					{ charset: 'utf-8' },
 					{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
-					{ name: 'description', content: 'Export Figma frames to responsive HTML and CSS' }
+					{ name: 'description', content: `${pkg.description} - v${pkg.version}` }
 				],
 				template: ({ attributes, files, publicPath, title, meta }) => {
 					// inline all script to fit figma's one-file rule

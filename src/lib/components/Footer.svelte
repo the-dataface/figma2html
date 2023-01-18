@@ -14,7 +14,7 @@
 	import DatafaceLogo from './DatafaceLogo.svelte';
 	import WindowResize from './WindowResize.svelte';
 
-	const { preview, manifest } = getContext('App');
+	const { preview, pkg } = getContext('App');
 
 	const dispatch = createEventDispatcher();
 
@@ -70,12 +70,13 @@
 		<div
 			class="menu-pane fixed right-2 bottom-14 flex flex-col rounded-lg border border-solid border-figma-border bg-figma-bg p-1"
 		>
-			{#each [{ href: 'https://github.com/the-dataface/figma2html/blob/main/README.md', icon: HelpCircleIcon, text: 'About' }, { href: 'https://github.com/the-dataface/figma2html/issues/new/choose', icon: AlertCircleIcon, text: 'Report Issue' }, { href: 'https://github.com/the-dataface/figma2html/blob/main/CHANGELOG.md', icon: GitMergeIcon, text: `v${manifest.api}` }] as { href, icon, text }}
+			{#each [{ href: pkg.homepage, icon: HelpCircleIcon, text: 'About' }, { href: pkg.bugs.url, icon: AlertCircleIcon, text: 'Report Issue' }, { href: 'https://github.com/the-dataface/figma2html/blob/main/CHANGELOG.md', icon: GitMergeIcon, text: `v${pkg.version}` }] as { href, icon, text }}
 				<a
 					class="flex items-center p-2 text-sm text-figma-text hover:text-figma-text-secondary active:text-figma-text-tertiary"
 					{href}
 					target="_blank"
 					rel="noreferrer"
+					title={text}
 				>
 					<svelte:component this={icon} size="18" class="mr-2 fill-figma-bg" />
 					{text}

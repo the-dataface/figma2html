@@ -1,6 +1,6 @@
 declare global {
 	interface Config {
-		name: string;
+		filename: string;
 		scale: Scale;
 		format: Format;
 		output: Output;

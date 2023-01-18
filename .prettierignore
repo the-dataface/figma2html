@@ -10,5 +10,3 @@ node_modules
 .d.ts
 .md
 lefthook.yml
-package.json
-package-lock.json

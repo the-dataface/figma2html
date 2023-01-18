@@ -1,9 +1,26 @@
 {
 	"name": "figma2html",
+	"version": "1.0.0-next",
 	"description": "Export Figma frames as images with text elements rendered as HTML",
+	"homepage": "https://www.github.com/the-dataface/figma2html",
+	"repository": {
+		"type": "git",
+		"url": "https://www.github.com/the-dataface/figma2html.git"
+	},
+	"bugs": {
+		"email": "sam@thedataface.com",
+		"url": "https://www.github.com/the-dataface/figma2html/issues/new/choose"
+	},
+	"license": "MIT",
+	"keywords": [
+		"ai2html",
+		"figma",
+		"figma2html",
+		"figma html"
+	],
 	"scripts": {
 		"dev": "rollup -c -w",
-		"build": "rollup -c"
+		"build": "rollup -c && rm ./build/bundle.js"
 	},
 	"author": {
 		"name": "Sam Vickars",
@@ -20,7 +37,6 @@
 			"name": "Michael Hester"
 		}
 	],
-	"license": "MIT",
 	"devDependencies": {
 		"@figma/plugin-typings": "1.57.1",
 		"@rollup/plugin-alias": "^4.0.2",

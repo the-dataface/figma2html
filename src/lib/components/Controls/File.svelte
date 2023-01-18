@@ -11,7 +11,7 @@
 
 	const {
 		error,
-		config: { output, testingMode, name }
+		config: { output, testingMode, filename }
 	} = getContext('App');
 
 	const dispatch = createEventDispatcher();
@@ -21,7 +21,7 @@
 	<div>
 		<div class="mt-2 mb-2.5 flex items-center justify-between text-[10px]">
 			<h3 class="m-0 text-xs">File name</h3>
-			{#if !$name || $name === ''}
+			{#if !$filename || $filename === ''}
 				<div
 					class="flex items-center gap-1 text-xs text-figma-bg-danger"
 					transition:fly={{ x: 50, duration: 300, easing: backOut }}
@@ -37,9 +37,9 @@
 					id="file-name"
 					required
 					placeholder="Enter a file name"
-					bind:value={$name}
+					bind:value={$filename}
 					on:change={() => {
-						if ($name === '') {
+						if ($filename === '') {
 							$error.message = 'File name cannot be empty';
 							dispatch('error');
 							return;
@@ -49,7 +49,9 @@
 						//   dispatch("error");
 						//   return;
 						// }
-						name.set(slugify($name, { lower: true, strict: true, remove: /[*+~.()'"!:@]/g }));
+						filename.set(
+							slugify($filename, { lower: true, strict: true, remove: /[*+~.()'"!:@]/g })
+						);
 						dispatch('change');
 						return;
 					}}

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount, setContext } from 'svelte';
+	import { writable } from 'svelte/store';
 	import JSZip from 'jszip/dist/jszip.min.js';
 
 	import Panel from './lib/components/Layout/Panel.svelte';
@@ -10,10 +11,9 @@
 	import Page from './lib/components/Controls/Page.svelte';
 	import Preview from './lib/components/Controls/Preview.svelte';
 	import Text from './lib/components/Controls/Text.svelte';
-	import { writable } from 'svelte/store';
 
 	// the figma manifest. useful for versioning and meta
-	import manifest from '../manifest.json';
+	import pkg from './lib/pkg';
 
 	const error = writable({ message: undefined, timeout: undefined } as {
 		message: string;
@@ -30,7 +30,7 @@
 	const output = writable('html' as Output);
 	const format = writable('PNG' as Format);
 	const scale = writable('1' as Scale);
-	const name = writable(undefined as string | undefined);
+	const filename = writable(undefined as string | undefined);
 	const includeResizer = writable(true as boolean);
 	const fluid = writable(true as boolean);
 	const testingMode = writable(false as boolean);
@@ -58,7 +58,7 @@
 
 	// ingest config data from plugin
 	const receiveConfig = (config: Config) => {
-		name.set(config.name);
+		filename.set(config.filename);
 		format.set(config.format);
 		scale.set(config.scale);
 		output.set(config.output);
@@ -78,7 +78,7 @@
 
 	// send config data to plugin
 	const sendConfig = (): Config => ({
-		name: $name,
+		filename: $filename,
 		scale: $scale,
 		format: $format,
 		output: $output,
@@ -129,7 +129,7 @@
 			case 'export': {
 				const link = document.createElement('a');
 				link.href = await buildZipArchive(message.assets, message.file);
-				link.download = `${$name}.zip`;
+				link.download = `${$filename}.zip`;
 				link.click();
 				setTimeout(() => loading.set(false), 1500);
 				break;
@@ -160,7 +160,7 @@
 			return;
 		}
 
-		if (!$name || $name === '') {
+		if (!$filename || $filename === '') {
 			setErrorMessage('File name cannot be empty');
 			return;
 		}
@@ -226,12 +226,12 @@
 	$: if ($format === 'SVG') scale.set('1');
 
 	setContext('App', {
-		manifest,
+		pkg,
 		loading,
 		error,
 		preview,
 		config: {
-			name,
+			filename,
 			format,
 			scale,
 			output,
@@ -251,7 +251,7 @@
 	});
 </script>
 
-<h1 class="sr-only">figma2html</h1>
+<h1 class="sr-only">{name}</h1>
 
 <article class="flex h-screen flex-col flex-nowrap">
 	<div class="grid w-full flex-auto grid-cols-3 overflow-hidden bg-figma-bg text-figma-text">

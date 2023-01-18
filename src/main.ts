@@ -1,10 +1,10 @@
 import yaml from 'js-yaml';
 import slugify from 'slugify';
 
-import createSettingsBlock from './lib/generator/createSettingsBlock';
-// import { createGroupsFromFrames } from './lib/generator/group';
-import html from './lib/generator/html/wrapper';
-import log from './lib/utils/log';
+import createSettingsBlock from 'lib/generator/createSettingsBlock';
+// import { createGroupsFromFrames } from 'lib/generator/group';
+import html from 'lib/generator/html/wrapper';
+import log from 'lib/utils/log';
 
 /**
  * ignore invisible nodes. speeds up document traversal
@@ -27,7 +27,7 @@ const isFrameExportable = (frameName: string): boolean => !!frameName.match(/^#\
  */
 const defaults = {
 	config: {
-		name: slugify(figma.currentPage.name, { lower: true, strict: true }),
+		filename: slugify(figma.currentPage.name, { lower: true, strict: true }),
 		scale: '1',
 		format: 'PNG',
 		output: 'html',
@@ -338,7 +338,7 @@ const getFile = async (
 	variables: Variables
 ): Promise<HTMLFile> => {
 	return {
-		filename: config.name,
+		filename: config.filename,
 		output: config.output,
 		data: html({ config, assets, variables })
 	};
