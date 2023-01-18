@@ -1,20 +1,10 @@
 import yaml from 'js-yaml';
+import slugify from 'slugify';
 
 import createSettingsBlock from './lib/generator/createSettingsBlock';
 // import { createGroupsFromFrames } from './lib/generator/group';
 import html from './lib/generator/html/wrapper';
-import slugify from 'slugify';
 import log from './lib/utils/log';
-import type {
-	Asset,
-	Config,
-	Exportable,
-	HTMLFile,
-	PreviewSettings,
-	Variables,
-	Size,
-	Panels
-} from './types';
 
 /**
  * ignore invisible nodes. speeds up document traversal

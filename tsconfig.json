@@ -4,12 +4,7 @@
 		"target": "ES6",
 		"moduleResolution": "node",
 		"lib": ["ES2022", "dom"],
-		"typeRoots": [
-			"./node_modules/@types",
-			"./node_modules/@figma",
-			"./src/constants",
-			"./src/types"
-		],
+		"typeRoots": ["./node_modules/@types", "./node_modules/@figma", "./src/types"],
 		"paths": {
 			"*": ["./src/*"]
 		},

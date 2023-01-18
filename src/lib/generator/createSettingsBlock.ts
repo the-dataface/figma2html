@@ -1,5 +1,3 @@
-import type { Format, Scale, Size } from '../../types';
-
 export default (config: {
 	format: Format;
 	scale: Scale;

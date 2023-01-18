@@ -1,16 +1,4 @@
 <script lang="ts">
-	import type {
-		Asset,
-		Config,
-		Format,
-		Output,
-		HTMLFile,
-		Loading,
-		Scale,
-		Panels,
-		PostMessage
-	} from './types';
-
 	import { onMount, setContext } from 'svelte';
 	import JSZip from 'jszip/dist/jszip.min.js';
 

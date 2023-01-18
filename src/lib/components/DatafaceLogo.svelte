@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { Size } from 'types';
 	import { ExternalLinkIcon } from 'svelte-feather-icons';
 
 	let classes: string = '';
