@@ -1,63 +1,46 @@
-<script>
-    import { createEventDispatcher } from "svelte";
-    import { fade } from "svelte/transition";
+<script lang="ts">
+	import { createEventDispatcher } from 'svelte';
+	import { fly } from 'svelte/transition';
+	import { backOut } from 'svelte/easing';
 
-    const dispatch = createEventDispatcher();
+	export let label: string;
+	export let value: string;
+	export let checked: boolean;
+	export let id = 'checkbox--' + (Math.random() * 10000000).toFixed(0).toString();
 
-    export let checked;
-    export let label;
-    export let value;
-
-    let uniqueId = 'checkbox--' + ((Math.random() * 10000000).toFixed(0)).toString();
-
-    const toggle = () => {
-        checked = !checked;
-        dispatch("change");
-    }
+	const dispatch = createEventDispatcher();
 </script>
 
-<div class="container flex gap-2 relative items-center cursor-pointer" on:click={toggle}>
-    <input 
-        type="checkbox" 
-        id={uniqueId} 
-        bind:checked={checked} 
-        bind:value={value} 
-        onclick="this.blur();"
-        on:change
-        on:focus
-        on:blur
-        >
-    <div class="checkmark w-6 h-6 rounded-full pointer-events-none flex items-center justify-center transition-all"
-        class:checked={checked}
-    >
-        {#if checked}
-            <i class="fas fa-check text-xs" transition:fade />
-        {/if}
-    </div>
-    <label for={uniqueId} class="pointer-events-none">
-        <h5 class="m-0 text-xs">
-            {label}
-        </h5>
-    </label>
+<div class="container group flex gap-2 relative items-center cursor-pointer">
+	<input
+		class="opacity-0 cursor-pointer absolute inset-0 h-full w-full peer"
+		type="checkbox"
+		{id}
+		bind:value
+		bind:checked
+		on:change
+		on:focus
+		on:blur
+		on:toggle={() => {
+			checked = !checked;
+			dispatch('toggle');
+		}}
+	/>
+	<div
+		class="checkmark w-6 h-6 relative flex-shrink-0 flex-grow-0 rounded pointer-events-none flex items-center justify-center border border-solid border-figma-border bg-figma-bg-danger peer-checked:bg-figma-bg-success"
+	>
+		{#key checked}
+			<span
+				class="text-sm text-white font-bold absolute inset-0 h-full w-full flex items-center justify-center"
+				in:fly={{ y: checked ? -2 : 2, duration: 300, easing: backOut }}
+			>
+				{@html checked ? '&check;' : '&cross;'}
+			</span>
+		{/key}
+	</div>
+	<label for={id} class="select-none cursor-pointer flex-grow">
+		<h3 class="m-0 text-xs pointer-events-none">
+			{label}
+		</h3>
+	</label>
 </div>
-
-<style>
-    input {
-        opacity: 0;
-        cursor: pointer;
-        position: absolute;
-    }
-
-    .checkmark {
-        background-color: var(--figma-color-bg);
-        border: 1px solid var(--figma-color-border);
-    }
-
-    .container:hover .checkmark {
-        border: 1px solid var(--figma-color-border-strong);
-    }
-
-    .checkmark.checked {
-        background-color: var(--figma-color-bg-success);
-    }
-</style>

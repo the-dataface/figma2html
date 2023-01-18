@@ -1,60 +1,49 @@
-import yaml from 'js-yaml';
-
-export const convert = (prop, value) => {
-	if (prop === 'fontName') {
-		// add font family to array for google fonts
-		if (fontList.indexOf(value) < 0) fontList.push(value);
-
-		let family = value.family;
-		let style = value.style.includes('Italic') ? 'italic' : 'normal';
-
-		return `font-family: ${family}; font-style: ${style};`;
-	}
-
-	if (prop === 'fontWeight') return ` font-weight: ${value};`;
-
-	if (prop === 'fontSize') return ` font-size: ${value}px;`;
-
-	if (prop === 'textDecoration') return ` text-decoration: ${value.toLowerCase()};`;
-
-	if (prop === 'textCase')
-		return ` text-transform: ${value === 'ORIGINAL' ? 'none' : value.toLowerCase()};`;
-
-	if (prop === 'lineHeight')
-		return ` line-height: ${
-			value.unit === 'AUTO'
-				? 'normal'
-				: value.unit === 'PERCENT' && value.value > 0
-				? value.value / 100
-				: value.value + 'px'
-		};`;
-
-	if (prop === 'letterSpacing')
-		return ` letter-spacing: ${
-			value.unit === 'PERCENT' && value.value > 0 ? value.unit / 100 : value.value + 'px'
-		};`;
-
-	if (prop === 'fills' && value.length > 0)
-		return ` color: rgba(${value[0].color.r * 255}, ${value[0].color.g * 255}, ${
-			value[0].color.b * 255
-		}, ${value[0].opacity}); mix-blend-mode: ${value[0].blendMode.toLowerCase()};`;
-};
-
 export const fontList = [];
 
-export const styles = (segment, props) => {
-	let styleString = '',
-		stylesObject;
+// TODO: shouldn't this use our stringify function?
+export const styles = (segment: StyledTextSegment) => {
+	fontList.push(segment.fontName);
 
-	// convert each prop to a css string
-	props.forEach((prop) => {
-		if (segment[prop]) styleString += convert(prop, segment[prop]);
-	});
+	let color: string = undefined;
+	let mixBlendMode: string = undefined;
 
-	// convert the style string to an object
-	stylesObject = yaml.load(styleString.replaceAll('; ', '\n').replaceAll('undefined', ''));
+	if (segment.fills.length) {
+		const [fill] = segment.fills as SolidPaint[];
+		const [r, g, b] = [fill.color.r, fill.color.g, fill.color.b].map((color) =>
+			Math.round(color * 255)
+		);
+		color = `rgba(${r}, ${g}, ${b}, ${fill.opacity})`;
+		mixBlendMode = fill.blendMode.toLowerCase();
+	}
 
-	return { styleString, stylesObject };
+	const object = {
+		'font-family': segment.fontName.family,
+		'font-style': segment.fontName.style.includes('Italic') ? 'italic' : 'normal',
+		'font-weight': segment.fontWeight,
+		'font-size': segment.fontSize + 'px',
+		'text-decoration': segment.textDecoration.toLowerCase(),
+		'text-transform': segment.textCase === 'ORIGINAL' ? 'none' : segment.textCase.toLowerCase(),
+		'line-height':
+			segment.lineHeight.unit === 'AUTO'
+				? 'normal'
+				: segment.lineHeight.unit === 'PERCENT' && segment.lineHeight.value > 0
+				? segment.lineHeight.value / 100
+				: segment.lineHeight.value + 'px',
+		'letter-spacing':
+			segment.letterSpacing.unit === 'PERCENT' && segment.letterSpacing.value > 0
+				? segment.letterSpacing.value / 100
+				: segment.letterSpacing.value + 'px',
+		color,
+		'mix-blend-mode': mixBlendMode
+	};
+
+	return {
+		object,
+		string: Object.entries(object)
+			.filter((d) => d[0] && d[1])
+			.map(([key, value]) => `${key}: ${value};`)
+			.join(' ')
+	};
 };
 
-export default { convert, fontList, styles };
+export default { fontList, styles };

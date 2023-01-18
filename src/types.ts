@@ -1,29 +1,15 @@
-export type Extension =
-	| { value: 'PNG'; label: 'png'; selected: boolean }
-	| { value: 'JPG'; label: 'jpg'; selected: boolean }
-	| { value: 'SVG'; label: 'svg'; selected: boolean };
-export type FileType =
-	| { value: 'html'; label: 'html'; selected: boolean }
-	| { value: 'svelte'; label: 'svelte'; selected: boolean };
-export type Scale =
-	| { value: 1; label: '1x'; selected: boolean }
-	| { value: 2; label: '2x'; selected: boolean }
-	| { value: 4; label: '4x'; selected: boolean };
-
-export type Loading = boolean;
-
 export interface Config {
-	syntax: string;
+	name: string;
 	scale: Scale;
-	extension: Extension;
-	fileType: FileType;
+	format: Format;
+	output: Output;
 	includeResizer: boolean;
 	testingMode: boolean;
 	fluid: boolean;
 	maxWidth: number;
-	centerHtmlOutput: boolean;
+	centered: boolean;
 	imagePath: string;
-	altText: string;
+	alt: string;
 	applyStyleNames: boolean;
 	applyHtags: boolean;
 	styleTextSegments: boolean;
@@ -31,13 +17,29 @@ export interface Config {
 	customScript: string;
 }
 
-export interface Variable {
+export type Loading = boolean;
+
+export type Scale = '1' | '2' | '4';
+
+export type Format = 'JPG' | 'PNG' | 'SVG';
+
+export type Output = 'html' | 'svelte';
+
+export interface Variables {
 	[key: string]: string;
 }
 
 export interface Size {
-	width: number;
-	height: number;
+	w: number;
+	h: number;
+}
+
+export interface Panels {
+	file: boolean;
+	images: boolean;
+	page: boolean;
+	text: boolean;
+	preview: boolean;
 }
 
 export interface Exportable {
@@ -48,7 +50,7 @@ export interface Exportable {
 
 export interface Asset {
 	filename: string;
-	extension: Extension;
+	format: Format;
 	size?: Size;
 	data: Uint8Array;
 	url?: string;
@@ -57,7 +59,7 @@ export interface Asset {
 
 export interface HTMLFile {
 	filename: string;
-	extension: FileType;
+	output: Output;
 	data: string;
 	url?: string;
 }
@@ -67,12 +69,17 @@ export interface PreviewSettings {
 	thumbSize?: Size;
 }
 
-export interface Views {
-	file: boolean;
-	images: boolean;
-	page: boolean;
-	text: boolean;
-	preview: boolean;
+export interface PostMessage {
+	type:
+		| 'init'
+		| 'load'
+		| 'config'
+		| 'export'
+		| 'reset-settings'
+		| 'save-settings'
+		| 'load-settings'
+		| 'write-variables';
+	config?: Config | null;
 }
 
 export default {};

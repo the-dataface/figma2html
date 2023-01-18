@@ -1,30 +1,22 @@
-import { Extension, FileType, Scale, Size } from '../../types';
+import type { Format, Scale, Size } from '../../types';
 
 export default (config: {
-	extension: Extension;
+	format: Format;
 	scale: Scale;
 	srcSize: Size;
 }): { settings: ExportSettings; destSize?: Size } => {
-	const { extension, scale, srcSize } = config;
+	const { format, scale, srcSize } = config;
 
-	if (scale && extension.value !== 'SVG') {
-		const value = scale.value;
+	// SVGs scale natively, hence the S!
+	if (scale && format !== 'SVG') {
 		return {
-			settings: {
-				format: extension.value,
-				constraint: { type: 'SCALE', value }
-			},
-			destSize: {
-				width: srcSize.width * value,
-				height: srcSize.height * value
-			}
-		};
-	} else {
-		return {
-			settings: {
-				format: extension.value
-			},
-			destSize: srcSize
+			settings: { format: format, constraint: { type: 'SCALE', value: +scale } },
+			destSize: { w: srcSize.w * +scale, h: srcSize.h * +scale }
 		};
 	}
+
+	return {
+		settings: { format: format },
+		destSize: srcSize
+	};
 };

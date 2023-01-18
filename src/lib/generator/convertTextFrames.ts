@@ -1,68 +1,79 @@
+import slugify from 'slugify';
 import styleProps from 'lib/generator/styleProps';
-import dashify from 'lib/utils/dashify';
 import trim from 'lib/utils/trim';
 
-export default (textFrames, frameWidth, frameHeight) => {
-	const props = [
-		'fontName',
-		'fontWeight',
-		'fontSize',
-		'textDecoration',
-		'textCase',
-		'lineHeight',
-		'letterSpacing',
-		'fills',
-		'textStyleId',
-		'fillStyleId',
-		'listOptions',
-		'indentation',
-		'hyperlink'
-	];
+// https://www.figma.com/plugin-docs/api/properties/TextNode-getstyledtextsegments/#fields
+const fields = [
+	'fontName',
+	'fontWeight',
+	'fontSize',
+	'textDecoration',
+	'textCase',
+	'lineHeight',
+	'letterSpacing',
+	'fills',
+	'textStyleId',
+	'fillStyleId',
+	'listOptions',
+	'indentation',
+	'hyperlink'
+];
 
+const hTag = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
+
+export default (textFrames, frameWidth: number, frameHeight: number) => {
 	// return array of text frame style + class data
-	return textFrames.map((textFrame, i) => {
-		let elClass = ``;
-		let elId = `f2h-text-${i}`;
-		let customClasses;
-		let textSegments = [];
-		let customAttributes = [];
-		let x, y;
-		let translateX, translateY;
+	return textFrames.map((textFrame, i: number) => {
+		const textSegments = [];
+		const customAttributes = [];
 
-		let segments = textFrame.getStyledTextSegments(props);
-		const styleId = textFrame.textStyleId;
-		const styleObject = figma.getStyleById(styleId);
-		// const styleObject = false;
+		let elClass: string = ``;
+		let elId: string = `f2h-text-${i}`;
+		let customClasses: string;
+		let x: number = 0;
+		let y: number = 0;
+		let translateX: number = 0;
+		let translateY: number = 0;
+
+		// check all fields
+		const segments = textFrame.getStyledTextSegments(fields) as StyledTextSegment[];
+
+		const styleid = figma.getStyleById(textFrame.textStyleId) as TextStyle;
 
 		segments.forEach((seg, i) => {
 			// get styles object from included props
-			const stylesObject = styleProps.styles(seg, props).stylesObject,
-				styleString = styleProps.styles(seg, props).styleString;
+			const styles = styleProps.styles(seg);
+
+			// fields to check against the root. all of these would need to match original
+			const baseStyleFields = [
+				'font-family',
+				'font-size',
+				'letter-spacing',
+				'color',
+				'line-height',
+				'mix-blend-mode',
+				'text-decoration',
+				'text-transform'
+			];
 
 			// is this segment's style the same as the first segment's style, except for font weight and font style?
 			const isBaseStyle =
-				i === 0
-					? true
-					: stylesObject['font-family'] === textSegments[0].stylesObject['font-family'] &&
-					  stylesObject['font-size'] === textSegments[0].stylesObject['font-size'] &&
-					  stylesObject['letter-spacing'] === textSegments[0].stylesObject['letter-spacing'] &&
-					  stylesObject['color'] === textSegments[0].stylesObject['color'] &&
-					  stylesObject['line-height'] === textSegments[0].stylesObject['line-height'] &&
-					  stylesObject['mix-blend-mode'] === textSegments[0].stylesObject['mix-blend-mode'] &&
-					  stylesObject['text-decoration'] === textSegments[0].stylesObject['text-decoration'] &&
-					  stylesObject['text-transform'] === textSegments[0].stylesObject['text-transform'];
+				!i ||
+				!new Set(
+					baseStyleFields.map((key) => styles.object[key] === textSegments[0].styles.object[key])
+				).has(false);
 
 			// is this segment's font-weight 700 (bold) (only if isBaseStyle is false)?
-			const isBold = isBaseStyle && stylesObject['font-weight'] === 700;
+			const isBold = isBaseStyle && styles.object['font-weight'] === 700;
 
 			// is this segment's font-weight neither 400 or 700 (only if isBaseStyle is false)?
 			const isOtherWeight =
-				isBaseStyle && stylesObject['font-weight'] !== 400 && stylesObject['font-weight'] !== 700
-					? stylesObject['font-weight']
+				isBaseStyle && styles.object['font-weight'] !== 400 && styles.object['font-weight'] !== 700
+					? styles.object['font-weight']
 					: false;
 
 			// is this segment's font-style italic (only if isBaseStyle is false)?
-			const isItalic = isBaseStyle && stylesObject['font-style'] === 'italic';
+			const isItalic = isBaseStyle && styles.object['font-style'] === 'italic';
 
 			textSegments.push({
 				characters: seg.characters,
@@ -70,8 +81,7 @@ export default (textFrames, frameWidth, frameHeight) => {
 				end: seg.end,
 				hyperlink: seg.hyperlink,
 				listOptions: seg.listOptions,
-				stylesObject,
-				styleString,
+				styles,
 				isBaseStyle,
 				isBold,
 				isOtherWeight,
@@ -79,60 +89,69 @@ export default (textFrames, frameWidth, frameHeight) => {
 			});
 		});
 
-		if (styleId && typeof styleId !== 'symbol' && styleObject)
-			elClass += ` ${dashify(styleObject.name.split('/')[styleObject.name.split('/').length - 1])}`;
+		if (styleid?.name && typeof styleid.name !== 'symbol')
+			elClass += ` ${slugify(styleid.name.split('/').slice(-1)[0], {
+				lower: true,
+				strict: true
+			})}`;
 
 		// get base style and change font-weight to 400 and style to normal
-		const tag = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(trim(elClass)) ? trim(elClass) : 'p';
+		const tag = hTag.has(trim(elClass)) ? trim(elClass) : 'p';
 
 		const baseStyle = {
 			tag,
-			style: textSegments[0].styleString
+			style: textSegments[0].styles.string
 				.replace('font-weight: 700', 'font-weight: 400')
 				.replace('font-style: italic', 'font-style: normal')
 		};
 
 		// turn layer name into custom attributes if it starts with [f2h]
 		if (textFrame.name.startsWith('[f2h]')) {
-			let layerName = textFrame.name.replace('[f2h]', '');
-			let attributes = layerName.split(';');
-
+			const layerName = textFrame.name.replace('[f2h]', '');
+			const attributes = layerName.split(';');
 			attributes.forEach((attr) => {
+				const [key, value] = attr.split(':');
 				customAttributes.push({
-					key: attr.split(':')[0],
-					value: attr
-						.split(':')[1]
-						.split(',')
-						.map((v) => v.trim())
+					key: key,
+					value: value.split(',').map((v: string) => v.trim())
 				});
 			});
 		}
 
 		// get x positioning based on horizontal alignment
-		if (textFrame.textAlignHorizontal === 'LEFT') {
-			x = (textFrame.x / frameWidth) * 100;
-			translateX = 0;
-		} else if (textFrame.textAlignHorizontal === 'CENTER') {
-			x = ((textFrame.x + textFrame.width / 2) / frameWidth) * 100;
-			translateX = -50;
-		} else if (textFrame.textAlignHorizontal === 'RIGHT') {
-			x = ((textFrame.x + textFrame.width) / frameWidth) * 100;
-			translateX = -100;
-		} else if (textFrame.textAlignHorizontal === 'JUSTIFIED') {
-			x = (textFrame.x / frameWidth) * 100;
-			translateX = 0;
+		switch (textFrame.textAlignHorizontal) {
+			case 'LEFT':
+				x = (textFrame.x / frameWidth) * 100;
+				translateX = 0;
+				break;
+			case 'CENTER':
+				x = ((textFrame.x + textFrame.width / 2) / frameWidth) * 100;
+				translateX = -50;
+				break;
+			case 'RIGHT':
+				x = ((textFrame.x + textFrame.width) / frameWidth) * 100;
+				translateX = -100;
+				break;
+			case 'JUSTIFIED':
+				x = (textFrame.x / frameWidth) * 100;
+				translateX = 0;
+				break;
 		}
 
 		// get y positioning based on vertical alignment
-		if (textFrame.textAlignVertical === 'TOP') {
-			y = (textFrame.y / frameHeight) * 100;
-			translateY = 0;
-		} else if (textFrame.textAlignVertical === 'CENTER') {
-			y = ((textFrame.y + textFrame.height / 2) / frameHeight) * 100;
-			translateY = -50;
-		} else if (textFrame.textAlignVertical === 'BOTTOM') {
-			y = ((textFrame.y + textFrame.height) / frameHeight) * 100;
-			translateY = -100;
+		switch (textFrame.textAlignVertical) {
+			case 'TOP':
+				y = (textFrame.y / frameHeight) * 100;
+				translateY = 0;
+				break;
+			case 'CENTER':
+				y = ((textFrame.y + textFrame.height / 2) / frameHeight) * 100;
+				translateY = -50;
+				break;
+			case 'BOTTOM':
+				y = ((textFrame.y + textFrame.height) / frameHeight) * 100;
+				translateY = -100;
+				break;
 		}
 
 		return {

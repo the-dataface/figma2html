@@ -12,7 +12,7 @@ export const createGroupFromFrame = (frameNode: FrameNode): GroupNode | null => 
 };
 
 export const createGroupsFromFrames = (
-	items: ReadonlyArray<SceneNode> | PageNode[]
+	items: ReadonlyArray<FrameNode> | PageNode[]
 ): GroupNode[] => {
 	const groups: GroupNode[] = [];
 	if (!items.length) return groups;

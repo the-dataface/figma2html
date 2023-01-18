@@ -1,41 +1,14 @@
-<script>
-  import { createEventDispatcher } from "svelte";
+<script lang="ts">
+	export let id: string = undefined;
 
-  const dispatch = createEventDispatcher();
+	let classes = '';
+	export { classes as class };
 </script>
 
-<div on:click={() => dispatch("click")}>
-  <slot />
-</div>
-
-<style>
-  div {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    border: none;
-    background: none;
-    color: var(--figma-color-text-secondary);
-    cursor: pointer;
-    font-size: 11px;
-    white-space: nowrap;
-  }
-
-  div p {
-    margin-left: -4px;
-  }
-
-  div:hover {
-    color: var(--figma-color-text) !important;
-    border: none !important;
-    background: none !important;
-  }
-
-  div svg {
-    fill: var(--figma-color-text);
-  }
-
-  div:hover svg {
-    fill: var(--figma-color-text-secondary);
-  }
-</style>
+<button
+	{id}
+	class="flex items-center justify-center py-4 px-[11px] cursor-pointer h-4 transition-all rounded-full bg-figma-bg hover:bg-figma-bg-secondary {classes}"
+	on:click
+>
+	<slot />
+</button>

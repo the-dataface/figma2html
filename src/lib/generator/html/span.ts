@@ -1,3 +1,4 @@
+// TODO: type these parametrs
 export default (segment, variables, styleTextSegments) => {
 	let el = ``;
 	let characters = segment.characters;
@@ -14,7 +15,7 @@ export default (segment, variables, styleTextSegments) => {
 	if (segment.hyperlink) el += `<a href="${segment.hyperlink.value}" target="_blank">`;
 
 	// if segment.isBaseStyle is false, then add a span with inline styles
-	if (!segment.isBaseStyle && styleTextSegments) el += `<span style="${segment.styleString}">`;
+	if (!segment.isBaseStyle && styleTextSegments) el += `<span style="${segment.styles.string}">`;
 
 	// if segment.isOtherWeight is not false, then add a span with inline styles
 	if (segment.isOtherWeight && styleTextSegments)

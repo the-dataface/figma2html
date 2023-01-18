@@ -58,28 +58,29 @@ export default [
 					link: null,
 					script: null
 				},
-				meta: [{ charset: 'utf-8' }],
-				template: ({ attributes, bundle, files, publicPath, title, meta }) => {
+				meta: [
+					{ charset: 'utf-8' },
+					{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
+					{ name: 'description', content: 'Export Figma frames to responsive HTML and CSS' }
+				],
+				template: ({ attributes, files, publicPath, title, meta }) => {
 					// inline all script to fit figma's one-file rule
 					const scripts = (files.js || []).map(({ code }) => `<script>${code}</script>`).join('\n');
 
 					const links = (files.css || [])
-						.map(({ fileName }) => {
-							const attrs = makeHtmlAttributes(attributes.link);
-							return `<link href="${publicPath}${fileName}" rel="stylesheet"${attrs}>`;
-						})
+						.map(
+							({ fileName }) =>
+								`<link href="${publicPath}${fileName}" rel="stylesheet"${makeHtmlAttributes(
+									attributes.link
+								)}>`
+						)
 						.join('\n');
 
-					const metas = meta
-						.map((input) => {
-							const attrs = makeHtmlAttributes(input);
-							return `<meta${attrs}>`;
-						})
-						.join('\n');
+					const metas = meta.map((input) => `<meta${makeHtmlAttributes(input)}>`).join('\n');
 
 					const html = makeHtmlAttributes(attributes.html);
 
-					return `<!DOCTYPE html><html${html}><head>${metas}<title>${title}</title>${links}</head><body>${scripts}</body></html>`;
+					return `<!DOCTYPE html><html${html}><head><title>${title}</title>${metas}${links}</head><body><div id='app'></div>${scripts}</body></html>`;
 				}
 			}),
 			!production && serve(),
@@ -100,6 +101,7 @@ export default [
 		},
 		plugins: [
 			typescript(),
+			resolve(),
 			commonjs(),
 			babel({ babelHelpers: 'bundled' }),
 			json(),

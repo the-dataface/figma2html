@@ -1,25 +1,24 @@
 <script>
-  import PreviewCard from "../Layout/PreviewCard.svelte";
-  import Overlay from "../Overlay.svelte";
+	import { getContext } from 'svelte';
+	import { FileTextIcon } from 'svelte-feather-icons';
+	import PreviewCard from '../Layout/PreviewCard.svelte';
+	// import Overlay from '../Overlay.svelte';
 
-  export let exampleAssets = [];
-  export let exampleFile = undefined;
-  export let scale = undefined;
-  export let showLoader;
+	const { loading, preview } = getContext('App');
 </script>
 
-<div class="w-full flex flex-wrap gap-2 relative">
-    {#if showLoader === true || showLoader === undefined}
-        <Overlay />
-    {/if}
-    {#if exampleAssets.length > 0}
-        {#if exampleFile}
-            <PreviewCard icon="file" title={exampleFile.filename} extension={exampleFile.extension.value} />
-        {/if}
-    {/if}
-    {#each exampleAssets as asset}
-        <PreviewCard title={asset.filename} extension={asset.extension.value} size={asset.size} scale={scale.value} src={asset.url} />
-    {/each}
+<div class="w-full grid md:grid-cols-2 gap-2 relative">
+	<!-- {#if $loading}
+		<Overlay />
+	{/if} -->
+	{#if $preview.assets.length > 0 && $preview.file}
+		<PreviewCard title={$preview.file.filename} format={$preview.file.output.toLowerCase()}>
+			<svelte:fragment slot="icon">
+				<FileTextIcon size="32" class="text-figma-text" />
+			</svelte:fragment>
+		</PreviewCard>
+	{/if}
+	{#each $preview.assets as asset}
+		<PreviewCard title={asset.filename} format={asset.format} size={asset.size} src={asset.url} />
+	{/each}
 </div>
-
-<style></style>
