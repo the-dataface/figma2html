@@ -61,10 +61,7 @@ export default ({ node, filename, widthRange, alt, config, variables }) => {
 		})
 	})}></div>`;
 
-	frameContent.html += `\n\t\t<picture>\n\t\t\t<source ${stringify.attrs({
-		srcset: filename + '.' + format,
-		type: 'image/' + format
-	})}>\n\t\t\t<img ${stringify.attrs({
+	frameContent.html += `\n\t\t<picture>\n\t\t\t<img ${stringify.attrs({
 		id: 'img-' + id,
 		class: 'f2h-img',
 		alt: alt,
