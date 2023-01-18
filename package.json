@@ -3,7 +3,9 @@
 	"description": "Export Figma frames as images with text elements rendered as HTML",
 	"scripts": {
 		"dev": "rollup -c -w",
-		"build": "rollup -c"
+		"build": "rollup -c",
+		"format": "prettier --write .",
+		"lint": "prettier --check . && eslint . --fix"
 	},
 	"author": {
 		"name": "Sam Vickars",
