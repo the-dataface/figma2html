@@ -3,9 +3,7 @@
 	"description": "Export Figma frames as images with text elements rendered as HTML",
 	"scripts": {
 		"dev": "rollup -c -w",
-		"build": "rollup -c",
-		"format": "prettier --write .",
-		"lint": "prettier --check . && eslint . --fix"
+		"build": "rollup -c"
 	},
 	"author": {
 		"name": "Sam Vickars",
@@ -44,6 +42,7 @@
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte3": "^4.0.0",
 		"figma-plugin-ds": "1.0.1",
+		"lefthook": "^1.2.7",
 		"postcss": "^8.4.20",
 		"postcss-load-config": "^4.0.1",
 		"prettier": "^2.8.3",

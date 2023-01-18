@@ -24,8 +24,6 @@
 	import Text from './lib/components/Controls/Text.svelte';
 	import { writable } from 'svelte/store';
 
-	// GlobalCSS;
-
 	const error = writable({ message: undefined, timeout: undefined } as {
 		message: string;
 		timeout: number;
