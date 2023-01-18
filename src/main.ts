@@ -556,8 +556,6 @@ figma.ui.onmessage = async (message) => {
 			panels = await Stored.panels.get();
 			size = await Stored.size.get();
 
-			console.log({ config });
-
 			figma.ui.resize(size.w, size.h);
 
 			figma.ui.postMessage({ type: 'load', config, variables, panels, size });
