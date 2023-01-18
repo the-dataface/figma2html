@@ -1,6 +1,6 @@
 import trim from 'lib/utils/trim';
 
-export default (containerId, output) => {
+export default (containerId: string) => {
 	// The resizer function is embedded in the HTML page -- external variables must
 	// be passed in.
 	const resizer = (containerId) => {

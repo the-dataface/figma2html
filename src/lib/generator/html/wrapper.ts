@@ -49,8 +49,7 @@ export default ({ config, assets, variables }) => {
 				css: frameCSS
 			})}</style>`;
 			code += `<div id="${containerID}" class="figma2html">${assetsHTML}</div>`;
-			if (config.includeResizer)
-				code += `<script>${js.resizer(containerID, config.output)}</script>`;
+			if (config.includeResizer) code += `<script>${js.resizer(containerID)}</script>`;
 			if (config.includeGoogleFonts && fontList.length > 0)
 				code += `<script>${js.fonts(fontList)}</script>`;
 			if (config.customScript) code += `<script>${config.customScript}<script>`;
@@ -65,7 +64,7 @@ export default ({ config, assets, variables }) => {
 			) {
 				code += `<script>import { onMount } from "svelte";`;
 				code += `onMount(() => {`;
-				if (config.includeResizer) code += js.resizer(containerID, config.output);
+				if (config.includeResizer) code += js.resizer(containerID);
 				if (config.includeGoogleFonts && fontList.length) code += js.fonts(fontList);
 				if (config.customScript) code += config.customScript;
 				code += `})</script>`;
