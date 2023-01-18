@@ -7,10 +7,10 @@ pre-commit:
   commands:
     prettier:
       glob: '*'
-      run: npx prettier --ignore-unknown --write {staged_files} && git add {staged_files}
+      run: npx prettier --ignore-unknown --write {staged_files}
 
 pre-push:
   commands:
     lint:
       glob: '*'
-      run: npx eslint --fix {staged_files} && git add {staged_files}
+      run: npx eslint --fix {push_files} && git add {push_files}
