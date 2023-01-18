@@ -47,11 +47,10 @@ const defaults = {
 	size: { w: 960, h: 500 },
 	variables: { hed: 'figma2html' },
 	panels: {
-		file: true,
+		file: false,
 		images: false,
 		page: false,
-		text: false,
-		preview: true
+		text: false
 	}
 };
 

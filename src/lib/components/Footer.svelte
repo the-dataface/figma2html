@@ -7,13 +7,14 @@
 		HelpCircleIcon,
 		AlertCircleIcon,
 		XIcon,
-		InfoIcon
+		InfoIcon,
+		GitMergeIcon
 	} from 'svelte-feather-icons';
 	import Button from './Inputs/Button.svelte';
 	import DatafaceLogo from './DatafaceLogo.svelte';
 	import WindowResize from './WindowResize.svelte';
 
-	const { preview } = getContext('App');
+	const { preview, manifest } = getContext('App');
 
 	const dispatch = createEventDispatcher();
 
@@ -69,7 +70,7 @@
 		<div
 			class="menu-pane fixed right-2 bottom-14 flex flex-col rounded-lg border border-solid border-figma-border bg-figma-bg p-1"
 		>
-			{#each [{ href: 'https://github.com/the-dataface/figma2html', icon: HelpCircleIcon, text: 'About' }, { href: 'https://github.com/the-dataface/figma2html/issues', icon: AlertCircleIcon, text: 'Report Issue' }] as { href, icon, text }}
+			{#each [{ href: 'https://github.com/the-dataface/figma2html/blob/main/README.md', icon: HelpCircleIcon, text: 'About' }, { href: 'https://github.com/the-dataface/figma2html/issues/new/choose', icon: AlertCircleIcon, text: 'Report Issue' }, { href: 'https://github.com/the-dataface/figma2html/blob/main/CHANGELOG.md', icon: GitMergeIcon, text: `v${manifest.api}` }] as { href, icon, text }}
 				<a
 					class="flex items-center p-2 text-sm text-figma-text hover:text-figma-text-secondary active:text-figma-text-tertiary"
 					{href}

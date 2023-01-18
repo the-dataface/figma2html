@@ -12,6 +12,9 @@
 	import Text from './lib/components/Controls/Text.svelte';
 	import { writable } from 'svelte/store';
 
+	// the figma manifest. useful for versioning and meta
+	import manifest from '../manifest.json';
+
 	const error = writable({ message: undefined, timeout: undefined } as {
 		message: string;
 		timeout: number;
@@ -21,7 +24,7 @@
 	const loading = writable(false as Loading);
 
 	// PANELS OPEN
-	let panels = {} as Panels;
+	const panels = writable({} as Panels);
 
 	// CONFIG
 	const output = writable('html' as Output);
@@ -102,7 +105,7 @@
 		switch (message.type) {
 			case 'load': {
 				const config: Config = message.config;
-				panels = message.panels;
+				panels.set(message.panels);
 				variables.set(Object.keys(message.variables).length > 0);
 				receiveConfig(config);
 				break;
@@ -153,7 +156,7 @@
 	const onSelectExport = () => {
 		if (!$alt || $alt === '') {
 			setErrorMessage('Please enter alt text');
-			panels.images = true;
+			$panels.images = true;
 			return;
 		}
 
@@ -178,7 +181,7 @@
 		parent.postMessage({ pluginMessage: { type: 'write-variables' } }, '*');
 
 	const onTogglePanel = () =>
-		parent.postMessage({ pluginMessage: { type: 'panels', panels: panels } }, '*');
+		parent.postMessage({ pluginMessage: { type: 'panels', panels: $panels } }, '*');
 
 	const setErrorMessage = (message: string) => {
 		clearTimeout($error.timeout);
@@ -223,6 +226,7 @@
 	$: if ($format === 'SVG') scale.set('1');
 
 	setContext('App', {
+		manifest,
 		loading,
 		error,
 		preview,
@@ -254,20 +258,20 @@
 		<div
 			class="col-span-1 flex flex-col overflow-y-scroll border-r border-solid border-figma-border"
 		>
-			{#if panels}
-				<Panel title="File settings" open={panels.file} on:toggle={onTogglePanel}>
+			{#if $panels}
+				<Panel title="File settings" open={$panels.file} on:toggle={onTogglePanel}>
 					<File on:change={onChangeConfig} on:error={() => setErrorMessage($error.message)} />
 				</Panel>
-				<Panel title="Image settings" bind:open={panels.images} on:toggle={onTogglePanel}>
+				<Panel title="Image settings" bind:open={$panels.images} on:toggle={onTogglePanel}>
 					<Images on:change={onChangeConfig} />
 				</Panel>
-				<Panel title="Page settings" bind:open={panels.page} on:toggle={onTogglePanel}>
+				<Panel title="Page settings" bind:open={$panels.page} on:toggle={onTogglePanel}>
 					<Page on:change={onChangeConfig} />
 				</Panel>
 				<Panel
 					border={false}
 					title="Text settings"
-					bind:open={panels.text}
+					bind:open={$panels.text}
 					on:togglePanel={onTogglePanel}
 				>
 					<Text on:change={onChangeConfig} on:write-variables={onWriteVariables} />
@@ -276,9 +280,7 @@
 		</div>
 
 		<div class="col-span-2 col-start-2 overflow-y-scroll">
-			<Panel title="Output" bind:open={panels.preview} on:togglePanel={onTogglePanel}>
-				<Preview />
-			</Panel>
+			<Preview />
 		</div>
 	</div>
 
