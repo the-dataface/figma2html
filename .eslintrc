@@ -4,11 +4,7 @@
 	"parser": "@typescript-eslint/parser",
 	"extends": ["eslint:recommended", "prettier"],
 	"plugins": ["svelte3", "@typescript-eslint"],
-	"ignorePatterns": ["**/*.d.ts"],
-	"overrides": [
-		{ "files": ["*.svelte"], "processor": "svelte3/svelte3" },
-		{ "files": ["**/*.{ts,tsx,js,jsx}"] }
-	],
+	"overrides": [{ "files": ["*.svelte"], "processor": "svelte3/svelte3" }],
 	"parserOptions": {
 		"sourceType": "module",
 		"ecmaVersion": 2020

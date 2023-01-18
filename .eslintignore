@@ -1,0 +1,7 @@
+.github
+.vscode
+node_modules
+dist
+build
+coverage
+!**/*.{ts,tsx,js,jsx,svelte}
