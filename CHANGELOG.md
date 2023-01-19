@@ -4,4 +4,4 @@
 
 ### Major changes
 
-- Initial beta release
+- Initial beta release ([#84](https://github.com/the-dataface/figma2html/pull/84))
