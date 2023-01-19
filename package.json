@@ -22,7 +22,8 @@
 	"scripts": {
 		"dev": "rollup -c -w",
 		"build": "rollup -c && rm ./build/bundle.js",
-		"ci:version": "changeset version"
+		"ci:version": "changeset version",
+		"ci:publish": "npm run build && changeset publish && git push --folow-tags"
 	},
 	"author": {
 		"name": "Sam Vickars",
