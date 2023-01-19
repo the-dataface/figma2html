@@ -1,3 +1,7 @@
-# 1
+# figma2html
 
-- First release
+## 1.0.0-beta
+
+### Major changes
+
+- Initial beta release

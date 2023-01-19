@@ -1,6 +1,7 @@
 {
 	"name": "figma2html",
-	"version": "1.0.0-next",
+	"version": "1.0.0-beta",
+	"private": true,
 	"description": "Export Figma frames as images with text elements rendered as HTML",
 	"homepage": "https://www.github.com/the-dataface/figma2html",
 	"repository": {
@@ -20,7 +21,8 @@
 	],
 	"scripts": {
 		"dev": "rollup -c -w",
-		"build": "rollup -c && rm ./build/bundle.js"
+		"build": "rollup -c && rm ./build/bundle.js",
+		"ci:version": "changeset version"
 	},
 	"author": {
 		"name": "Sam Vickars",
@@ -38,6 +40,7 @@
 		}
 	],
 	"devDependencies": {
+		"@changesets/cli": "^2.26.0",
 		"@figma/plugin-typings": "1.57.1",
 		"@rollup/plugin-alias": "^4.0.2",
 		"@rollup/plugin-babel": "^6.0.3",
@@ -49,6 +52,7 @@
 		"@rollup/plugin-node-resolve": "^15.0.1",
 		"@rollup/plugin-terser": "^0.2.1",
 		"@rollup/plugin-typescript": "10.0.1",
+		"@svitejs/changesets-changelog-github-compact": "^1.1.0",
 		"@typescript-eslint/eslint-plugin": "^5.48.2",
 		"@typescript-eslint/parser": "^5.48.2",
 		"autoprefixer": "^10.4.13",

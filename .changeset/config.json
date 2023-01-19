@@ -1,0 +1,15 @@
+{
+	"$schema": "https://unpkg.com/@changesets/config@1.5.0/schema.json",
+	"changelog": [
+		"@svitejs/changesets-changelog-github-compact",
+		{ "repo": "the-dataface/figma2html" }
+	],
+	"commit": false,
+	"fixed": [],
+	"linked": [],
+	"access": "restricted",
+	"privatePackages": { "version": true, "tag": true },
+	"baseBranch": "main",
+	"updateInternalDependencies": "patch",
+	"ignore": []
+}
