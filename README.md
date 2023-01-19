@@ -88,7 +88,7 @@ This replacement occurs on the exported files and not on Figma itself, leaving F
 
 ## Contributing + Feedback
 
-We welcome feedback, bug reports and feature requests in the form of [Issues](https://github.com/the-dataface/figma2html/issues) or [PRs](https://www.github.com/the-dataface/figma2html/pulls). Alternatively, comments can be left on the Figma plugin community pae
+We welcome feedback, bug reports and feature requests in the form of [Issues](https://github.com/the-dataface/figma2html/issues) or [PRs](https://www.github.com/the-dataface/figma2html/pulls). Alternatively, comments can be left on the Figma plugin community page.
 
 Further information on contributing can be found in [CONTRIBUTING.md](https://www.github.com/the-dataface/figma2html/blob/main/CONTRIBUTING.md).
 
