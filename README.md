@@ -1,8 +1,10 @@
 ![figma2html in action](/src/img/coverArt.png)
 
-# figma2html
+# [figma2html](https://www.figma.com/community/plugin/1109185297790825980/figma2html)
 
-Export Figma frames to responsive HTML and CSS. A Figma version of [ai2html](http://ai2html.org), with additional features. Created by [The DataFace](https://www.thedataface.com).
+Export Figma frames to responsive HTML and CSS. A Figma version of [ai2html](http://ai2html.org), with additional features. Created by [The DataFace](https://www.thedataface.com). 
+
+[Install the plugin](https://www.figma.com/community/plugin/1109185297790825980/figma2html) on Figma.
 
 ## Table of Contents
 
