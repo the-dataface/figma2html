@@ -71,7 +71,7 @@ export default ({ node, filename, widthRange, alt, config, variables }) => {
 		draggable: 'false',
 		decoding: 'async',
 		width: width.toFixed(2),
-		height: height.toFixed(2)
+		height: !config.fluid ? height.toFixed(2) : 'null'
 	})}/>\n\t\t</picture>\n`;
 
 	if (textData) {
