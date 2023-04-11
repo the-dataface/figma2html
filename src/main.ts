@@ -507,7 +507,7 @@ figma.ui.onmessage = async (message) => {
 			figma.ui.resize(size.w, size.h);
 
 			config = await Stored.config.get();
-			Stored.config.write(config);
+			// Stored.config.write(config);
 
 			variables = await Stored.variables.get();
 			panels = await Stored.panels.get();
