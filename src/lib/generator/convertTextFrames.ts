@@ -51,9 +51,11 @@ export default (textFrames, frameWidth: number, frameHeight: number) => {
 		// check all fields
 		const segments = textFrame.getStyledTextSegments(fields) as StyledTextSegment[];
 
-		const styleid = figma?.getStyleById(
-			typeof textFrame.textStyleId !== 'symbol' && textFrame.textStyleId
-		) as TextStyle;
+		let styleid: TextStyle;
+
+		if (typeof textFrame.textStyleId !== 'symbol' && textFrame.textStyleId) {
+			styleid = figma?.getStyleById(textFrame.textStyleId) as TextStyle;
+		}
 
 		// get base style and change font-weight to 400 and style to normal
 		const tag = hTag.has(trim(elClass)) ? trim(elClass) : 'p';
