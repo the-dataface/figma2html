@@ -13,4 +13,4 @@ pre-push:
   commands:
     lint:
       glob: '*'
-      run: npx eslint --fix {push_files} && git add {push_files}
+      run: npx eslint --fix {push_files} --ignore-pattern "**/*.md" && git add {push_files}
