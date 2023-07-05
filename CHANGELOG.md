@@ -1,6 +1,6 @@
 # figma2html
 
-## 1.0.1
+## 1.0.1-beta
 
 ### Patch Changes
 
