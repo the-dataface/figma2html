@@ -88,7 +88,7 @@ export default ({ node, filename, widthRange, alt, config, variables }) => {
 
 		// add pStyle to css
 		if (config.styleTextSegments)
-			if (pStyle)
+			if (pStyle?.style)
 				frameContent.css += `\n\t#${id} ${pStyle.tag} { ${pStyle.style.replaceAll(
 					'undefined',
 					''

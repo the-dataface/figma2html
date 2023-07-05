@@ -1,4 +1,5 @@
 import slugify from 'slugify';
+
 import styleProps from 'lib/generator/styleProps';
 import trim from 'lib/utils/trim';
 
@@ -17,6 +18,18 @@ const fields = [
 	'listOptions',
 	'indentation',
 	'hyperlink'
+];
+
+// fields to check against the root. all of these would need to match original
+const baseStyleFields = [
+	'font-family',
+	'font-size',
+	'letter-spacing',
+	'color',
+	'line-height',
+	'mix-blend-mode',
+	'text-decoration',
+	'text-transform'
 ];
 
 const hTag = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
@@ -38,29 +51,31 @@ export default (textFrames, frameWidth: number, frameHeight: number) => {
 		// check all fields
 		const segments = textFrame.getStyledTextSegments(fields) as StyledTextSegment[];
 
-		const styleid = figma.getStyleById(textFrame.textStyleId) as TextStyle;
+		const styleid = figma?.getStyleById(
+			typeof textFrame.textStyleId !== 'symbol' && textFrame.textStyleId
+		) as TextStyle;
+
+		// get base style and change font-weight to 400 and style to normal
+		const tag = hTag.has(trim(elClass)) ? trim(elClass) : 'p';
+
+		const baseStyle = {
+			tag,
+			style: textSegments?.[0]?.styles?.string
+				.replace('font-weight: 700', 'font-weight: 400')
+				.replace('font-style: italic', 'font-style: normal')
+		};
 
 		segments.forEach((seg, i) => {
 			// get styles object from included props
 			const styles = styleProps.styles(seg);
 
-			// fields to check against the root. all of these would need to match original
-			const baseStyleFields = [
-				'font-family',
-				'font-size',
-				'letter-spacing',
-				'color',
-				'line-height',
-				'mix-blend-mode',
-				'text-decoration',
-				'text-transform'
-			];
-
 			// is this segment's style the same as the first segment's style, except for font weight and font style?
 			const isBaseStyle =
 				!i ||
 				!new Set(
-					baseStyleFields.map((key) => styles.object[key] === textSegments[0].styles.object[key])
+					baseStyleFields.map(
+						(key) => styles.object[key] === textSegments?.[0]?.styles?.object[key]
+					)
 				).has(false);
 
 			// is this segment's font-weight 700 (bold) (only if isBaseStyle is false)?
@@ -94,16 +109,6 @@ export default (textFrames, frameWidth: number, frameHeight: number) => {
 				lower: true,
 				strict: true
 			})}`;
-
-		// get base style and change font-weight to 400 and style to normal
-		const tag = hTag.has(trim(elClass)) ? trim(elClass) : 'p';
-
-		const baseStyle = {
-			tag,
-			style: textSegments[0].styles.string
-				.replace('font-weight: 700', 'font-weight: 400')
-				.replace('font-style: italic', 'font-style: normal')
-		};
 
 		// turn layer name into custom attributes if it starts with [f2h]
 		if (textFrame.name.startsWith('[f2h]')) {
