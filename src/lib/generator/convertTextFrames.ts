@@ -81,8 +81,6 @@ export default (textFrames: TextNode[], artboard: FrameNode) => {
 				.replace('font-style: italic', 'font-style: normal')
 		};
 
-		console.log({ baseStyle }, textSegments);
-
 		segments.forEach((seg, i) => {
 			// get styles object from included props
 			const styles = styleProps.styles(seg);
