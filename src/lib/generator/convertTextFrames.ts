@@ -62,9 +62,7 @@ export default (textFrames, frameWidth: number, frameHeight: number) => {
 
 		const baseStyle = {
 			tag,
-			style: textSegments?.[0]?.styles?.string
-				.replace('font-weight: 700', 'font-weight: 400')
-				.replace('font-style: italic', 'font-style: normal')
+			style: styleProps.styles(segments[0]).string.replace('font-weight: 700', 'font-weight: 400')
 		};
 
 		segments.forEach((seg, i) => {
