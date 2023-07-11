@@ -437,7 +437,11 @@ const withModificationsForText = (node: FrameNode): FrameNode => {
 	for (const nodeToConvert of nodesToConvert) {
 		if (nodeToConvert.type === 'INSTANCE') createGroupFromFrame(nodeToConvert.detachInstance());
 		else if (nodeToConvert.type === 'COMPONENT') createGroupFromComponent(nodeToConvert);
-		else if (nodeToConvert.type === 'FRAME') createGroupFromFrame(nodeToConvert);
+		else if (nodeToConvert.type === 'FRAME') {
+			// if nodeToConvert has any children that are text nodes, convert it to a group
+			const textNodes = nodeToConvert.findAllWithCriteria({ types: ['TEXT'] });
+			if (textNodes.length > 0) createGroupFromFrame(nodeToConvert);
+		}
 	}
 
 	return node;
