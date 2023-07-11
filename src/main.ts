@@ -428,36 +428,22 @@ const getAssets = async (
 
 // TODO: can this function be folded into getAssets?
 const withModificationsForText = (node: FrameNode): FrameNode => {
-	// TODO: @svickars - I'm not sure what this is doing. Can you explain?
-	// find all frame nodes within the frame
-	// const frameNodes = node.findAllWithCriteria({ types: ['FRAME'] });
+	// Convert all instances, components, and frames to groups. This is so positioning of text layers is absolute relative to the base frame instead of its parent, which isn't accounted for in the html.
 
-	// find all frame nodes within the frame that contain text layers
-	// const textNodes = frameNodes.filter((node) => {
-	// 	return node.findAllWithCriteria({ types: ['TEXT'] }).length > 0;
-	// });
+	// find all components and component instances within the frame
+	const nodesToConvert = node.findAllWithCriteria({ types: ['COMPONENT', 'INSTANCE', 'FRAME'] });
 
-	// // find all frame nodes within the frame with a child node of type TEXT
-	// const allTextNodes = allNodes.filter((node) =>
-	// 	node.children.find((child) => child.type === 'TEXT')
-	// );
-
-	// convert all frames to groups for positioning
-	// const groups: GroupNode[] = createGroupsFromFrames(frameNodes);
+	// detach all components and component instances
+	for (const nodeToConvert of nodesToConvert) {
+		if (nodeToConvert.type === 'INSTANCE') createGroupFromFrame(nodeToConvert.detachInstance());
+		else if (nodeToConvert.type === 'COMPONENT') createGroupFromComponent(nodeToConvert);
+		else if (nodeToConvert.type === 'FRAME') createGroupFromFrame(nodeToConvert);
+	}
 
 	return node;
 };
 
 const withModificationsForExport = (node: FrameNode, config: Config): FrameNode => {
-	// find all components and component instances within the frame
-	const componentNodes = node.findAllWithCriteria({ types: ['COMPONENT', 'INSTANCE'] });
-
-	// detach all components and component instances
-	for (const componentNode of componentNodes) {
-		if (componentNode.type === 'INSTANCE') componentNode.detachInstance();
-		else createGroupFromComponent(componentNode);
-	}
-
 	const textNodes = node.findAllWithCriteria({ types: ['TEXT'] });
 
 	// remove all hidden text layers. if testingMode is true, fade all visible text layers. if false, hide all visible text layers.

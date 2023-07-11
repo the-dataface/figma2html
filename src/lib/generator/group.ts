@@ -8,6 +8,23 @@ export const createGroupFromFrame = (frameNode: FrameNode): GroupNode | null => 
 	const group: GroupNode = figma.group(frameNode.children, parent);
 	if (frameNode.name) group.name = frameNode.name;
 
+	frameNode.remove();
+
+	return group;
+};
+
+export const createGroupFromComponent = (componentNode: ComponentNode): GroupNode | null => {
+	if (!componentNode || !componentNode.parent) return null;
+	if (!Array.isArray(componentNode.children) || !componentNode.children.length) return null;
+
+	const parent = componentNode.parent;
+	if (parent.type === 'INSTANCE') return null;
+
+	const group: GroupNode = figma.group(componentNode.children, parent);
+	if (componentNode.name) group.name = componentNode.name;
+
+	componentNode.remove();
+
 	return group;
 };
 
