@@ -475,8 +475,8 @@ const refreshPreview = async (config: Config | undefined, variables: Variables |
 	const assets: Asset[] = await getAssets(exportables, config, { isFinal: false, thumbSize });
 	const file: HTMLFile = await getFile(config, assets, variables);
 
-	// commented out to test
-	// tempFrame.remove();
+	// comment out to test
+	tempFrame.remove();
 
 	figma.ui.postMessage({
 		type: 'preview',
@@ -490,8 +490,8 @@ const generateExport = async (config: Config, variables: Variables) => {
 	const assets = await getAssets(exportables, config, { isFinal: true });
 	const file = await getFile(config, assets, variables);
 
-	// commented out to test
-	// tempFrame.remove();
+	// comment out to test
+	tempFrame.remove();
 
 	figma.ui.postMessage({ type: 'export', assets, file });
 	return;
@@ -599,8 +599,8 @@ figma.ui.onmessage = async (message) => {
 };
 
 figma.on('close', () => {
-	// commented out to test
-	// tempFrame.remove();
+	// comment out to test
+	tempFrame.remove();
 
 	log('closed');
 	return;
