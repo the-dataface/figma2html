@@ -139,8 +139,10 @@ export default (textFrames: TextNode[], artboard: FrameNode) => {
 			});
 		}
 
-		const artboardWidth = artboard.absoluteBoundingBox.x + artboard.absoluteBoundingBox.width;
-		const artboardHeight = artboard.absoluteBoundingBox.y + artboard.absoluteBoundingBox.height;
+		// const artboardWidth = artboard.absoluteBoundingBox.x + artboard.absoluteBoundingBox.width;
+		const artboardWidth = artboard.width;
+		// const artboardHeight = artboard.absoluteBoundingBox.y + artboard.absoluteBoundingBox.height;
+		const artboardHeight = artboard.height;
 
 		// textFrame.absoluteBoundingBox.x /
 		// 	(artboard.absoluteBoundingBox.x + artboard.absoluteBoundingBox.width);
@@ -149,18 +151,15 @@ export default (textFrames: TextNode[], artboard: FrameNode) => {
 		switch (textFrame.textAlignHorizontal) {
 			case 'JUSTIFIED':
 			case 'LEFT':
-				x = (textFrame.absoluteBoundingBox.x / artboardWidth) * 100;
+				x = (textFrame.x / artboardWidth) * 100;
 				translateX = 0;
 				break;
 			case 'CENTER':
-				x =
-					(textFrame.absoluteBoundingBox.x / artboardWidth +
-						+(textFrame.width / artboard.width) / 2) *
-					100;
+				x = (textFrame.x / artboardWidth + +(textFrame.width / artboard.width) / 2) * 100;
 				translateX = -50;
 				break;
 			case 'RIGHT':
-				x = ((textFrame.absoluteBoundingBox.x + textFrame.width) / artboardWidth) * 100;
+				x = ((textFrame.x + textFrame.width) / artboardWidth) * 100;
 				translateX = -100;
 				break;
 		}
@@ -168,15 +167,15 @@ export default (textFrames: TextNode[], artboard: FrameNode) => {
 		// get y positioning based on vertical alignment
 		switch (textFrame.textAlignVertical) {
 			case 'TOP':
-				y = (textFrame.absoluteBoundingBox.y / artboardHeight) * 100;
+				y = (textFrame.y / artboardHeight) * 100;
 				translateY = 0;
 				break;
 			case 'CENTER':
-				y = ((textFrame.absoluteBoundingBox.y + textFrame.height / 2) / artboardHeight) * 100;
+				y = ((textFrame.y + textFrame.height / 2) / artboardHeight) * 100;
 				translateY = -50;
 				break;
 			case 'BOTTOM':
-				y = ((textFrame.absoluteBoundingBox.y + textFrame.height) / artboardHeight) * 100;
+				y = ((textFrame.y + textFrame.height) / artboardHeight) * 100;
 				translateY = -100;
 				break;
 		}
