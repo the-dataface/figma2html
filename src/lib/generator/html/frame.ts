@@ -132,9 +132,10 @@ export default ({ node, filename, widthRange, alt, config, variables }) => {
 				else {
 					els.push({
 						tag:
-							config.applyHtags && ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(trim(text.class))
-								? trim(text.class)
-								: 'p',
+							// to do: fix this. removed for now
+							// config.applyHtags && ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(trim(text.class))
+							// ? trim(text.class) :
+							'p',
 						segments: [segment],
 						newElement: !!i && (!prevEndsNewLine || (thisIncludesNewLine && !thisEndsNewLine))
 					});

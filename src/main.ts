@@ -43,7 +43,7 @@ const defaults = {
 		imagePath: 'figma2html/',
 		alt: null,
 		applyStyleNames: true,
-		applyHtags: true,
+		applyHtags: false,
 		styleTextSegments: true,
 		includeGoogleFonts: true,
 		customScript: null

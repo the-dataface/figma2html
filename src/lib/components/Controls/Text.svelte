@@ -24,11 +24,11 @@
 		bind:value={$applyStyleNames}
 		bind:checked={$applyStyleNames}
 	/>
-	<Checkbox
+	<!-- <Checkbox
 		label="Convert header styles to <h> tags"
 		bind:value={$applyHtags}
 		bind:checked={$applyHtags}
-	/>
+	/> -->
 	<Checkbox
 		label="Include Google fonts"
 		bind:value={$includeGoogleFonts}
