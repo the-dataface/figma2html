@@ -2,11 +2,7 @@ import yaml from 'js-yaml';
 import slugify from 'slugify';
 
 import createSettingsBlock from 'lib/generator/createSettingsBlock';
-import {
-	createGroupFromComponent,
-	createGroupFromFrame,
-	createGroupsFromFrames
-} from 'lib/generator/group';
+import { createGroupFromComponent, createGroupFromFrame } from 'lib/generator/group';
 import html from 'lib/generator/html/wrapper';
 import log from 'lib/utils/log';
 

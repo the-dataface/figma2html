@@ -7,7 +7,7 @@
 
 	const {
 		variables,
-		config: { applyHtags, applyStyleNames, includeGoogleFonts, styleTextSegments }
+		config: { applyStyleNames, includeGoogleFonts, styleTextSegments }
 	} = getContext('App');
 
 	const dispatch = createEventDispatcher();
