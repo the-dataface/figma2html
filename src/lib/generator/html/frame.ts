@@ -16,8 +16,6 @@ export default ({ node, filename, widthRange, alt, config, variables }) => {
 	const aspectRatio = width / height;
 	const [minWidth, maxWidth] = widthRange.ranges[widthRange.widths.indexOf(width)];
 
-	const frameWidth = node.width;
-	const frameHeight = node.height;
 	const frameClass = `f2h-frame`;
 	const id = `f2h-frame-${width}`;
 	const format = config.format.toLowerCase();
@@ -26,7 +24,7 @@ export default ({ node, filename, widthRange, alt, config, variables }) => {
 
 	// find all text nodes within the frame
 	const textFrames = node.findAllWithCriteria({ types: ['TEXT'] });
-	const textData = convertTextFrames(textFrames, frameWidth, frameHeight);
+	const textData = convertTextFrames(textFrames, node);
 
 	// set layout mode to none
 	node.layoutMode = 'NONE';
