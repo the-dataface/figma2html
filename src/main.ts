@@ -2,7 +2,11 @@ import yaml from 'js-yaml';
 import slugify from 'slugify';
 
 import createSettingsBlock from 'lib/generator/createSettingsBlock';
-// import { createGroupsFromFrames } from 'lib/generator/group';
+import {
+	createGroupFromComponent,
+	createGroupFromFrame,
+	createGroupsFromFrames
+} from 'lib/generator/group';
 import html from 'lib/generator/html/wrapper';
 import log from 'lib/utils/log';
 
@@ -445,12 +449,23 @@ const withModificationsForText = (node: FrameNode): FrameNode => {
 };
 
 const withModificationsForExport = (node: FrameNode, config: Config): FrameNode => {
+	// find all components and component instances within the frame
+	const componentNodes = node.findAllWithCriteria({ types: ['COMPONENT', 'INSTANCE'] });
+
+	// detach all components and component instances
+	for (const componentNode of componentNodes) {
+		if (componentNode.type === 'INSTANCE') componentNode.detachInstance();
+		else createGroupFromComponent(componentNode);
+	}
+
 	const textNodes = node.findAllWithCriteria({ types: ['TEXT'] });
 
-	// fade all text layers if testingMode is true
-	if (config.testingMode) for (const node of textNodes) node.opacity = 0.5;
-	// hide all text layers if testingMode is false
-	else for (const node of textNodes) node.visible = false;
+	// remove all hidden text layers. if testingMode is true, fade all visible text layers. if false, hide all visible text layers.
+	for (const node of textNodes) {
+		if (!node.visible) node.remove();
+		else if (config.testingMode) node.opacity = 0.2;
+		else node.visible = false;
+	}
 
 	return node;
 };
@@ -474,7 +489,8 @@ const refreshPreview = async (config: Config | undefined, variables: Variables |
 	const assets: Asset[] = await getAssets(exportables, config, { isFinal: false, thumbSize });
 	const file: HTMLFile = await getFile(config, assets, variables);
 
-	tempFrame.remove();
+	// commented out to test
+	// tempFrame.remove();
 
 	figma.ui.postMessage({
 		type: 'preview',
@@ -487,7 +503,10 @@ const generateExport = async (config: Config, variables: Variables) => {
 	const exportables = getExportables();
 	const assets = await getAssets(exportables, config, { isFinal: true });
 	const file = await getFile(config, assets, variables);
-	tempFrame.remove();
+
+	// commented out to test
+	// tempFrame.remove();
+
 	figma.ui.postMessage({ type: 'export', assets, file });
 	return;
 };
@@ -594,7 +613,9 @@ figma.ui.onmessage = async (message) => {
 };
 
 figma.on('close', () => {
-	tempFrame.remove();
+	// commented out to test
+	// tempFrame.remove();
+
 	log('closed');
 	return;
 });
