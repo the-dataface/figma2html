@@ -1,29 +1,41 @@
 import slugify from 'slugify';
+
 import styleProps from 'lib/generator/styleProps';
 import trim from 'lib/utils/trim';
 
-// https://www.figma.com/plugin-docs/api/properties/TextNode-getstyledtextsegments/#fields
-const fields = [
-	'fontName',
-	'fontWeight',
-	'fontSize',
-	'textDecoration',
-	'textCase',
-	'lineHeight',
-	'letterSpacing',
-	'fills',
-	'textStyleId',
-	'fillStyleId',
-	'listOptions',
-	'indentation',
-	'hyperlink'
+// const isFrameVisible = (frame) => {
+// 	while (frame.parent) {
+// 		if (!frame.visible || frame.opacity === 0) return false;
+// 		if (frame.parent.type === 'PAGE') return true;
+// 		frame = frame.parent;
+// 	}
+// 	return true;
+// };
+
+// fields to check against the root. all of these would need to match original
+const baseStyleFields = [
+	'font-family',
+	'font-size',
+	'letter-spacing',
+	'color',
+	'line-height',
+	'mix-blend-mode',
+	'text-decoration',
+	'text-transform'
 ];
 
 const hTag = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
 
-export default (textFrames, frameWidth: number, frameHeight: number) => {
+export default (textFrames: TextNode[], artboard: FrameNode) => {
 	// return array of text frame style + class data
-	return textFrames.map((textFrame, i: number) => {
+	let frames = [];
+
+	textFrames.forEach((textFrame, i) => {
+		// if (!isFrameVisible(textFrame)) {
+		// 	log(`Skipping hidden text frame ${textFrame.name}`, textFrame);
+		// 	return;
+		// }
+
 		const elId = `f2h-text-${i}`;
 		const textSegments = [];
 		const customAttributes = [];
@@ -36,31 +48,50 @@ export default (textFrames, frameWidth: number, frameHeight: number) => {
 		let translateY = 0;
 
 		// check all fields
-		const segments = textFrame.getStyledTextSegments(fields) as StyledTextSegment[];
+		const segments = textFrame.getStyledTextSegments([
+			'fontName',
+			'fontWeight',
+			'fontSize',
+			'textDecoration',
+			'textCase',
+			'lineHeight',
+			'letterSpacing',
+			'fills',
+			'textStyleId',
+			'fillStyleId',
+			'listOptions',
+			'indentation',
+			'hyperlink'
+		]) as StyledTextSegment[];
 
-		const styleid = figma.getStyleById(textFrame.textStyleId) as TextStyle;
+		let styleid: TextStyle;
+
+		if (typeof textFrame.textStyleId !== 'symbol' && textFrame.textStyleId) {
+			styleid = figma?.getStyleById(textFrame.textStyleId) as TextStyle;
+		}
+
+		// get base style and change font-weight to 400 and style to normal
+		const tag = hTag.has(trim(elClass)) ? trim(elClass) : 'p';
+
+		const baseStyle = {
+			tag,
+			style: styleProps
+				.styles(segments[0])
+				.string.replace('font-weight: 700', 'font-weight: 400')
+				.replace('font-style: italic', 'font-style: normal')
+		};
 
 		segments.forEach((seg, i) => {
 			// get styles object from included props
 			const styles = styleProps.styles(seg);
 
-			// fields to check against the root. all of these would need to match original
-			const baseStyleFields = [
-				'font-family',
-				'font-size',
-				'letter-spacing',
-				'color',
-				'line-height',
-				'mix-blend-mode',
-				'text-decoration',
-				'text-transform'
-			];
-
 			// is this segment's style the same as the first segment's style, except for font weight and font style?
 			const isBaseStyle =
 				!i ||
 				!new Set(
-					baseStyleFields.map((key) => styles.object[key] === textSegments[0].styles.object[key])
+					baseStyleFields.map(
+						(key) => styles.object[key] === textSegments?.[0]?.styles?.object[key]
+					)
 				).has(false);
 
 			// is this segment's font-weight 700 (bold) (only if isBaseStyle is false)?
@@ -95,16 +126,6 @@ export default (textFrames, frameWidth: number, frameHeight: number) => {
 				strict: true
 			})}`;
 
-		// get base style and change font-weight to 400 and style to normal
-		const tag = hTag.has(trim(elClass)) ? trim(elClass) : 'p';
-
-		const baseStyle = {
-			tag,
-			style: textSegments[0].styles.string
-				.replace('font-weight: 700', 'font-weight: 400')
-				.replace('font-style: italic', 'font-style: normal')
-		};
-
 		// turn layer name into custom attributes if it starts with [f2h]
 		if (textFrame.name.startsWith('[f2h]')) {
 			const layerName = textFrame.name.replace('[f2h]', '');
@@ -118,19 +139,28 @@ export default (textFrames, frameWidth: number, frameHeight: number) => {
 			});
 		}
 
+		const artboardWidth = artboard.absoluteBoundingBox.x + artboard.absoluteBoundingBox.width;
+		const artboardHeight = artboard.absoluteBoundingBox.y + artboard.absoluteBoundingBox.height;
+
+		// textFrame.absoluteBoundingBox.x /
+		// 	(artboard.absoluteBoundingBox.x + artboard.absoluteBoundingBox.width);
+
 		// get x positioning based on horizontal alignment
 		switch (textFrame.textAlignHorizontal) {
 			case 'JUSTIFIED':
 			case 'LEFT':
-				x = (textFrame.x / frameWidth) * 100;
+				x = (textFrame.absoluteBoundingBox.x / artboardWidth) * 100;
 				translateX = 0;
 				break;
 			case 'CENTER':
-				x = ((textFrame.x + textFrame.width / 2) / frameWidth) * 100;
+				x =
+					(textFrame.absoluteBoundingBox.x / artboardWidth +
+						+(textFrame.width / artboard.width) / 2) *
+					100;
 				translateX = -50;
 				break;
 			case 'RIGHT':
-				x = ((textFrame.x + textFrame.width) / frameWidth) * 100;
+				x = ((textFrame.absoluteBoundingBox.x + textFrame.width) / artboardWidth) * 100;
 				translateX = -100;
 				break;
 		}
@@ -138,28 +168,28 @@ export default (textFrames, frameWidth: number, frameHeight: number) => {
 		// get y positioning based on vertical alignment
 		switch (textFrame.textAlignVertical) {
 			case 'TOP':
-				y = (textFrame.y / frameHeight) * 100;
+				y = (textFrame.absoluteBoundingBox.y / artboardHeight) * 100;
 				translateY = 0;
 				break;
 			case 'CENTER':
-				y = ((textFrame.y + textFrame.height / 2) / frameHeight) * 100;
+				y = ((textFrame.absoluteBoundingBox.y + textFrame.height / 2) / artboardHeight) * 100;
 				translateY = -50;
 				break;
 			case 'BOTTOM':
-				y = ((textFrame.y + textFrame.height) / frameHeight) * 100;
+				y = ((textFrame.absoluteBoundingBox.y + textFrame.height) / artboardHeight) * 100;
 				translateY = -100;
 				break;
 		}
 
-		return {
+		frames.push({
 			customClasses,
 			customAttributes,
 			class: elClass,
 			elId,
 			segments: textSegments,
 			baseStyle,
-			x: `${x.toFixed(2)}% `,
-			y: `${y.toFixed(2)}% `,
+			x: `${x.toFixed(2)}%`,
+			y: `${y.toFixed(2)}%`,
 			horizontalAlignment: textFrame.textAlignHorizontal,
 			verticalAlignment: textFrame.textAlignVertical,
 			width:
@@ -170,6 +200,8 @@ export default (textFrames, frameWidth: number, frameHeight: number) => {
 			translate: `${translateX}%, ${translateY}%`,
 			rotation: textFrame.rotation * -1,
 			effect: textFrame.effects
-		};
+		});
 	});
+
+	return frames;
 };
