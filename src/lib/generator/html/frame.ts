@@ -146,8 +146,6 @@ export default ({ node, filename, widthRange, alt, config, variables }) => {
 					}) + (customStyle || '')
 			});
 
-			// console.log(attrs);
-
 			el += `<div ${attrs}>`;
 
 			els.forEach((element) => {
