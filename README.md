@@ -2,7 +2,7 @@
 
 # [figma2html](https://www.figma.com/community/plugin/1109185297790825980/figma2html)
 
-Export Figma frames to responsive HTML and CSS. A Figma version of [ai2html](http://ai2html.org), with additional features. Created by [The DataFace](https://www.thedataface.com). 
+Export Figma frames to responsive HTML and CSS. A Figma version of [ai2html](http://ai2html.org), with additional features. Created by [The DataFace](https://www.thedataface.com).
 
 [Install the plugin](https://www.figma.com/community/plugin/1109185297790825980/figma2html) on Figma.
 
@@ -71,9 +71,8 @@ Check out [this demo Figma file](https://www.figma.com/file/THVkWmLhe7TJD16hj0ID
 
 - Turn on `Style text elements` to include inline styles to match the text styles you see in Figma.
 - Turn on `Include figma styles` as Classes to include any named styles in Figma as classes on your text elements. Ex. `Desktop/Utility Sans` will be included as `class="utility-sans"`.
-- Turn on `Convert Header Styles to H tags` to render text elements containing a header class in Figma (`h1`, `h2`, `h3`, etc.) with the appropriate H tag in the outputted HTML, instead of as a `<p>` element.
 - Turn on `Include Google Fonts` to include a Google Fonts tag for included Google Fonts in the outputted HTML.
-- **Including custom attributes:** you can include custom attributes on a text layer by naming the layer `[f2h]` followed by a list of attributes in YAML format. For example, a text layer named `[f2h]class:text-sm,font-sans;id:my-text-layer` will render as `<p class="font-sans text-sm" id="my-text-layer">`). Very useful for including Tailwind classes. Note that naming your layers like this will not turn off `Style text elements` for that node, and will still include inline styling for child spans. To rely purely on class names for styling, turn off the `Style text elements` option. (should we change this?)
+- **Including custom attributes:** you can include custom attributes on a text layer by naming the layer `[f2h]` followed by a list of attributes in HTMl attribute format. For example, a text layer named `[f2h]class="text-sm font-sans" id="my-text-layer"` will render as `<p class="font-sans text-sm" id="my-text-layer">`). This can be useful for including Tailwind and other utility classes. You also can use a reserved `tag` attribute to change the default `<p>` tag to one of your choosing (ex: `[f2h] tag="h1" id="hed" class="text-xl font-bold"` will render `<h1 id="hed" class='text-xl font-bold>`). Note that naming your layers like this will not turn off `Style text elements` for that node, and will still include inline styling for child spans. To rely purely on class names for styling, turn off the `Style text elements` option.
 
 ### Variable Text
 

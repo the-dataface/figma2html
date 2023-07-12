@@ -1,16 +1,5 @@
 import slugify from 'slugify';
-
 import styleProps from 'lib/generator/styleProps';
-import trim from 'lib/utils/trim';
-
-// const isFrameVisible = (frame) => {
-// 	while (frame.parent) {
-// 		if (!frame.visible || frame.opacity === 0) return false;
-// 		if (frame.parent.type === 'PAGE') return true;
-// 		frame = frame.parent;
-// 	}
-// 	return true;
-// };
 
 // fields to check against the root. all of these would need to match original
 const baseStyleFields = [
@@ -24,21 +13,14 @@ const baseStyleFields = [
 	'text-transform'
 ];
 
-const hTag = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
-
 export default (textFrames: TextNode[], artboard: FrameNode) => {
 	// return array of text frame style + class data
 	let frames = [];
 
 	textFrames.forEach((textFrame, i) => {
-		// if (!isFrameVisible(textFrame)) {
-		// 	log(`Skipping hidden text frame ${textFrame.name}`, textFrame);
-		// 	return;
-		// }
-
 		const elId = `f2h-text-${i}`;
 		const textSegments = [];
-		const customAttributes = [];
+		const customAttributes = {};
 
 		let elClass = ``;
 		let customClasses: string;
@@ -70,15 +52,11 @@ export default (textFrames: TextNode[], artboard: FrameNode) => {
 			styleid = figma?.getStyleById(textFrame.textStyleId) as TextStyle;
 		}
 
-		// get base style and change font-weight to 400 and style to normal
-		const tag = hTag.has(trim(elClass)) ? trim(elClass) : 'p';
+		let tag = 'p';
 
-		const baseStyle = {
-			tag,
-			style: segments[0]
-				? styleProps.styles(segments[0]).string.replace('font-weight: 700', 'font-weight: 400')
-				: ''
-		};
+		const baseStyle = segments[0]
+			? styleProps.styles(segments[0]).string.replace('font-weight: 700', 'font-weight: 400')
+			: '';
 
 		segments.forEach((seg, i) => {
 			// get styles object from included props
@@ -127,38 +105,48 @@ export default (textFrames: TextNode[], artboard: FrameNode) => {
 
 		// turn layer name into custom attributes if it starts with [f2h]
 		if (textFrame.name.startsWith('[f2h]')) {
-			const layerName = textFrame.name.replace('[f2h]', '');
-			const attributes = layerName.split(';');
-			attributes.forEach((attr) => {
-				const [key, value] = attr.split(':');
-				customAttributes.push({
-					key: key,
-					value: value.split(',').map((v: string) => v.trim())
-				});
-			});
+			const attributesString = textFrame.name.replace('[f2h]', '').trim();
+			const attributes = attributesString.split(/\s+(?=\w+=)/);
+
+			for (const attribute of attributes) {
+				const [k, v] = attribute.split('=');
+
+				const key = k.trim();
+				let value = v.trim();
+
+				// account for optional starting/ending quots
+				if (value.startsWith('"') || value.startsWith("'")) {
+					value = value.slice(1, -1).trim();
+				}
+
+				if (value.endsWith('"') || value.endsWith("'")) {
+					value = value.slice(0, -1).trim();
+				}
+
+				// if key is tag, set tag and continue
+				if (key === 'tag') {
+					tag = value;
+					continue;
+				}
+
+				// otherwise, count as attribute
+				customAttributes[key] = value;
+			}
 		}
-
-		// const artboardWidth = artboard.absoluteBoundingBox.x + artboard.absoluteBoundingBox.width;
-		const artboardWidth = artboard.width;
-		// const artboardHeight = artboard.absoluteBoundingBox.y + artboard.absoluteBoundingBox.height;
-		const artboardHeight = artboard.height;
-
-		// textFrame.absoluteBoundingBox.x /
-		// 	(artboard.absoluteBoundingBox.x + artboard.absoluteBoundingBox.width);
 
 		// get x positioning based on horizontal alignment
 		switch (textFrame.textAlignHorizontal) {
 			case 'JUSTIFIED':
 			case 'LEFT':
-				x = (textFrame.x / artboardWidth) * 100;
+				x = (textFrame.x / artboard.width) * 100;
 				translateX = 0;
 				break;
 			case 'CENTER':
-				x = (textFrame.x / artboardWidth + +(textFrame.width / artboard.width) / 2) * 100;
+				x = (textFrame.x / artboard.width + +(textFrame.width / artboard.width) / 2) * 100;
 				translateX = -50;
 				break;
 			case 'RIGHT':
-				x = ((textFrame.x + textFrame.width) / artboardWidth) * 100;
+				x = ((textFrame.x + textFrame.width) / artboard.width) * 100;
 				translateX = -100;
 				break;
 		}
@@ -166,20 +154,21 @@ export default (textFrames: TextNode[], artboard: FrameNode) => {
 		// get y positioning based on vertical alignment
 		switch (textFrame.textAlignVertical) {
 			case 'TOP':
-				y = (textFrame.y / artboardHeight) * 100;
+				y = (textFrame.y / artboard.height) * 100;
 				translateY = 0;
 				break;
 			case 'CENTER':
-				y = ((textFrame.y + textFrame.height / 2) / artboardHeight) * 100;
+				y = ((textFrame.y + textFrame.height / 2) / artboard.height) * 100;
 				translateY = -50;
 				break;
 			case 'BOTTOM':
-				y = ((textFrame.y + textFrame.height) / artboardHeight) * 100;
+				y = ((textFrame.y + textFrame.height) / artboard.height) * 100;
 				translateY = -100;
 				break;
 		}
 
 		frames.push({
+			tag,
 			customClasses,
 			customAttributes,
 			class: elClass,

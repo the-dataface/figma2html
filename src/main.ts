@@ -39,7 +39,6 @@ const defaults = {
 		imagePath: 'figma2html/',
 		alt: null,
 		applyStyleNames: true,
-		applyHtags: false,
 		styleTextSegments: true,
 		includeGoogleFonts: true,
 		customScript: null
@@ -72,6 +71,7 @@ const newConfigFrame = ({ name, x = 0, y = 0, text }: NewConfigFrame) => {
 	frameNode.verticalPadding = 4;
 	frameNode.horizontalPadding = 6;
 	frameNode.cornerRadius = 4;
+
 	const textNode = figma.createText();
 	textNode.characters = yaml.dump(text).trim();
 	frameNode.appendChild(textNode);
@@ -475,7 +475,6 @@ const refreshPreview = async (config: Config | undefined, variables: Variables |
 	const assets: Asset[] = await getAssets(exportables, config, { isFinal: false, thumbSize });
 	const file: HTMLFile = await getFile(config, assets, variables);
 
-	// comment out to test
 	tempFrame.remove();
 
 	figma.ui.postMessage({
@@ -490,7 +489,6 @@ const generateExport = async (config: Config, variables: Variables) => {
 	const assets = await getAssets(exportables, config, { isFinal: true });
 	const file = await getFile(config, assets, variables);
 
-	// comment out to test
 	tempFrame.remove();
 
 	figma.ui.postMessage({ type: 'export', assets, file });
@@ -512,7 +510,6 @@ figma.ui.onmessage = async (message) => {
 			figma.ui.resize(size.w, size.h);
 
 			config = await Stored.config.get();
-			// Stored.config.write(config);
 
 			variables = await Stored.variables.get();
 			panels = await Stored.panels.get();
@@ -599,9 +596,7 @@ figma.ui.onmessage = async (message) => {
 };
 
 figma.on('close', () => {
-	// comment out to test
 	tempFrame.remove();
-
 	log('closed');
 	return;
 });
