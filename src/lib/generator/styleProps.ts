@@ -2,6 +2,8 @@ export const fontList = [];
 
 // TODO: shouldn't this use our stringify function?
 export const styles = (segment: StyledTextSegment) => {
+	if (!segment) return;
+
 	fontList.push(segment.fontName);
 
 	let color: string = undefined;

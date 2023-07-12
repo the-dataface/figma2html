@@ -36,7 +36,6 @@
 	const testingMode = writable(false as boolean);
 	const centered = writable(false as boolean);
 	const applyStyleNames = writable(false as boolean);
-	const applyHtags = writable(false as boolean);
 	const styleTextSegments = writable(true as boolean);
 	const includeGoogleFonts = writable(true as boolean);
 	const maxWidth = writable(undefined as number | undefined);
@@ -70,7 +69,6 @@
 		imagePath.set(config.imagePath);
 		alt.set(config.alt);
 		applyStyleNames.set(config.applyStyleNames);
-		applyHtags.set(config.applyHtags);
 		styleTextSegments.set(config.styleTextSegments);
 		includeGoogleFonts.set(config.includeGoogleFonts);
 		customScript.set(config.customScript);
@@ -90,7 +88,6 @@
 		imagePath: $imagePath,
 		alt: $alt,
 		applyStyleNames: $applyStyleNames,
-		applyHtags: $applyHtags,
 		styleTextSegments: $styleTextSegments,
 		includeGoogleFonts: $includeGoogleFonts,
 		customScript: $customScript
@@ -243,7 +240,6 @@
 			imagePath,
 			alt,
 			applyStyleNames,
-			applyHtags,
 			styleTextSegments,
 			includeGoogleFonts,
 			customScript

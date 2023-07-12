@@ -2,7 +2,6 @@ import convertTextFrames from 'lib/generator/convertTextFrames';
 import css from 'lib/generator/css/index';
 import roundTo from 'lib/utils/roundTo';
 import stringify from 'lib/utils/stringify';
-import trim from 'lib/utils/trim';
 
 import span from './span';
 
@@ -16,8 +15,6 @@ export default ({ node, filename, widthRange, alt, config, variables }) => {
 	const aspectRatio = width / height;
 	const [minWidth, maxWidth] = widthRange.ranges[widthRange.widths.indexOf(width)];
 
-	const frameWidth = node.width;
-	const frameHeight = node.height;
 	const frameClass = `f2h-frame`;
 	const id = `f2h-frame-${width}`;
 	const format = config.format.toLowerCase();
@@ -26,7 +23,7 @@ export default ({ node, filename, widthRange, alt, config, variables }) => {
 
 	// find all text nodes within the frame
 	const textFrames = node.findAllWithCriteria({ types: ['TEXT'] });
-	const textData = convertTextFrames(textFrames, frameWidth, frameHeight);
+	const textData = convertTextFrames(textFrames, node);
 
 	// set layout mode to none
 	node.layoutMode = 'NONE';
@@ -71,7 +68,7 @@ export default ({ node, filename, widthRange, alt, config, variables }) => {
 		draggable: 'false',
 		decoding: 'async',
 		width: width.toFixed(2),
-		height: height.toFixed(2)
+		height: !config.fluid ? height.toFixed(2) : 'null'
 	})}/>\n\t\t</picture>\n`;
 
 	if (textData) {
@@ -96,9 +93,6 @@ export default ({ node, filename, widthRange, alt, config, variables }) => {
 
 		textData.forEach((text) => {
 			let el = ``;
-			// TODO: make elClass part of elAttributes
-			let elClass = 'f2h-text';
-			let elAttributes = '';
 
 			let effect = '';
 			if (text.effect.length > 0) effect = css.textEffect(text.effect);
@@ -133,29 +127,32 @@ export default ({ node, filename, widthRange, alt, config, variables }) => {
 				if (notNewElement) els[els.length - 1].segments.push(segment);
 				else {
 					els.push({
-						tag:
-							config.applyHtags && ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(trim(text.class))
-								? trim(text.class)
-								: 'p',
+						tag: text.tag,
 						segments: [segment],
 						newElement: !!i && (!prevEndsNewLine || (thisIncludesNewLine && !thisEndsNewLine))
 					});
 				}
 			});
 
-			// if text.customAttributes array contains an object with key 'class', add it to the class
-			text.customAttributes.forEach((attr) => {
-				if (attr.key === 'class') elClass += ` ${attr.value.join(' ')}`;
-				else elAttributes += ` ${attr.key}="${attr.value}"`;
+			const { style: customStyle, ...restCustomAttributes } = text.customAttributes;
+
+			const attrs = stringify.attrs({
+				...restCustomAttributes,
+				class: `f2h-text${' ' + text.customAttributes.class || ''}`,
+				style:
+					stringify.styles({
+						...style,
+						effect
+					}) + (customStyle || '')
 			});
 
-			el += `<div class="${elClass}" ${elAttributes} style="${stringify.styles(style)} ${effect}">`;
+			el += `<div ${attrs}>`;
 
 			els.forEach((element) => {
 				el += `\n\t\t\t<${element.tag} ${stringify.attrs({
-					class: `${text.elId} ${text.class} ${
-						text.customClasses ? text.customClasses.join(' ') : ''
-					}`
+					class: [text.elId, text.class, text.customClasses ? text.customClasses.join(' ') : '']
+						.join(' ')
+						.trim()
 				})}>`;
 
 				element.segments.forEach((segment) => {
@@ -166,11 +163,11 @@ export default ({ node, filename, widthRange, alt, config, variables }) => {
 
 				if (config.styleTextSegments) {
 					// if text.baseStyle is not the same as pStyle, append text.baseStyle to frameContent.css
-					if (text.baseStyle.style !== pStyle.style)
+					if (text.baseStyle !== pStyle.style)
 						frameContent.css += `\n\t#${id} .${text.elId}${text.class.replaceAll(
 							' ',
 							'.'
-						)} { ${text.baseStyle.style.replaceAll('undefined', '')} }`;
+						)} { ${text.baseStyle.replaceAll('undefined', '')} }`;
 				}
 			});
 

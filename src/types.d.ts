@@ -12,7 +12,6 @@ declare global {
 		imagePath: string;
 		alt: string;
 		applyStyleNames: boolean;
-		applyHtags: boolean;
 		styleTextSegments: boolean;
 		includeGoogleFonts: boolean;
 		customScript: string;

@@ -7,7 +7,7 @@
 
 	const {
 		variables,
-		config: { applyHtags, applyStyleNames, includeGoogleFonts, styleTextSegments }
+		config: { applyStyleNames, includeGoogleFonts, styleTextSegments }
 	} = getContext('App');
 
 	const dispatch = createEventDispatcher();
@@ -23,11 +23,6 @@
 		label="Include Figma styles as classes"
 		bind:value={$applyStyleNames}
 		bind:checked={$applyStyleNames}
-	/>
-	<Checkbox
-		label="Convert header styles to <h> tags"
-		bind:value={$applyHtags}
-		bind:checked={$applyHtags}
 	/>
 	<Checkbox
 		label="Include Google fonts"
