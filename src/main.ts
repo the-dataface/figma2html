@@ -5,6 +5,7 @@ import createSettingsBlock from 'lib/generator/createSettingsBlock';
 import { createGroupFromComponent, createGroupFromFrame } from 'lib/generator/group';
 import html from 'lib/generator/html/wrapper';
 import log from 'lib/utils/log';
+import isNodeVisible from 'lib/utils/isNodeVisible';
 
 /**
  * ignore invisible nodes. speeds up document traversal
@@ -448,7 +449,7 @@ const withModificationsForExport = (node: FrameNode, config: Config): FrameNode 
 
 	// remove all hidden text layers. if testingMode is true, fade all visible text layers. if false, hide all visible text layers.
 	for (const node of textNodes) {
-		if (!node.visible) node.remove();
+		if (!isNodeVisible(node)) node.remove();
 		else if (config.testingMode) node.opacity = 0.2;
 		else node.visible = false;
 	}
