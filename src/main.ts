@@ -4,8 +4,8 @@ import slugify from 'slugify';
 import createSettingsBlock from 'lib/generator/createSettingsBlock';
 import { createGroupFromComponent, createGroupFromFrame } from 'lib/generator/group';
 import html from 'lib/generator/html/wrapper';
-import log from 'lib/utils/log';
 import isNodeVisible from 'lib/utils/isNodeVisible';
+import log from 'lib/utils/log';
 
 /**
  * ignore invisible nodes. speeds up document traversal
@@ -134,15 +134,19 @@ class Stored {
 			const variablesText = variablesFrame?.children?.[0] as TextNode;
 
 			if (variablesText?.characters) {
-				const variables = yaml.load(variablesText.characters);
-				Stored.variables.write();
+				try {
+					const variables = yaml.load(variablesText.characters);
+					Stored.variables.write();
 
-				figma.ui.postMessage({
-					type: 'variables',
-					variables: variables
-				});
+					figma.ui.postMessage({
+						type: 'variables',
+						variables: variables
+					});
 
-				return variables;
+					return variables;
+				} catch (e) {
+					figma.notify('Error loading f2h-variables. Check YAML syntax.', { error: true });
+				}
 			} else {
 				figma.ui.postMessage({
 					type: 'variables',
@@ -279,8 +283,12 @@ class Stored {
 			const settingsNode = settingsFrame.children[0] as TextNode;
 
 			if (settingsNode?.characters) {
-				const config = yaml.load(settingsNode.characters);
-				await Stored.config.set(config);
+				try {
+					const config = yaml.load(settingsNode.characters);
+					await Stored.config.set(config);
+				} catch (e) {
+					figma.notify('Error loading f2h-settings. Check YAML syntax.', { error: true });
+				}
 			}
 		};
 	};
