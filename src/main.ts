@@ -4,8 +4,8 @@ import slugify from 'slugify';
 import createSettingsBlock from 'lib/generator/createSettingsBlock';
 import { createGroupFromComponent, createGroupFromFrame } from 'lib/generator/group';
 import html from 'lib/generator/html/wrapper';
-import log from 'lib/utils/log';
 import isNodeVisible from 'lib/utils/isNodeVisible';
+import log from 'lib/utils/log';
 
 /**
  * ignore invisible nodes. speeds up document traversal
@@ -171,7 +171,7 @@ class Stored {
 				x = existingVariablesText.x;
 				const characters = existingVariablesText.characters;
 				variables = yaml.load(characters);
-				existingVariablesText.remove();
+				existingVariablesFrame.remove();
 			}
 
 			// load Inter for variables text node
@@ -181,20 +181,21 @@ class Stored {
 				);
 				const settingsNode = nodes.find((node) => node.name === 'f2h-settings') as FrameNode;
 
-				// if settings exists, place beside it
+				// if settings exists, place below it
 				if (settingsNode) {
-					x = settingsNode.x + settingsNode.width;
+					y = settingsNode.y + settingsNode.height;
+					x = settingsNode.x;
 				} else {
 					// otherwise get all top-level children and place it to the right of them
+					const maxY = nodes.reduce((max, node) => Math.max(max, node.y + node.height), 0);
+					y = maxY;
+
 					const maxX = nodes.reduce((max, node) => Math.max(max, node.x + node.width), 0);
 					x = maxX;
 				}
 
-				// a little padding
-				x += 25;
-
-				// get uppermost point
-				y = nodes.reduce((min, node) => Math.min(min, node.y), 0);
+				// a little y padding
+				y += 50;
 
 				// create the node
 				newConfigFrame({
