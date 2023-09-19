@@ -145,7 +145,7 @@ class Stored {
 
 					return variables;
 				} catch (e) {
-					figma.notify('Error loading f2h-variables. Check YAML syntax.', { error: true });
+					figma.notify('Error loading f2h-variables. Validate YAML syntax.', { error: true });
 				}
 			} else {
 				figma.ui.postMessage({
@@ -287,7 +287,7 @@ class Stored {
 					const config = yaml.load(settingsNode.characters);
 					await Stored.config.set(config);
 				} catch (e) {
-					figma.notify('Error loading f2h-settings. Check YAML syntax.', { error: true });
+					figma.notify('Error loading f2h-settings. Validate YAML syntax.', { error: true });
 				}
 			}
 		};
