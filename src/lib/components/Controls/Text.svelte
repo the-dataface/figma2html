@@ -1,16 +1,11 @@
 <script>
-	import { createEventDispatcher, getContext } from 'svelte';
+	import { getContext } from 'svelte';
 
-	import { TypeIcon } from 'svelte-feather-icons';
 	import Checkbox from '../Inputs/Checkbox.svelte';
-	import Button from '../Inputs/Button.svelte';
 
 	const {
-		variables,
 		config: { applyStyleNames, includeGoogleFonts, styleTextSegments }
 	} = getContext('App');
-
-	const dispatch = createEventDispatcher();
 </script>
 
 <div class="flex w-full flex-col gap-2">
