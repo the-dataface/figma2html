@@ -1,6 +1,6 @@
 {
 	"name": "figma2html",
-	"version": "1.0.2-beta",
+	"version": "1.0.2",
 	"private": true,
 	"description": "Export Figma frames as images with text elements rendered as HTML",
 	"homepage": "https://www.github.com/the-dataface/figma2html",

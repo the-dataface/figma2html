@@ -1,5 +1,13 @@
 # figma2html
 
+## 1.0.2
+
+### Patch Changes
+
+- Notify users of malformatted YAML ([#101](https://github.com/the-dataface/figma2html/pull/101))
+
+- Remove duplicate variables frame + fix placement ([#101](https://github.com/the-dataface/figma2html/pull/101))
+
 ## 1.0.2-beta
 
 ### Patch Changes
