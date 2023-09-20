@@ -26,7 +26,7 @@ declare global {
 	type Output = 'html' | 'svelte';
 
 	interface Variables {
-		[key: string]: string;
+		[key: string]: { key: string; value: string };
 	}
 
 	interface Size {
@@ -40,6 +40,7 @@ declare global {
 		page: boolean;
 		text: boolean;
 		preview: boolean;
+		variables: boolean;
 	}
 
 	interface Exportable {
