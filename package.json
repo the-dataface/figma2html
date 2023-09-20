@@ -42,7 +42,7 @@
 	],
 	"devDependencies": {
 		"@changesets/cli": "^2.26.0",
-		"@figma/plugin-typings": "1.57.1",
+		"@figma/plugin-typings": "^1.77.0",
 		"@rollup/plugin-alias": "^4.0.2",
 		"@rollup/plugin-babel": "^6.0.3",
 		"@rollup/plugin-commonjs": "24.0.0",

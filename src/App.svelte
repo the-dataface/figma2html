@@ -11,6 +11,7 @@
 	import Page from './lib/components/Controls/Page.svelte';
 	import Preview from './lib/components/Controls/Preview.svelte';
 	import Text from './lib/components/Controls/Text.svelte';
+	import Variables from './lib/components/Controls/Variables.svelte';
 
 	// the figma manifest. useful for versioning and meta
 	import pkg from './lib/pkg';
@@ -53,7 +54,7 @@
 		file: HTMLFile | undefined;
 	});
 
-	const variables = writable(false as boolean);
+	const variables = writable({});
 
 	// ingest config data from plugin
 	const receiveConfig = (config: Config) => {
@@ -103,8 +104,13 @@
 			case 'load': {
 				const config: Config = message.config;
 				panels.set(message.panels);
-				variables.set(Object.keys(message.variables).length > 0);
 				receiveConfig(config);
+				break;
+			}
+
+			case 'variables': {
+				const vars = message.variables;
+				variables.set(vars);
 				break;
 			}
 
@@ -129,11 +135,6 @@
 				link.download = `${$filename}.zip`;
 				link.click();
 				setTimeout(() => loading.set(false), 1500);
-				break;
-			}
-
-			case 'write-variables': {
-				variables.set(message.variables === null);
 				break;
 			}
 
@@ -175,7 +176,7 @@
 		parent.postMessage({ pluginMessage: { type: 'load-settings' } }, '*');
 
 	const onWriteVariables = () =>
-		parent.postMessage({ pluginMessage: { type: 'write-variables' } }, '*');
+		parent.postMessage({ pluginMessage: { type: 'write-variables', variables: $variables } }, '*');
 
 	const onTogglePanel = () =>
 		parent.postMessage({ pluginMessage: { type: 'panels', panels: $panels } }, '*');
@@ -243,7 +244,8 @@
 			styleTextSegments,
 			includeGoogleFonts,
 			customScript
-		}
+		},
+		variables
 	});
 </script>
 
@@ -264,13 +266,11 @@
 				<Panel title="Page settings" bind:open={$panels.page} on:toggle={onTogglePanel}>
 					<Page on:change={onChangeConfig} />
 				</Panel>
-				<Panel
-					border={false}
-					title="Text settings"
-					bind:open={$panels.text}
-					on:togglePanel={onTogglePanel}
-				>
-					<Text on:change={onChangeConfig} on:write-variables={onWriteVariables} />
+				<Panel title="Text settings" bind:open={$panels.text} on:togglePanel={onTogglePanel}>
+					<Text on:change={onChangeConfig} />
+				</Panel>
+				<Panel title="Variables" bind:open={$panels.variables} on:onTogglePanel={onTogglePanel}>
+					<Variables on:change={onChangeConfig} on:write-variables={onWriteVariables} />
 				</Panel>
 			{/if}
 		</div>

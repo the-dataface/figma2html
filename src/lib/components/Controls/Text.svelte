@@ -29,13 +29,4 @@
 		bind:value={$includeGoogleFonts}
 		bind:checked={$includeGoogleFonts}
 	/>
-	{#if !$variables}
-		<Button
-			class="bg-figma-bg-secondary hover:bg-figma-bg-tertiary"
-			on:click={() => dispatch('write-variables')}
-		>
-			<TypeIcon size="12" class="mr-2" />
-			<p class="m-0 text-xs">Generate variable text</p>
-		</Button>
-	{/if}
 </div>

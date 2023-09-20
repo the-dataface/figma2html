@@ -40,6 +40,7 @@ declare global {
 		page: boolean;
 		text: boolean;
 		preview: boolean;
+		variables: boolean;
 	}
 
 	interface Exportable {

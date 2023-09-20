@@ -1,4 +1,3 @@
-import yaml from 'js-yaml';
 import slugify from 'slugify';
 
 import createSettingsBlock from 'lib/generator/createSettingsBlock';
@@ -23,6 +22,45 @@ figma.showUI(__html__, { width: 560, height: 500, themeColors: true });
 /** UTILS */
 const isFrameExportable = (frameName: string): boolean => !!frameName.match(/^#\d+px$/);
 
+// d3's autoType, minus date parsing
+// https://github.com/d3/d3-dsv/blob/main/src/autoType.js
+const autoType = (object: { [key: string]: unknown }) => {
+	for (const key in object) {
+		let value: string | number | boolean | null | undefined = (object[key] as string)?.trim();
+		let number: number;
+		const lowercaseValue = value.toLowerCase();
+
+		if (lowercaseValue === 'true') value = true;
+		else if (lowercaseValue === 'false') value = false;
+		else if (lowercaseValue === 'NaN') value = NaN;
+		else if (lowercaseValue === 'null') value = null;
+		else if (lowercaseValue === 'undefined') value = undefined;
+		else if (!isNaN((number = +value))) value = number;
+		else continue;
+
+		object[key] = value;
+	}
+	return object;
+};
+
+class KeyValue {
+	static toJSON = (text: string): Config | Variables => {
+		const splitLines = text.split('\n').filter((line) => line?.trim());
+		const keyValuePairs = splitLines.map((line) => {
+			const split = line?.trim()?.split(/:(.*)/s);
+			if (!split) return;
+			const [key, value] = split;
+			return [key.trim(), value.trim()];
+		});
+		const typed = autoType(Object.fromEntries(keyValuePairs));
+		return typed as Config | Variables;
+	};
+	static toString = (obj: Config | Variables): string =>
+		Object.entries(obj)
+			.map(([key, value]) => `${key}: ${value}`)
+			.join('\n');
+}
+
 /**
  * DEFAULT VARIABLES
  */
@@ -43,40 +81,207 @@ const defaults = {
 		styleTextSegments: true,
 		includeGoogleFonts: true,
 		customScript: null
-	},
-	size: { w: 960, h: 500 },
-	variables: { hed: 'figma2html' },
+	} as Config,
+	size: { w: 960, h: 500 } as Size,
+	variables: {} as Variables,
 	panels: {
 		file: false,
 		images: false,
 		page: false,
-		text: false
-	}
+		text: false,
+		variables: false
+	} as Panels
 };
 
-// TODO: should these frames be `locked` to prevent accidental deletion?
 interface NewConfigFrame {
 	name: string;
 	x?: number;
 	y?: number;
-	text: object;
+	text: Config | Variables;
 }
-const newConfigFrame = ({ name, x = 0, y = 0, text }: NewConfigFrame) => {
+
+const newConfigFrame = ({ name, text }: NewConfigFrame) => {
 	const frameNode = figma.createFrame();
 	frameNode.name = name;
-	frameNode.x = x;
-	frameNode.y = y;
-	frameNode.layoutMode = 'VERTICAL';
+	frameNode.locked = true;
 	frameNode.primaryAxisSizingMode = 'AUTO';
 	frameNode.counterAxisSizingMode = 'AUTO';
-	frameNode.verticalPadding = 4;
-	frameNode.horizontalPadding = 6;
+	frameNode.layoutMode = 'VERTICAL';
+	frameNode.layoutGrow = 0;
+	frameNode.layoutAlign = 'STRETCH';
+	frameNode.layoutPositioning = 'AUTO';
+	frameNode.paddingTop = 4;
+	frameNode.paddingBottom = frameNode.paddingTop;
+	frameNode.paddingLeft = 6;
+	frameNode.paddingRight = frameNode.paddingLeft;
 	frameNode.cornerRadius = 4;
+	frameNode.fills = [{ type: 'SOLID', color: { r: 0.985, g: 0.985, b: 0.985 } }];
+	frameNode.strokes = [{ type: 'SOLID', color: { r: 0.8, g: 0.8, b: 0.8 } }];
 
 	const textNode = figma.createText();
-	textNode.characters = yaml.dump(text).trim();
+	textNode.layoutGrow = 0;
+	textNode.layoutAlign = 'STRETCH';
+	textNode.layoutPositioning = 'AUTO';
+	figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
+		textNode.characters = KeyValue.toString(text);
+		textNode.textAutoResize = 'WIDTH_AND_HEIGHT';
+	});
 	frameNode.appendChild(textNode);
+
+	return textNode;
 };
+
+let settingsFrame: TextNode;
+let variablesFrame: TextNode;
+
+// CONFIG GROUP + FRAMES
+// write the config to a text node on the current page. users should not be able to edit this text node, but we have no way of locking them. We add a note to warn users and then add the settings + variables frames.
+let configGroupNode: FrameNode = figma.currentPage.findChild(
+	(node) => node.type === 'FRAME' && node.name === 'figma2html'
+) as FrameNode;
+
+if (configGroupNode) {
+	// find settings frame in existing group
+	settingsFrame = (
+		configGroupNode.findChild(
+			(node) => node.type === 'FRAME' && node.name === 'f2h-settings'
+		) as FrameNode
+	)?.children?.[0] as TextNode;
+
+	// create new settings frame if there isn't one nested
+	if (!settingsFrame) {
+		settingsFrame = newConfigFrame({
+			name: 'f2h-settings',
+			text: defaults.config
+		});
+		configGroupNode.appendChild(settingsFrame.parent as FrameNode);
+	}
+
+	// find variables frame in existing group
+	variablesFrame = (
+		configGroupNode.findChild(
+			(node) => node.type === 'FRAME' && node.name === 'f2h-variables'
+		) as FrameNode
+	)?.children?.[0] as TextNode;
+
+	// create new variables frame if there isn't one nested
+	if (!variablesFrame) {
+		variablesFrame = newConfigFrame({
+			name: 'f2h-variables',
+			text: defaults.variables
+		});
+		configGroupNode.appendChild(variablesFrame.parent as FrameNode);
+	}
+} else {
+	const frameNode = figma.createFrame();
+	frameNode.x = figma.currentPage.children.reduce((min, node) => Math.min(min, node.x), 0) - 450;
+	frameNode.y = figma.currentPage.children.reduce((min, node) => Math.min(min, node.y), 0);
+	frameNode.name = 'figma2html';
+	frameNode.layoutMode = 'VERTICAL';
+	frameNode.primaryAxisSizingMode = 'AUTO';
+	frameNode.counterAxisSizingMode = 'FIXED';
+	frameNode.paddingTop = 6;
+	frameNode.paddingBottom = frameNode.paddingTop;
+	frameNode.paddingLeft = 6;
+	frameNode.paddingRight = frameNode.paddingLeft;
+	frameNode.cornerRadius = 4;
+	frameNode.itemSpacing = 12;
+	frameNode.maxWidth = 400;
+	frameNode.minWidth = frameNode.maxWidth;
+	frameNode.strokes = [{ type: 'SOLID', color: { r: 0.8, g: 0.8, b: 0.8 } }];
+
+	const figma2htmlTextNode = figma.createText();
+	figma2htmlTextNode.name = 'FIGMA2HTML';
+	figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
+		figma2htmlTextNode.characters = 'FIGMA2HTML';
+		figma2htmlTextNode.textDecoration = 'UNDERLINE';
+		figma2htmlTextNode.fontSize = 14;
+		figma2htmlTextNode.letterSpacing = { value: 0.5, unit: 'PERCENT' };
+	});
+	figma2htmlTextNode.layoutGrow = 0;
+	figma2htmlTextNode.layoutAlign = 'STRETCH';
+	figma2htmlTextNode.layoutPositioning = 'AUTO';
+
+	const textWarningNode = figma.createText();
+	textWarningNode.name = 'WARNING';
+	figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
+		textWarningNode.characters =
+			'CAUTION: Do not edit or delete anything in this frame. Figma2html settings are stored here to enable cross-device collaboration.';
+		textWarningNode.fills = [{ type: 'SOLID', color: { r: 1, g: 0, b: 0 } }];
+		textWarningNode.layoutGrow = 0;
+		textWarningNode.layoutAlign = 'STRETCH';
+		textWarningNode.layoutPositioning = 'AUTO';
+		textWarningNode.fontSize = 10;
+	});
+
+	const metaGroup = figma.createFrame();
+	metaGroup.name = 'f2h-meta';
+	metaGroup.primaryAxisSizingMode = 'AUTO';
+	metaGroup.counterAxisSizingMode = 'AUTO';
+	metaGroup.layoutMode = 'VERTICAL';
+	metaGroup.itemSpacing = 6;
+	metaGroup.layoutGrow = 0;
+	metaGroup.layoutAlign = 'STRETCH';
+	metaGroup.layoutPositioning = 'AUTO';
+
+	metaGroup.appendChild(figma2htmlTextNode);
+	metaGroup.appendChild(textWarningNode);
+
+	// create variables frame, but first check if legacy versions exist
+
+	const legacyVariablesFrame = figma.currentPage.findChild(
+		(node) => node.type === 'FRAME' && node.name === 'f2h-variables'
+	) as FrameNode;
+
+	const legacyVariables = (legacyVariablesFrame?.children?.[0] as TextNode)?.characters;
+
+	if (legacyVariables) legacyVariablesFrame.remove();
+
+	const initVariables = legacyVariables ? KeyValue.toJSON(legacyVariables) : defaults.variables;
+
+	variablesFrame = newConfigFrame({
+		name: 'f2h-variables',
+		text: initVariables
+	});
+
+	figma.ui.postMessage({
+		type: 'variables',
+		variables: initVariables
+	});
+
+	// create settings frame, but first check if legacy versions exist
+
+	const legacySettingsFrame = figma.currentPage.findChild(
+		(node) => node.type === 'FRAME' && node.name === 'f2h-settings'
+	) as FrameNode;
+
+	const legacySettings = (legacySettingsFrame?.children?.[0] as TextNode)?.characters;
+
+	if (legacySettings) legacySettingsFrame.remove();
+
+	const initSettings = legacySettings ? KeyValue.toJSON(legacySettings) : defaults.config;
+
+	settingsFrame = newConfigFrame({
+		name: 'f2h-settings',
+		text: initSettings
+	});
+
+	figma.ui.postMessage({
+		type: 'config',
+		config: initSettings
+	});
+
+	frameNode.appendChild(metaGroup);
+	frameNode.appendChild(variablesFrame.parent as FrameNode);
+	frameNode.appendChild(settingsFrame.parent as FrameNode);
+
+	figma.currentPage.appendChild(frameNode);
+
+	frameNode.locked = true;
+	frameNode.visible = false;
+
+	configGroupNode = frameNode;
+}
 
 /**
  * STORED DATA
@@ -99,6 +304,7 @@ class Stored {
 		};
 		static clear = async (): Promise<void> => {
 			await figma.clientStorage.deleteAsync('panels');
+			Stored.panels.set(defaults.panels);
 		};
 	};
 
@@ -118,6 +324,7 @@ class Stored {
 
 		static clear = async (): Promise<void> => {
 			await figma.clientStorage.deleteAsync('size');
+			Stored.size.set(defaults.size);
 		};
 	};
 
@@ -125,91 +332,43 @@ class Stored {
 	 * VARIABLES
 	 */
 	static variables = class {
+		static frame = (): TextNode => variablesFrame;
 		static get = async (): Promise<Variables> => {
-			// get the stored variables
-			const variablesFrame = figma.currentPage.findChild(
-				(node) => node.type === 'FRAME' && node.name === 'f2h-variables'
-			) as FrameNode;
-
-			const variablesText = variablesFrame?.children?.[0] as TextNode;
-
-			if (variablesText?.characters) {
-				const variables = yaml.load(variablesText.characters);
-				Stored.variables.write();
+			const characters = Stored.variables.frame().characters;
+			if (characters) {
+				const variables = KeyValue.toJSON(characters) ?? {};
+				Stored.variables.write(variables as Variables);
 
 				figma.ui.postMessage({
 					type: 'variables',
 					variables: variables
 				});
 
-				return variables;
+				return variables as Variables;
 			} else {
 				figma.ui.postMessage({
 					type: 'variables',
-					variables: null
+					variables: {}
 				});
 
 				return defaults.variables;
 			}
 		};
 
-		static write = async (): Promise<void> => {
-			// write an example variables array to a text node on the current page
-			let variables: object = defaults.variables;
-			let x = 0;
-			let y = 0;
-
-			// remove existing variables text node if found
-			const existingVariablesFrame = figma.currentPage.findChild(
-				(node) => node.type === 'FRAME' && node.name === 'f2h-variables'
-			) as FrameNode;
-
-			const existingVariablesText = existingVariablesFrame?.children?.[0] as TextNode;
-
-			if (existingVariablesText?.characters) {
-				// save xPos of existing variables text node if it exists
-				x = existingVariablesText.x;
-				const characters = existingVariablesText.characters;
-				variables = yaml.load(characters);
-				existingVariablesFrame.remove();
-			}
-
-			// load Inter for variables text node
+		static write = async (variables = defaults.variables): Promise<void> => {
 			figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
-				const nodes = figma.currentPage.findAll(
-					(node) => isFrameExportable(node.name) || node.name === 'f2h-settings'
-				);
-				const settingsNode = nodes.find((node) => node.name === 'f2h-settings') as FrameNode;
-
-				// if settings exists, place below it
-				if (settingsNode) {
-					y = settingsNode.y + settingsNode.height;
-					x = settingsNode.x;
-				} else {
-					// otherwise get all top-level children and place it to the right of them
-					const maxY = nodes.reduce((max, node) => Math.max(max, node.y + node.height), 0);
-					y = maxY;
-
-					const maxX = nodes.reduce((max, node) => Math.max(max, node.x + node.width), 0);
-					x = maxX;
-				}
-
-				// a little y padding
-				y += 50;
-
-				// create the node
-				newConfigFrame({
-					name: 'f2h-variables',
-					text: variables,
-					x,
-					y
-				});
-
-				figma.ui.postMessage({
-					type: 'variables',
-					variables: variables
-				});
+				Stored.variables.frame().characters = KeyValue.toString(variables);
 			});
+
+			figma.ui.postMessage({
+				type: 'variables',
+				variables: variables
+			});
+		};
+
+		static clear = async (): Promise<void> => {
+			await figma.clientStorage.deleteAsync('variables');
+			Stored.variables.write(defaults.variables);
 		};
 	};
 
@@ -217,6 +376,7 @@ class Stored {
 	 * CONFIG
 	 */
 	static config = class {
+		static frame = (): TextNode => settingsFrame;
 		static get = async (): Promise<Config> => {
 			const _config = await figma.clientStorage.getAsync('config');
 			return _config || defaults.config;
@@ -229,59 +389,33 @@ class Stored {
 
 		static clear = async (): Promise<void> => {
 			await figma.clientStorage.deleteAsync('config');
-			return;
+			Stored.config.write(defaults.config);
 		};
 
 		// write the config to a text node on the current page
-		static write = async (config): Promise<void> => {
-			let x = 0;
-			let y = 0;
-
-			// remove existing settings text node if found
-			const settings = figma.currentPage.findChild(
-				(node) => node.type === 'FRAME' && node.name === 'f2h-settings'
-			) as TextNode;
-
-			if (settings) {
-				// save position if settings node exists
-				x = settings.x;
-				settings.remove();
-			}
-
-			// load Inter for settings text node
+		static write = async (config = defaults.config): Promise<void> => {
 			figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
-				// get all frames with names starting with "#"
-				const nodes = figma.currentPage.findChildren(({ name }) => isFrameExportable(name));
+				Stored.config.frame().characters = KeyValue.toString(config);
+			});
 
-				// get furthest point to the right
-				x = nodes.reduce((max, node) => Math.max(max, node.x + node.width), 0);
-
-				x += 100;
-
-				// get furthest point to the top
-				y = nodes.reduce((min, node) => Math.min(min, node.y), 0);
-
-				// create the node
-				newConfigFrame({
-					name: 'f2h-settings',
-					text: config,
-					x,
-					y
-				});
+			figma.ui.postMessage({
+				type: 'config',
+				config: config
 			});
 		};
 
 		// find text node named "settings" and load
 		static load = async (): Promise<void> => {
-			const settingsFrame = figma.currentPage.findChild(
-				(node) => node.type === 'FRAME' && node.name === 'f2h-settings'
-			) as FrameNode;
+			const characters = Stored.config.frame().characters;
 
-			const settingsNode = settingsFrame.children[0] as TextNode;
-
-			if (settingsNode?.characters) {
-				const config = yaml.load(settingsNode.characters);
+			if (characters) {
+				const config = KeyValue.toJSON(characters) as Config;
 				await Stored.config.set(config);
+
+				figma.ui.postMessage({
+					type: 'config',
+					config: config
+				});
 			}
 		};
 	};
@@ -586,8 +720,8 @@ figma.ui.onmessage = async (message) => {
 		}
 
 		case 'write-variables': {
-			await Stored.variables.write();
-			log('Writing example variables');
+			await Stored.variables.write(message.variables);
+			log('Writing variables');
 			break;
 		}
 
@@ -599,6 +733,10 @@ figma.ui.onmessage = async (message) => {
 
 figma.on('close', () => {
 	tempFrame.remove();
+	if (configGroupNode) {
+		configGroupNode.locked = true;
+		configGroupNode.visible = false;
+	}
 	log('closed');
 	return;
 });
