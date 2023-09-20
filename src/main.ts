@@ -45,7 +45,7 @@ const autoType = (object: { [key: string]: unknown }) => {
 
 class KeyValue {
 	static toJSON = (text: string): Config | Variables => {
-		const splitLines = text.split('\n').filter((line) => line?.trim());
+		const splitLines = text.split(/\n+(?=\S+:.*)/).filter((line) => line?.trim());
 		const keyValuePairs = splitLines.map((line) => {
 			const split = line?.trim()?.split(/:(.*)/s);
 			if (!split) return;
