@@ -10,15 +10,28 @@
 
 	const dispatch = createEventDispatcher();
 
-	$: entries = Object.entries($variables).sort(([a], [b]) => a.localeCompare(b));
+	$: entries = Object.entries($variables);
 </script>
 
 <div class="flex w-full flex-col gap-4">
 	{#if entries.length}
 		<ul class="flex flex-col gap-4 divide-y divide-figma-bg-secondary">
-			{#each entries as [key, value] (key)}
-				{@const id = `variable-${slugify(key, { lower: true, strict: true })}`}
-				<li class="flex flex-col gap-2 pt-4 first-of-type:pt-0" animate:flip={{ duration: 300 }}>
+			{#each entries as [uuid, { key, value }] (uuid)}
+				{@const id = `variable-${slugify(uuid, { lower: true, strict: true })}`}
+				<li
+					class="flex flex-col gap-2 pt-4 first-of-type:pt-0"
+					animate:flip={{ duration: 300 }}
+					on:blur={() => {
+						variables.update((v) => {
+							const newKey = document.getElementById(`${id}-key`).value;
+							const newValue = document.getElementById(`${id}-value`).value;
+							v[uuid].key = newKey;
+							v[uuid].value = newValue;
+							return v;
+						});
+						dispatch('write-variables');
+					}}
+				>
 					<div class="flex flex-row flex-nowrap items-center justify-between gap-2">
 						<Input
 							id="{id}-key"
@@ -26,8 +39,7 @@
 							value={key}
 							on:change={(e) => {
 								variables.update((v) => {
-									delete v[key];
-									v[e.target.value] = value;
+									v[uuid].key = e.target.value;
 									return v;
 								});
 								dispatch('write-variables');
@@ -40,12 +52,10 @@
 							title="Save variable: {key}"
 							on:click={() => {
 								variables.update((v) => {
-									// delete entire entry
-									delete v[key];
-
 									const newKey = document.getElementById(`${id}-key`).value;
 									const newValue = document.getElementById(`${id}-value`).value;
-									v[newKey] = newValue;
+									v[uuid].key = newKey;
+									v[uuid].value = newValue;
 									return v;
 								});
 								dispatch('write-variables');
@@ -61,7 +71,7 @@
 							on:click={() => {
 								variables.update((v) => {
 									// delete entire entry
-									delete v[key];
+									delete v[uuid];
 									return v;
 								});
 								dispatch('write-variables');
@@ -76,7 +86,7 @@
 						{value}
 						on:input={(e) => {
 							variables.update((v) => {
-								v[key] = e.target.value;
+								v[uuid].value = e.target.value;
 								return v;
 							});
 							dispatch('write-variables');
@@ -90,7 +100,10 @@
 	<Button
 		class="bg-figma-bg-secondary"
 		on:click={() => {
-			variables.update((v) => ({ ...v, '': '' }));
+			variables.update((v) => {
+				return { ...v, [Math.random().toString(36).substring(2, 15)]: { key: '', value: '' } };
+			});
+			// dispatch('write-variables');
 		}}
 	>
 		<PlusIcon size="12" class="mr-2" />

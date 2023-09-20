@@ -22,24 +22,6 @@ figma.showUI(__html__, { width: 560, height: 500, themeColors: true });
 /** UTILS */
 const isFrameExportable = (frameName: string): boolean => !!frameName.match(/^#\d+px$/);
 
-class KeyValue {
-	static toJSON = (text: string): Config | Variables => {
-		const splitLines = text.split(/\n+(?=\S+:.*)/).filter((line) => line?.trim());
-		const keyValuePairs = splitLines.map((line) => {
-			const split = line?.trim()?.split(/:(.*)/s);
-			if (!split) return;
-			const [key, value] = split;
-			return [key.trim(), value.trim()];
-		});
-		const result = Object.fromEntries(keyValuePairs);
-		return result as Config | Variables;
-	};
-	static toString = (obj: Config | Variables): string =>
-		Object.entries(obj)
-			.map(([key, value]) => `${key}: ${value}`)
-			.join('\n');
-}
-
 /**
  * DEFAULT VARIABLES
  */
@@ -72,14 +54,207 @@ const defaults = {
 	} as Panels
 };
 
+/**
+ * STORED DATA
+ * Interface with data in clientStorage
+ * @see {@link https://www.figma.com/plugin-docs/api/figma-clientStorage/|ClientStorage}
+ */
+class Stored {
+	/**
+	 * PANELS.
+	 * Sections of the UI to show/hide by default
+	 */
+	static panels = class {
+		static get = async (): Promise<Panels> => {
+			const panels = await figma.clientStorage.getAsync('panels');
+			return panels ?? defaults.panels;
+		};
+		static set = async (panels: Panels): Promise<Panels> => {
+			await figma.clientStorage.setAsync('panels', panels);
+			return panels;
+		};
+		static clear = async (): Promise<void> => {
+			await figma.clientStorage.deleteAsync('panels');
+			Stored.panels.set(defaults.panels);
+		};
+	};
+
+	/**
+	 * SIZE
+	 */
+	static size = class {
+		static get = async () => {
+			const _size = await figma.clientStorage.getAsync('size');
+			return _size ?? defaults.size;
+		};
+
+		static set = async (_size: { w: number; h: number }) => {
+			await figma.clientStorage.setAsync('size', _size);
+			return _size;
+		};
+
+		static clear = async (): Promise<void> => {
+			await figma.clientStorage.deleteAsync('size');
+			Stored.size.set(defaults.size);
+		};
+	};
+
+	/**
+	 * VARIABLES
+	 */
+	static variables = class {
+		static frame = (): TextNode => variablesFrame;
+		static toJSON = (text: string): Config | Variables => {
+			const splitLines = text.split(/\n+(?=\S+:.*)/).filter((line) => line?.trim());
+			const keyValuePairs = splitLines.map((line) => {
+				const split = line?.trim()?.split(/:(.*)/s);
+				if (!split) return;
+				const uuid = Math.random().toString(36).substring(2, 15);
+				const [key, value] = split;
+				return [uuid, { key: key.trim(), value: value.trim() }];
+			});
+			const result = Object.fromEntries(keyValuePairs);
+			return result as Variables;
+		};
+		static toString = (obj: Variables): string => {
+			console.log(obj);
+			return Object.entries(obj)
+				.filter((d) => !!d[1].key.trim())
+				.map(([, { key, value }]) => `${key}: ${value}`)
+				.join('\n');
+		};
+		static get = async (): Promise<Variables> => {
+			const characters = Stored.variables.frame().characters;
+			if (characters) {
+				const variables = Stored.variables.toJSON(characters) ?? {};
+				Stored.variables.write(variables as Variables);
+
+				figma.ui.postMessage({
+					type: 'variables',
+					variables: variables
+				});
+
+				return variables as Variables;
+			} else {
+				figma.ui.postMessage({
+					type: 'variables',
+					variables: {}
+				});
+
+				return defaults.variables;
+			}
+		};
+		static write = async (variables = defaults.variables): Promise<void> => {
+			figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
+				Stored.variables.frame().characters = Stored.variables.toString(variables);
+			});
+
+			figma.ui.postMessage({
+				type: 'variables',
+				variables: variables
+			});
+		};
+		static clear = async (): Promise<void> => {
+			await figma.clientStorage.deleteAsync('variables');
+			Stored.variables.write(defaults.variables);
+		};
+	};
+
+	/**
+	 * CONFIG
+	 */
+	static config = class {
+		static frame = (): TextNode => settingsFrame;
+		static toJSON = (text: string): Config => {
+			const splitLines = text.split(/\n+(?=\S+:.*)/).filter((line) => line?.trim());
+			const keyValuePairs = splitLines.map((line) => {
+				const split = line?.trim()?.split(/:(.*)/s);
+				if (!split) return;
+				const [key, value] = split;
+				return [key.trim(), value.trim()];
+			});
+			const result = Object.fromEntries(keyValuePairs);
+			return result as Config;
+		};
+		static toString = (obj: Config | Variables): string => {
+			return Object.entries(obj)
+				.map(([key, value]) => `${key}: ${value}`)
+				.join('\n');
+		};
+		static get = async (): Promise<Config> => {
+			const _config = await figma.clientStorage.getAsync('config');
+			return _config || defaults.config;
+		};
+
+		static set = async (_config: Config): Promise<Config> => {
+			await figma.clientStorage.setAsync('config', _config);
+			return _config;
+		};
+
+		static clear = async (): Promise<void> => {
+			await figma.clientStorage.deleteAsync('config');
+			Stored.config.write(defaults.config);
+		};
+
+		// write the config to a text node on the current page
+		static write = async (config = defaults.config): Promise<void> => {
+			figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
+				Stored.config.frame().characters = Stored.config.toString(config);
+			});
+
+			figma.ui.postMessage({
+				type: 'config',
+				config: config
+			});
+		};
+
+		// find text node named "settings" and load
+		static load = async (): Promise<void> => {
+			const characters = Stored.config.frame().characters;
+
+			if (characters) {
+				const config = Stored.config.toJSON(characters) as Config;
+				await Stored.config.set(config);
+
+				figma.ui.postMessage({
+					type: 'config',
+					config: config
+				});
+			}
+		};
+	};
+}
+
+class TempFrame {
+	frame: FrameNode | undefined;
+
+	create = () => {
+		if (this.frame) {
+			this.frame.remove();
+			this.frame = undefined;
+		}
+
+		this.frame = figma.createFrame();
+		this.frame.name = '[figma2html]';
+		this.frame.clipsContent = false;
+	};
+
+	remove = () => {
+		this.frame?.remove();
+		this.frame = undefined;
+	};
+}
+
 interface NewConfigFrame {
 	name: string;
 	x?: number;
 	y?: number;
 	text: Config | Variables;
+	// eslint-disable-next-line no-unused-vars
+	parser: (obj: Config | Variables) => string;
 }
 
-const newConfigFrame = ({ name, text }: NewConfigFrame) => {
+const newConfigFrame = ({ name, text, parser }: NewConfigFrame) => {
 	const frameNode = figma.createFrame();
 	frameNode.name = name;
 	frameNode.locked = true;
@@ -102,7 +277,7 @@ const newConfigFrame = ({ name, text }: NewConfigFrame) => {
 	textNode.layoutAlign = 'STRETCH';
 	textNode.layoutPositioning = 'AUTO';
 	figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
-		textNode.characters = KeyValue.toString(text);
+		textNode.characters = parser(text);
 		textNode.textAutoResize = 'WIDTH_AND_HEIGHT';
 	});
 	frameNode.appendChild(textNode);
@@ -131,7 +306,8 @@ if (configGroupNode) {
 	if (!settingsFrame) {
 		settingsFrame = newConfigFrame({
 			name: 'f2h-settings',
-			text: defaults.config
+			text: defaults.config,
+			parser: Stored.config.toString
 		});
 		configGroupNode.appendChild(settingsFrame.parent as FrameNode);
 	}
@@ -147,7 +323,8 @@ if (configGroupNode) {
 	if (!variablesFrame) {
 		variablesFrame = newConfigFrame({
 			name: 'f2h-variables',
-			text: defaults.variables
+			text: defaults.variables,
+			parser: Stored.variables.toString
 		});
 		configGroupNode.appendChild(variablesFrame.parent as FrameNode);
 	}
@@ -216,11 +393,14 @@ if (configGroupNode) {
 
 	if (legacyVariables) legacyVariablesFrame.remove();
 
-	const initVariables = legacyVariables ? KeyValue.toJSON(legacyVariables) : defaults.variables;
+	const initVariables = legacyVariables
+		? Stored.variables.toJSON(legacyVariables)
+		: defaults.variables;
 
 	variablesFrame = newConfigFrame({
 		name: 'f2h-variables',
-		text: initVariables
+		text: initVariables,
+		parser: Stored.variables.toString
 	});
 
 	figma.ui.postMessage({
@@ -238,11 +418,12 @@ if (configGroupNode) {
 
 	if (legacySettings) legacySettingsFrame.remove();
 
-	const initSettings = legacySettings ? KeyValue.toJSON(legacySettings) : defaults.config;
+	const initSettings = legacySettings ? Stored.config.toJSON(legacySettings) : defaults.config;
 
 	settingsFrame = newConfigFrame({
 		name: 'f2h-settings',
-		text: initSettings
+		text: initSettings,
+		parser: Stored.config.toString
 	});
 
 	figma.ui.postMessage({
@@ -260,164 +441,6 @@ if (configGroupNode) {
 	frameNode.visible = false;
 
 	configGroupNode = frameNode;
-}
-
-/**
- * STORED DATA
- * Interface with data in clientStorage
- * @see {@link https://www.figma.com/plugin-docs/api/figma-clientStorage/|ClientStorage}
- */
-class Stored {
-	/**
-	 * PANELS.
-	 * Sections of the UI to show/hide by default
-	 */
-	static panels = class {
-		static get = async (): Promise<Panels> => {
-			const panels = await figma.clientStorage.getAsync('panels');
-			return panels ?? defaults.panels;
-		};
-		static set = async (panels: Panels): Promise<Panels> => {
-			await figma.clientStorage.setAsync('panels', panels);
-			return panels;
-		};
-		static clear = async (): Promise<void> => {
-			await figma.clientStorage.deleteAsync('panels');
-			Stored.panels.set(defaults.panels);
-		};
-	};
-
-	/**
-	 * SIZE
-	 */
-	static size = class {
-		static get = async () => {
-			const _size = await figma.clientStorage.getAsync('size');
-			return _size ?? defaults.size;
-		};
-
-		static set = async (_size: { w: number; h: number }) => {
-			await figma.clientStorage.setAsync('size', _size);
-			return _size;
-		};
-
-		static clear = async (): Promise<void> => {
-			await figma.clientStorage.deleteAsync('size');
-			Stored.size.set(defaults.size);
-		};
-	};
-
-	/**
-	 * VARIABLES
-	 */
-	static variables = class {
-		static frame = (): TextNode => variablesFrame;
-		static get = async (): Promise<Variables> => {
-			const characters = Stored.variables.frame().characters;
-			if (characters) {
-				const variables = KeyValue.toJSON(characters) ?? {};
-				Stored.variables.write(variables as Variables);
-
-				figma.ui.postMessage({
-					type: 'variables',
-					variables: variables
-				});
-
-				return variables as Variables;
-			} else {
-				figma.ui.postMessage({
-					type: 'variables',
-					variables: {}
-				});
-
-				return defaults.variables;
-			}
-		};
-
-		static write = async (variables = defaults.variables): Promise<void> => {
-			figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
-				Stored.variables.frame().characters = KeyValue.toString(variables);
-			});
-
-			figma.ui.postMessage({
-				type: 'variables',
-				variables: variables
-			});
-		};
-
-		static clear = async (): Promise<void> => {
-			await figma.clientStorage.deleteAsync('variables');
-			Stored.variables.write(defaults.variables);
-		};
-	};
-
-	/**
-	 * CONFIG
-	 */
-	static config = class {
-		static frame = (): TextNode => settingsFrame;
-		static get = async (): Promise<Config> => {
-			const _config = await figma.clientStorage.getAsync('config');
-			return _config || defaults.config;
-		};
-
-		static set = async (_config: Config): Promise<Config> => {
-			await figma.clientStorage.setAsync('config', _config);
-			return _config;
-		};
-
-		static clear = async (): Promise<void> => {
-			await figma.clientStorage.deleteAsync('config');
-			Stored.config.write(defaults.config);
-		};
-
-		// write the config to a text node on the current page
-		static write = async (config = defaults.config): Promise<void> => {
-			figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
-				Stored.config.frame().characters = KeyValue.toString(config);
-			});
-
-			figma.ui.postMessage({
-				type: 'config',
-				config: config
-			});
-		};
-
-		// find text node named "settings" and load
-		static load = async (): Promise<void> => {
-			const characters = Stored.config.frame().characters;
-
-			if (characters) {
-				const config = KeyValue.toJSON(characters) as Config;
-				await Stored.config.set(config);
-
-				figma.ui.postMessage({
-					type: 'config',
-					config: config
-				});
-			}
-		};
-	};
-}
-
-class TempFrame {
-	frame: FrameNode | undefined;
-
-	create = () => {
-		if (this.frame) {
-			this.frame.remove();
-			this.frame = undefined;
-		}
-
-		this.frame = figma.createFrame();
-		this.frame.name = '[figma2html]';
-		this.frame.clipsContent = false;
-	};
-
-	remove = () => {
-		this.frame?.remove();
-		this.frame = undefined;
-	};
 }
 
 // create a temporary frame to export
