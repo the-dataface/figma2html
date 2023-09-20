@@ -22,27 +22,6 @@ figma.showUI(__html__, { width: 560, height: 500, themeColors: true });
 /** UTILS */
 const isFrameExportable = (frameName: string): boolean => !!frameName.match(/^#\d+px$/);
 
-// d3's autoType, minus date parsing
-// https://github.com/d3/d3-dsv/blob/main/src/autoType.js
-const autoType = (object: { [key: string]: unknown }) => {
-	for (const key in object) {
-		let value: string | number | boolean | null | undefined = (object[key] as string)?.trim();
-		let number: number;
-		const lowercaseValue = value.toLowerCase();
-
-		if (lowercaseValue === 'true') value = true;
-		else if (lowercaseValue === 'false') value = false;
-		else if (lowercaseValue === 'NaN') value = NaN;
-		else if (lowercaseValue === 'null') value = null;
-		else if (lowercaseValue === 'undefined') value = undefined;
-		else if (!isNaN((number = +value))) value = number;
-		else continue;
-
-		object[key] = value;
-	}
-	return object;
-};
-
 class KeyValue {
 	static toJSON = (text: string): Config | Variables => {
 		const splitLines = text.split(/\n+(?=\S+:.*)/).filter((line) => line?.trim());
@@ -52,8 +31,8 @@ class KeyValue {
 			const [key, value] = split;
 			return [key.trim(), value.trim()];
 		});
-		const typed = autoType(Object.fromEntries(keyValuePairs));
-		return typed as Config | Variables;
+		const result = Object.fromEntries(keyValuePairs);
+		return result as Config | Variables;
 	};
 	static toString = (obj: Config | Variables): string =>
 		Object.entries(obj)
