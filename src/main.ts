@@ -4,8 +4,8 @@ import slugify from 'slugify';
 import createSettingsBlock from 'lib/generator/createSettingsBlock';
 import { createGroupFromComponent, createGroupFromFrame } from 'lib/generator/group';
 import html from 'lib/generator/html/wrapper';
-import log from 'lib/utils/log';
 import isNodeVisible from 'lib/utils/isNodeVisible';
+import log from 'lib/utils/log';
 
 /**
  * ignore invisible nodes. speeds up document traversal
@@ -134,15 +134,19 @@ class Stored {
 			const variablesText = variablesFrame?.children?.[0] as TextNode;
 
 			if (variablesText?.characters) {
-				const variables = yaml.load(variablesText.characters);
-				Stored.variables.write();
+				try {
+					const variables = yaml.load(variablesText.characters);
+					Stored.variables.write();
 
-				figma.ui.postMessage({
-					type: 'variables',
-					variables: variables
-				});
+					figma.ui.postMessage({
+						type: 'variables',
+						variables: variables
+					});
 
-				return variables;
+					return variables;
+				} catch (e) {
+					figma.notify('Error loading f2h-variables. Validate YAML syntax.', { error: true });
+				}
 			} else {
 				figma.ui.postMessage({
 					type: 'variables',
@@ -171,7 +175,7 @@ class Stored {
 				x = existingVariablesText.x;
 				const characters = existingVariablesText.characters;
 				variables = yaml.load(characters);
-				existingVariablesText.remove();
+				existingVariablesFrame.remove();
 			}
 
 			// load Inter for variables text node
@@ -181,20 +185,19 @@ class Stored {
 				);
 				const settingsNode = nodes.find((node) => node.name === 'f2h-settings') as FrameNode;
 
-				// if settings exists, place beside it
+				// if settings exists, place below it
 				if (settingsNode) {
-					x = settingsNode.x + settingsNode.width;
+					y = settingsNode.y + settingsNode.height;
+					x = settingsNode.x;
 				} else {
-					// otherwise get all top-level children and place it to the right of them
-					const maxX = nodes.reduce((max, node) => Math.max(max, node.x + node.width), 0);
-					x = maxX;
+					// otherwise get all top-level children and place it at the top of them
+					const minY = nodes.reduce((min, node) => Math.min(min, node.y), 0);
+					y = minY;
+					x = nodes.reduce((max, node) => Math.max(max, node.x + node.width), 0);
+					x += 100;
 				}
 
-				// a little padding
-				x += 25;
-
-				// get uppermost point
-				y = nodes.reduce((min, node) => Math.min(min, node.y), 0);
+				y += 50;
 
 				// create the node
 				newConfigFrame({
@@ -254,7 +257,6 @@ class Stored {
 
 				// get furthest point to the right
 				x = nodes.reduce((max, node) => Math.max(max, node.x + node.width), 0);
-
 				x += 100;
 
 				// get furthest point to the top
@@ -279,8 +281,12 @@ class Stored {
 			const settingsNode = settingsFrame.children[0] as TextNode;
 
 			if (settingsNode?.characters) {
-				const config = yaml.load(settingsNode.characters);
-				await Stored.config.set(config);
+				try {
+					const config = yaml.load(settingsNode.characters);
+					await Stored.config.set(config);
+				} catch (e) {
+					figma.notify('Error loading f2h-settings. Validate YAML syntax.', { error: true });
+				}
 			}
 		};
 	};
