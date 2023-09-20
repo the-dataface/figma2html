@@ -117,7 +117,6 @@ class Stored {
 			return result as Variables;
 		};
 		static toString = (obj: Variables): string => {
-			console.log(obj);
 			return Object.entries(obj)
 				.filter((d) => !!d[1].key.trim())
 				.map(([, { key, value }]) => `${key}: ${value}`)
