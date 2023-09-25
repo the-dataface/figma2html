@@ -62,6 +62,7 @@
 		"eslint": "^8.30.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte3": "^4.0.0",
+		"htmlparser2": "^9.0.0",
 		"lefthook": "^1.2.7",
 		"postcss": "^8.4.20",
 		"postcss-load-config": "^4.0.1",
@@ -84,7 +85,6 @@
 	},
 	"dependencies": {
 		"js-convert-case": "^4.2.0",
-		"js-yaml": "^4.1.0",
 		"jszip": "3.10.1"
 	}
 }

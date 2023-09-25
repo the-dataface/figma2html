@@ -76,16 +76,11 @@ Check out [this demo Figma file](https://www.figma.com/file/THVkWmLhe7TJD16hj0ID
 
 ### Variable Text
 
-Variable text is supported for exportable frames (frames prefixed with `#`). To use variables, add a top-level text node on the target page named `f2h-variables`. The plugin's UI offers a button to generate an example variables text node. The text node should be written in [YAML](https://yaml.org/) with key/value pairs:
+Variable text is supported for exportable frames (frames prefixed with `#`). Variables can be added in the UI under the `Variables` panel. All variables values are strings and can be used in any text node in your Figma file.
 
-```yaml
-hed: figma2html
-dek: Export Figma frames to responsive HTML and CSS. A Figma version of ai2html, with some extra features.
-```
+To use a variable, edit any desired _visible_ text node's name to be the key (e.g. `hed`) in double curly brackets (e.g. `{{hed}}`) in a _visible_ text node. The exported files with replace the key with the appropriate value (e.g. `{{hed}}` -> `figma2html`).
 
-To use a variable, wrap a key (e.g. `hed`) in double curly brackets (e.g. `{{hed}}`) in a _visible_ text node. The exported files with replace the key with the appropriate value (e.g. `{{hed}}` -> `figma2html`).
-
-This replacement occurs on the exported files and not on Figma itself, leaving Figma files untouched with `{{key}}` variables and simplifying future edits. Running the plugin will format the variables text node.
+This replacement occurs on the exported files and on Figma itself everytime a key or value changes.
 
 ## Contributing + Feedback
 

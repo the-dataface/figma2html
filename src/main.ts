@@ -3,8 +3,11 @@ import slugify from 'slugify';
 import createSettingsBlock from 'lib/generator/createSettingsBlock';
 import { createGroupFromComponent, createGroupFromFrame } from 'lib/generator/group';
 import html from 'lib/generator/html/wrapper';
+import extractTextFromHTML from 'lib/utils/extractTextFromHTML';
 import isNodeVisible from 'lib/utils/isNodeVisible';
 import log from 'lib/utils/log';
+import textNodeVariable from 'lib/utils/textNodeVariable';
+import isFigma2htmlFrame from 'lib/utils/isFigma2htmlFrame';
 
 /**
  * ignore invisible nodes. speeds up document traversal
@@ -20,7 +23,18 @@ figma.skipInvisibleInstanceChildren = true;
 figma.showUI(__html__, { width: 560, height: 500, themeColors: true });
 
 /** UTILS */
-const isFrameExportable = (frameName: string): boolean => !!frameName.match(/^#\d+px$/);
+const getVariableNameFromText = (text: string): string => text.replace(/{{|}}/g, '');
+
+const loadFonts = async (node: TextNode) => {
+	// if symbol, characters have mixed fonts
+	if (typeof node.fontName === 'symbol') {
+		const mixedFonts = node.getRangeAllFontNames(0, node.characters.length);
+		return await Promise.all(mixedFonts.map((font) => figma.loadFontAsync(font)));
+	}
+
+	// otherwise, load singular font
+	return await figma.loadFontAsync(node.fontName);
+};
 
 /**
  * DEFAULT VARIABLES
@@ -104,25 +118,42 @@ class Stored {
 	 */
 	static variables = class {
 		static frame = (): TextNode => variablesFrame;
-		static toJSON = (text: string): Config | Variables => {
-			const splitLines = text.split(/\n+(?=\S+:.*)/).filter((line) => line?.trim());
-			const keyValuePairs = splitLines.map((line) => {
-				const split = line?.trim()?.split(/:(.*)/s);
-				if (!split) return;
-				const uuid = Math.random().toString(36).substring(2, 15);
-				const [key, value] = split;
-				return [uuid, { key: key.trim(), value: value.trim() }];
-			});
-			const result = Object.fromEntries(keyValuePairs);
-			return result as Variables;
+
+		static toJSON = (text: string): Variables => {
+			try {
+				const splitLines = text.split(/\n+(?=\S+:.*)/).filter((line) => line?.trim());
+				const keyValuePairs = splitLines.map((line) => {
+					const split = line?.trim()?.split(/:(.*)/s);
+					if (!split) return;
+					const uuid = Math.random().toString(36).substring(2, 15);
+					const [key, value] = split;
+					return [uuid, { key: key.trim(), value: value.trim() }];
+				});
+				const result = Object.fromEntries(keyValuePairs) as Variables;
+				return result;
+			} catch (error) {
+				figma.ui.postMessage({
+					type: 'error',
+					message: 'Error parsing variables. Validate syntax & try again.'
+				});
+				return {};
+			}
 		};
+
 		static toString = (obj: Variables): string => {
 			return Object.entries(obj)
-				.filter((d) => !!d[1].key.trim())
+				.filter((d) => !!d?.[1]?.key?.trim())
 				.map(([, { key, value }]) => `${key}: ${value}`)
 				.join('\n');
 		};
-		static get = async (): Promise<Variables> => {
+
+		static keyed = (variables: Variables) => {
+			return Object.fromEntries(
+				Object.values(variables).map((d) => [d.key, { value: d.value, nodes: [] }])
+			);
+		};
+
+		static get = (): Variables => {
 			const characters = Stored.variables.frame().characters;
 			if (characters) {
 				const variables = Stored.variables.toJSON(characters) ?? {};
@@ -143,16 +174,81 @@ class Stored {
 				return defaults.variables;
 			}
 		};
+
 		static write = async (variables = defaults.variables): Promise<void> => {
-			figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
-				Stored.variables.frame().characters = Stored.variables.toString(variables);
-			});
+			await loadFonts(Stored.variables.frame());
+
+			Stored.variables.frame().characters = Stored.variables.toString(variables);
 
 			figma.ui.postMessage({
 				type: 'variables',
 				variables: variables
 			});
 		};
+
+		// inject only writes to text nodes that are WHOLLY variable, partials are injected only on export
+		static inject = async (
+			variables = Stored.variables.get()
+		): Promise<Record<string, { value: string; nodes: TextNode[] }>> => {
+			if (!variables || Object.keys(variables).length === 0) return;
+
+			const keyedVariables = Stored.variables.keyed(variables);
+
+			const artboards = figma.currentPage.findAll(
+				(node) => node.type === 'FRAME' && isFigma2htmlFrame(node)
+			) as FrameNode[];
+			if (artboards.length === 0) return;
+
+			// iterate through artboards and find all text nodes, grouping according to key
+			for (let i = 0; i < artboards.length; i++) {
+				const artboard = artboards[i];
+				const allTextNodes = artboard.findAllWithCriteria({ types: ['TEXT'] });
+
+				for (let j = 0; j < allTextNodes.length; j++) {
+					const node = allTextNodes[j];
+
+					// skip if not a variable
+					const isVariable = textNodeVariable(node, { whole: true, partial: false });
+
+					if (!isVariable) continue;
+
+					// get variable name
+					const key = getVariableNameFromText(node.name);
+					const isActiveVariable = key in keyedVariables;
+					if (!isActiveVariable) continue;
+
+					// add node to keyGroups
+					keyedVariables[key].nodes.push(node);
+				}
+			}
+
+			// iterate through each group and replace text content, retaining variable name and erroring if missing nodes
+			for (const [key, { value, nodes }] of Object.entries(keyedVariables)) {
+				if (nodes.length === 0) {
+					figma.notify(`No text nodes named {{${key}}} found`, {
+						error: true,
+						timeout: 3000
+					});
+				}
+
+				// iterate through text nodes and inject variable text content
+				for (let i = 0; i < nodes.length; i++) {
+					const node = nodes[i];
+					const textContent = extractTextFromHTML(value);
+
+					if (!textContent) continue;
+
+					await loadFonts(node);
+
+					// set the node's text content as the pure text, retaining the variable name
+					node.autoRename = false;
+					node.characters = textContent;
+				}
+			}
+
+			return keyedVariables;
+		};
+
 		static clear = async (): Promise<void> => {
 			await figma.clientStorage.deleteAsync('variables');
 			Stored.variables.write(defaults.variables);
@@ -164,22 +260,35 @@ class Stored {
 	 */
 	static config = class {
 		static frame = (): TextNode => settingsFrame;
+
 		static toJSON = (text: string): Config => {
-			const splitLines = text.split(/\n+(?=\S+:.*)/).filter((line) => line?.trim());
-			const keyValuePairs = splitLines.map((line) => {
-				const split = line?.trim()?.split(/:(.*)/s);
-				if (!split) return;
-				const [key, value] = split;
-				return [key.trim(), value.trim()];
-			});
-			const result = Object.fromEntries(keyValuePairs);
-			return result as Config;
+			try {
+				const splitLines = text.split(/\n+(?=\S+:.*)/).filter((line) => line?.trim());
+				const keyValuePairs = splitLines.map((line) => {
+					const split = line?.trim()?.split(/:(.*)/s);
+					if (!split) return;
+					const [key, value] = split;
+					return [key.trim(), value.trim()];
+				});
+				const result = Object.fromEntries(keyValuePairs) as Config;
+				Stored.config.set(result);
+				return result;
+			} catch (error) {
+				figma.ui.postMessage({
+					type: 'error',
+					message: 'Error parsing config. Validate syntax & try again.'
+				});
+				Stored.config.set(defaults.config);
+				return defaults.config;
+			}
 		};
-		static toString = (obj: Config | Variables): string => {
+
+		static toString = (obj: Config): string => {
 			return Object.entries(obj)
 				.map(([key, value]) => `${key}: ${value}`)
 				.join('\n');
 		};
+
 		static get = async (): Promise<Config> => {
 			const _config = await figma.clientStorage.getAsync('config');
 			return _config || defaults.config;
@@ -197,9 +306,9 @@ class Stored {
 
 		// write the config to a text node on the current page
 		static write = async (config = defaults.config): Promise<void> => {
-			figma.loadFontAsync({ family: 'Inter', style: 'Regular' }).then(() => {
-				Stored.config.frame().characters = Stored.config.toString(config);
-			});
+			await loadFonts(Stored.config.frame());
+
+			Stored.config.frame().characters = Stored.config.toString(config);
 
 			figma.ui.postMessage({
 				type: 'config',
@@ -212,8 +321,7 @@ class Stored {
 			const characters = Stored.config.frame().characters;
 
 			if (characters) {
-				const config = Stored.config.toJSON(characters) as Config;
-				await Stored.config.set(config);
+				const config = (await Stored.config.toJSON(characters)) as Config;
 
 				figma.ui.postMessage({
 					type: 'config',
@@ -453,7 +561,7 @@ const getExportables = (): Exportable[] => {
 		const isFrame = node.type === 'FRAME';
 		const isTopLevel = node.parent === figma.currentPage;
 
-		if (!(isFrame && isFrameExportable(node.name) && isTopLevel)) return false;
+		if (!(isFrame && isFigma2htmlFrame(node) && isTopLevel)) return false;
 
 		// add frame to exportables
 		exportables.push({
@@ -723,6 +831,12 @@ figma.ui.onmessage = async (message) => {
 		case 'write-variables': {
 			await Stored.variables.write(message.variables);
 			log('Writing variables');
+			break;
+		}
+
+		case 'inject-variables': {
+			await Stored.variables.inject(message.variables);
+			log('Injecting variables');
 			break;
 		}
 

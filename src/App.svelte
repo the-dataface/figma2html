@@ -167,19 +167,29 @@
 		postMessage({ type: 'export', config: sendConfig() });
 	};
 
-	const onResetSettings = () => postMessage({ type: 'reset-settings' });
+	const onResetSettings = () => {
+		postMessage({ type: 'reset-settings' });
+	};
 
-	const onSaveSettings = () =>
-		parent.postMessage({ pluginMessage: { type: 'save-settings' } }, '*');
+	const onSaveSettings = () => {
+		postMessage({ type: 'save-settings' });
+	};
 
-	const onLoadSettings = () =>
-		parent.postMessage({ pluginMessage: { type: 'load-settings' } }, '*');
+	const onLoadSettings = () => {
+		postMessage({ type: 'load-settings' });
+	};
 
-	const onWriteVariables = () =>
-		parent.postMessage({ pluginMessage: { type: 'write-variables', variables: $variables } }, '*');
+	const onWriteVariables = () => {
+		postMessage({ type: 'write-variables', variables: $variables });
+	};
 
-	const onTogglePanel = () =>
-		parent.postMessage({ pluginMessage: { type: 'panels', panels: $panels } }, '*');
+	const onInjectVariables = (e) => {
+		postMessage({ type: 'inject-variables', variables: e.detail });
+	};
+
+	const onTogglePanel = () => {
+		postMessage({ type: 'panels', panels: $panels });
+	};
 
 	const setErrorMessage = (message: string) => {
 		clearTimeout($error.timeout);
@@ -270,7 +280,11 @@
 					<Text on:change={onChangeConfig} />
 				</Panel>
 				<Panel title="Variables" bind:open={$panels.variables} on:onTogglePanel={onTogglePanel}>
-					<Variables on:change={onChangeConfig} on:write-variables={onWriteVariables} />
+					<Variables
+						on:change={onChangeConfig}
+						on:write-variables={onWriteVariables}
+						on:inject-variables={onInjectVariables}
+					/>
 				</Panel>
 			{/if}
 		</div>

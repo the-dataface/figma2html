@@ -79,8 +79,13 @@ declare global {
 			| 'reset-settings'
 			| 'save-settings'
 			| 'load-settings'
-			| 'write-variables';
+			| 'write-variables'
+			| 'inject-variables'
+			| 'panels';
 		config?: Config | null;
+		variables?: Variables | null;
+		loading?: Loading | null;
+		panels?: Panels | null;
 	}
 }
 
