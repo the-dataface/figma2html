@@ -4,10 +4,10 @@ import createSettingsBlock from 'lib/generator/createSettingsBlock';
 import { createGroupFromComponent, createGroupFromFrame } from 'lib/generator/group';
 import html from 'lib/generator/html/wrapper';
 import extractTextFromHTML from 'lib/utils/extractTextFromHTML';
+import isFigma2htmlFrame from 'lib/utils/isFigma2htmlFrame';
 import isNodeVisible from 'lib/utils/isNodeVisible';
 import log from 'lib/utils/log';
 import textNodeVariable from 'lib/utils/textNodeVariable';
-import isFigma2htmlFrame from 'lib/utils/isFigma2htmlFrame';
 
 /**
  * ignore invisible nodes. speeds up document traversal

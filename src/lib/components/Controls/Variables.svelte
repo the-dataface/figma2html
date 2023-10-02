@@ -32,14 +32,16 @@
 			<div class="flex flex-col gap-2 p-2">
 				<p>
 					Figma2html's Variables are a way to simultaneously set the text content of several nodes.
+				</p>
+				<p>
 					Variables can occur in two modes: whole or partial. Whole variables will replace the
 					entire text content of a node and are previewable, while partial variables will replace
-					only the variable name itself after exporting.
+					the variable in a text node only on export.
 				</p>
 				<p>
 					Get started with whole variables by renaming a text node in the left-hand panel to a
 					variable name of your choosing, excluding spaces. Wrap the variable name in two curly
-					braces on each side, like this: <code>{`{{variable}}`}</code>.
+					braces on each side: <code>{`{{variable}}`}</code>.
 				</p>
 				<p>
 					Then, open figma2html and add that same name in the Variables panel. Add an associated
@@ -49,8 +51,8 @@
 					> button to preview the text.
 				</p>
 				<p>
-					Whole Variables support valid HTML but only does so on exported frames. Previewing whole
-					variables in Figma will show only pure text content without any further styling.
+					Valid HTML is supported on whole and partial variables on export, but only pure text
+					content is previewable in Figma.
 				</p>
 			</div>
 		</div>
