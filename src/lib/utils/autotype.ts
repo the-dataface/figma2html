@@ -5,16 +5,16 @@ const type = (value) => {
 	else if (value?.toLowerCase() === 'false') value = false;
 	else if (value?.toLowerCase() === 'NaN') value = NaN;
 	else if (!isNaN((number = +value))) value = number;
-	else return value;
+
+	return value;
 };
 
 // https://github.com/d3/d3-dsv/blob/main/src/autoType.js
 export default function autoType(object) {
 	if (typeof object !== 'object') return type(object);
-	for (var key in object) {
+	for (const key in object) {
 		let value = object[key].trim();
-		value = type(value);
-		object[key] = value;
+		object[key] = type(value);
 	}
 	return object;
 }
