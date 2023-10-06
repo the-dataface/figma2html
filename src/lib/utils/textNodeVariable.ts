@@ -4,14 +4,14 @@ export const partialRegex = /{{([^\s]+)}}/g;
 export default (
 	node: TextNode,
 	options = { whole: true, partial: true }
-): undefined | string | string[] => {
+): { value: undefined | string | string[]; partial?: boolean; whole?: boolean } => {
 	const isText = node.type === 'TEXT';
 	if (!isText) return undefined;
 
 	// is the entire text node a variable? indicated by name
 	if (options.whole) {
 		const wholeVariableMatch = node.name.match(regex);
-		if (wholeVariableMatch?.[1]) return wholeVariableMatch[1];
+		if (wholeVariableMatch?.[1]) return { value: wholeVariableMatch[1], whole: true };
 	}
 
 	if (options.partial) {
@@ -21,7 +21,8 @@ export default (
 		const partialVariableMatchesArr = [
 			...new Set([...partialVariableMatches].map((d) => d?.slice(1)).flat())
 		];
-		if (partialVariableMatchesArr?.length > 0) return partialVariableMatchesArr;
+		if (partialVariableMatchesArr?.length > 0)
+			return { value: partialVariableMatchesArr, partial: true };
 	}
 
 	return undefined;

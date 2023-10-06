@@ -150,7 +150,10 @@ class Stored {
 
 		static keyed = (variables: Variables) => {
 			return Object.fromEntries(
-				Object.values(variables).map((d) => [d.key, { value: d.value, nodes: [] }])
+				Object.values(variables).map((d) => [
+					d.key,
+					{ value: d.value, nodes: [], partial: 0, whole: 0 }
+				])
 			);
 		};
 
@@ -209,9 +212,9 @@ class Stored {
 					const node = allTextNodes[j];
 
 					// skip if not a variable
-					const isVariable = textNodeVariable(node, { whole: true, partial: false });
+					const variable = textNodeVariable(node, { whole: true, partial: true });
 
-					if (!isVariable) continue;
+					if (!variable?.value) continue;
 
 					// get variable name
 					const key = getVariableNameFromText(node.name);
@@ -219,22 +222,33 @@ class Stored {
 					if (!isActiveVariable) continue;
 
 					// add node to keyGroups
-					keyedVariables[key].nodes.push(node);
+					keyedVariables[key].nodes.push({
+						node: node,
+						partial: !!variable?.partial,
+						whole: !!variable?.whole
+					});
+
+					if (variable.partial) keyedVariables[key].partial += 1;
+					if (variable.whole) keyedVariables[key].whole += 1;
 				}
 			}
 
 			// iterate through each group and replace text content, retaining variable name and erroring if missing nodes
-			for (const [key, { value, nodes }] of Object.entries(keyedVariables)) {
-				if (nodes.length === 0) {
-					figma.notify(`No text nodes named {{${key}}} found`, {
-						error: true,
+			for (const [key, { value, nodes, partial, whole }] of Object.entries(keyedVariables)) {
+				figma.notify(
+					`Found ${whole} whole & ${partial} partial variable text nodes for {{${key}}}.`,
+					{
+						error: whole === 0 && partial === 0,
 						timeout: 3000
-					});
-				}
+					}
+				);
 
 				// iterate through text nodes and inject variable text content
 				for (let i = 0; i < nodes.length; i++) {
-					const node = nodes[i];
+					const { node, whole } = nodes[i];
+
+					if (!whole) continue; // skip non-whole variables
+
 					const textContent = extractTextFromHTML(value);
 
 					if (!textContent) continue;
@@ -273,8 +287,10 @@ class Stored {
 				});
 				const result = Object.fromEntries(keyValuePairs) as Config;
 				const autotyped = autoType(result);
+
 				// account for legacy scales, which were surrounded by quotes
 				autotyped.scale = autotyped.scale.match(/^['"](.*)['"]$/)?.[1];
+
 				Stored.config.set(autotyped);
 				return autotyped;
 			} catch (error) {
@@ -360,9 +376,9 @@ interface NewConfigFrame {
 	name: string;
 	x?: number;
 	y?: number;
-	text: Config | Variables;
+	text: Config | Variables | string;
 	// eslint-disable-next-line no-unused-vars
-	parser: (obj: Config | Variables) => string;
+	parser: (obj: Config | Variables | string) => string;
 }
 
 const newConfigFrame = ({ name, text, parser }: NewConfigFrame) => {
