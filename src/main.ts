@@ -3,6 +3,7 @@ import slugify from 'slugify';
 import createSettingsBlock from 'lib/generator/createSettingsBlock';
 import { createGroupFromComponent, createGroupFromFrame } from 'lib/generator/group';
 import html from 'lib/generator/html/wrapper';
+import autoType from 'lib/utils/autotype';
 import extractTextFromHTML from 'lib/utils/extractTextFromHTML';
 import isFigma2htmlFrame from 'lib/utils/isFigma2htmlFrame';
 import isNodeVisible from 'lib/utils/isNodeVisible';
@@ -271,8 +272,11 @@ class Stored {
 					return [key.trim(), value.trim()];
 				});
 				const result = Object.fromEntries(keyValuePairs) as Config;
-				Stored.config.set(result);
-				return result;
+				const autotyped = autoType(result);
+				// account for legacy scales, which were surrounded by quotes
+				autotyped.scale = autotyped.scale.match(/^['"](.*)['"]$/)?.[1];
+				Stored.config.set(autotyped);
+				return autotyped;
 			} catch (error) {
 				figma.ui.postMessage({
 					type: 'error',
