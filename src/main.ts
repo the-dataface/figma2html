@@ -288,8 +288,10 @@ class Stored {
 				const result = Object.fromEntries(keyValuePairs) as Config;
 				const autotyped = autoType(result);
 
-				// account for legacy scales, which were surrounded by quotes
-				autotyped.scale = autotyped.scale.match(/^['"](.*)['"]$/)?.[1];
+				// account for legacy scales, which were string & by quotes
+				if (typeof autotyped.scale === 'string') {
+					autotyped.scale = autotyped.scale?.match(/^['"](.*)['"]$/)?.[1];
+				}
 
 				Stored.config.set(autotyped);
 				return autotyped;
