@@ -290,7 +290,9 @@ class Stored {
 
 				// account for legacy scales, which were string & by quotes
 				if (typeof autotyped.scale === 'string') {
-					autotyped.scale = autotyped.scale?.match(/^['"](.*)['"]$/)?.[1];
+					autotyped.scale = autotyped.scale?.match(/([0-9]+)/)?.[1];
+				} else {
+					autotyped.scale = `${autotyped.scale}`;
 				}
 
 				Stored.config.set(autotyped);
