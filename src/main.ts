@@ -296,6 +296,7 @@ class Stored {
 				Stored.config.set(autotyped);
 				return autotyped;
 			} catch (error) {
+				console.error('[figma2html]', error);
 				figma.ui.postMessage({
 					type: 'error',
 					message: 'Error parsing config. Validate syntax & try again.'
