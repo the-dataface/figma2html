@@ -1,5 +1,11 @@
 # figma2html
 
+## 1.0.3
+
+### Patch Changes
+
+- Fix custom `</script>` ending tag ([#106](https://github.com/the-dataface/figma2html/pull/106))
+
 ## 1.0.3-beta
 
 ### Patch Changes
