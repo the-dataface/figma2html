@@ -42,7 +42,7 @@ export default ({ config, assets, variables }) => {
 			if (config.includeResizer) code += `<script>${js.resizer(containerID)}</script>`;
 			if (config.includeGoogleFonts && fontList.length > 0)
 				code += `<script>${js.fonts(fontList)}</script>`;
-			if (config.customScript) code += `<script>${config.customScript}<script>`;
+			if (config.customScript) code += `<script>${config.customScript}</script>`;
 			break;
 		}
 		case 'svelte': {

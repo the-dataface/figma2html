@@ -1,5 +1,19 @@
 # figma2html
 
+## 1.0.3
+
+### Patch Changes
+
+- Fix custom `</script>` ending tag ([#106](https://github.com/the-dataface/figma2html/pull/106))
+
+## 1.0.3-beta
+
+### Patch Changes
+
+- Notify users of malformatted YAML ([#101](https://github.com/the-dataface/figma2html/pull/101))
+
+- Remove duplicate variables frame + fix placement ([#101](https://github.com/the-dataface/figma2html/pull/101))
+
 ## 1.0.2-beta
 
 ### Patch Changes
