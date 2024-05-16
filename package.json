@@ -42,14 +42,14 @@
 	],
 	"devDependencies": {
 		"@changesets/cli": "^2.26.0",
-		"@figma/plugin-typings": "1.57.1",
+		"@figma/plugin-typings": "^1.77.0",
 		"@rollup/plugin-alias": "^4.0.2",
 		"@rollup/plugin-babel": "^6.0.3",
 		"@rollup/plugin-commonjs": "24.0.0",
 		"@rollup/plugin-dsv": "^3.0.1",
 		"@rollup/plugin-html": "^1.0.1",
 		"@rollup/plugin-image": "3.0.1",
-		"@rollup/plugin-json": "^6.0.0",
+		"@rollup/plugin-json": "^6.0.1",
 		"@rollup/plugin-node-resolve": "^15.0.1",
 		"@rollup/plugin-terser": "^0.2.1",
 		"@rollup/plugin-typescript": "10.0.1",
@@ -62,6 +62,7 @@
 		"eslint": "^8.30.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte3": "^4.0.0",
+		"htmlparser2": "^9.0.0",
 		"lefthook": "^1.2.7",
 		"postcss": "^8.4.20",
 		"postcss-load-config": "^4.0.1",
@@ -84,7 +85,6 @@
 	},
 	"dependencies": {
 		"js-convert-case": "^4.2.0",
-		"js-yaml": "^4.1.0",
 		"jszip": "3.10.1"
 	}
 }

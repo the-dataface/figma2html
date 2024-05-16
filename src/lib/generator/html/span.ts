@@ -1,14 +1,35 @@
+import textNodeVariable from '../../utils/textNodeVariable';
+
 // TODO: type these parametrs
-export default (segment, variables, styleTextSegments) => {
+export default (parentNode: TextNode, segment, variables: Variable, styleTextSegments) => {
 	let el = ``;
 	let characters = segment.characters;
 
 	// replace variable text
-	if (variables) {
-		Object.keys(variables).forEach((key) => {
-			// replace all instances of the variable name with the value
-			characters = characters.replaceAll(`{{${key}}}`, variables[key]);
-		});
+	const parentTextNodeVariable = textNodeVariable(parentNode);
+
+	if (variables && parentTextNodeVariable) {
+		const keyedVariables = Object.fromEntries(
+			Object.values(variables).map((d) => [d.key, d.value])
+		);
+
+		// string indicates the entire node is a variable
+		if (typeof parentTextNodeVariable === 'string') {
+			const variableValue = keyedVariables?.[parentTextNodeVariable];
+			if (variableValue) {
+				characters = variableValue;
+			}
+		}
+		// array indicates a partial variable, where multiple can exist
+		else if (Array.isArray(parentTextNodeVariable)) {
+			for (let i = 0; i < parentTextNodeVariable.length; i++) {
+				const variable = parentTextNodeVariable[i];
+				const variableValue = keyedVariables?.[variable];
+				if (variableValue) {
+					characters = characters.replaceAll(`{{${variable}}}`, variableValue);
+				}
+			}
+		}
 	}
 
 	// if segment has a hyperlink, add an a tag

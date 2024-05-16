@@ -168,6 +168,7 @@ export default (textFrames: TextNode[], artboard: FrameNode) => {
 		}
 
 		frames.push({
+			node: textFrame,
 			tag,
 			customClasses,
 			customAttributes,

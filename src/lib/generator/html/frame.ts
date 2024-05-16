@@ -151,12 +151,13 @@ export default ({ node, filename, widthRange, alt, config, variables }) => {
 			els.forEach((element) => {
 				el += `\n\t\t\t<${element.tag} ${stringify.attrs({
 					class: [text.elId, text.class, text.customClasses ? text.customClasses.join(' ') : '']
+						.filter(Boolean)
 						.join(' ')
 						.trim()
 				})}>`;
 
 				element.segments.forEach((segment) => {
-					el += span(segment, variables, config.styleTextSegments);
+					el += span(text.node, segment, variables, config.styleTextSegments);
 				});
 
 				el += `</${element.tag}>\n`;

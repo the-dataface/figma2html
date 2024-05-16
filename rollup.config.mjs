@@ -6,15 +6,16 @@ import json from '@rollup/plugin-json';
 import resolve from '@rollup/plugin-node-resolve';
 import terser from '@rollup/plugin-terser';
 import typescript from '@rollup/plugin-typescript';
-import childProcess from 'child_process';
 import cssnano from 'cssnano';
+import { readFile } from 'node:fs/promises';
 import livereload from 'rollup-plugin-livereload';
 import postcss from 'rollup-plugin-postcss';
 import svelte from 'rollup-plugin-svelte';
 import svg from 'rollup-plugin-svg';
 import sveltePreprocess from 'svelte-preprocess';
 
-import pkg from './package.json' assert { type: 'json' };
+const fileUrl = new URL('./package.json', import.meta.url);
+const pkg = JSON.parse(await readFile(fileUrl, 'utf8'));
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -85,7 +86,6 @@ export default [
 					return `<!DOCTYPE html><html${html}><head><title>${title}</title>${metas}${links}</head><body><div id='app'></div>${scripts}</body></html>`;
 				}
 			}),
-			!production && serve(),
 			!production && livereload('build'),
 			production && terser()
 		],
@@ -105,25 +105,9 @@ export default [
 			typescript(),
 			resolve(),
 			commonjs(),
-			babel({ babelHelpers: 'bundled' }),
 			json(),
+			babel({ babelHelpers: 'bundled' }),
 			production && terser()
 		]
 	}
 ];
-
-function serve() {
-	let started = false;
-
-	return {
-		writeBundle() {
-			if (!started) {
-				started = true;
-				childProcess.spawn('npm', ['run', 'start', '--', '--dev'], {
-					stdio: ['ignore', 'inherit', 'inherit'],
-					shell: true
-				});
-			}
-		}
-	};
-}
