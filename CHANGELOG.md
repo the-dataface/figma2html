@@ -1,5 +1,21 @@
 # figma2html
 
+## 1.1.0
+
+### Minor Changes
+
+- Support multi-line variable text ([#100](https://github.com/the-dataface/figma2html/pull/100))
+
+- - Alter `variables` workflows by adding UI panel and making entries async to config block ([#100](https://github.com/the-dataface/figma2html/pull/100))
+  - Edit figma2html settings block, grouping together (migration is built in)
+  - Update reset/load/save functionality
+
+### Patch Changes
+
+- Fix f2h-variables frame duplication ([#100](https://github.com/the-dataface/figma2html/pull/100))
+
+- Fix Google Fonts family variant detection ([#111](https://github.com/the-dataface/figma2html/pull/111))
+
 ## 1.0.3
 
 ### Patch Changes
