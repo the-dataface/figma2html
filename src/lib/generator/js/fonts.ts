@@ -17,8 +17,24 @@ export default (fontList) => {
 	// group fontList array by family
 	const typefaces = new Map<string, Set<string>>();
 
-	for (const { family, style } of [...fontList]) {
+	for (let { family, style } of [...fontList]) {
+		// detect if there's a variant such as Condensed.
+		// Figma rolls Condensed, which is technically its own typeface, into the Roboto family here.
+		// it always shows up as the first word in the style string
+		// EX: Condensed ExtraBold Italic
+		const variant =
+			(style.includes('Italic') ? style.split(' ').length === 3 : style.split(' ').length === 2) &&
+			style.split(' ')[0];
+
+		// if there's a variant, remove it from the style and append to the family name
+		if (variant) {
+			family = `${family} ${variant}`;
+			style = style.replace(`${variant} `, '');
+		}
+
+		// google reads italic as 1, normal as 0
 		const googleStyle = style.includes('Italic') ? '1,' : '0,';
+
 		const weight =
 			style === 'Italic' ? weightLookup['Regular'] : weightLookup[style.replace(' Italic', '')];
 		const styleWeight = `${googleStyle}${weight}`;
