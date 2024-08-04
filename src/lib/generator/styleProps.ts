@@ -1,3 +1,5 @@
+import textCaseFigmaToCss from 'lib/utils/textCaseFigmaToCss';
+
 export const fontList = [];
 
 // TODO: shouldn't this use our stringify function?
@@ -24,7 +26,7 @@ export const styles = (segment: StyledTextSegment) => {
 		'font-weight': segment.fontWeight,
 		'font-size': segment.fontSize + 'px',
 		'text-decoration': segment.textDecoration.toLowerCase(),
-		'text-transform': segment.textCase === 'ORIGINAL' ? 'none' : segment.textCase.toLowerCase(),
+		'text-transform': textCaseFigmaToCss(segment.textCase),
 		'line-height':
 			segment.lineHeight.unit === 'AUTO'
 				? 'normal'
