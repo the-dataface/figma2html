@@ -1,5 +1,6 @@
 import slugify from 'slugify';
 import styleProps from 'lib/generator/styleProps';
+import { current_component, text } from 'svelte/internal';
 
 // fields to check against the root. all of these would need to match original
 const baseStyleFields = [
@@ -134,19 +135,58 @@ export default (textFrames: TextNode[], artboard: FrameNode) => {
 			}
 		}
 
+		// Get the textFrame position relative to the frame - handle nested frames
+
+		function getXPosition(
+			currentFrame: any,
+			artboard: FrameNode | ComponentNode,
+			currentPosition = 0
+		) {
+			// x is always relative to the parent frame or component.
+			// Groups don't matter
+			if (currentFrame.type != 'GROUP') {
+				currentPosition += currentFrame.x;
+			}
+
+			// Recurse until we arrive at the top
+			if (currentFrame.parent && currentFrame.parent !== artboard) {
+				return getXPosition(currentFrame.parent, artboard, currentPosition);
+			}
+			return currentPosition;
+		}
+
+		// Calculate the y position of a text element relative to the topmost frame
+		function getYPosition(
+			currentFrame: any,
+			artboard: FrameNode | ComponentNode,
+			currentPosition = 0
+		) {
+			if (currentFrame.type != 'GROUP') {
+				currentPosition += currentFrame.y;
+			}
+
+			if (currentFrame.parent && currentFrame.parent !== artboard) {
+				return getXPosition(currentFrame.parent, artboard, currentPosition);
+			}
+			return currentPosition;
+		}
+
 		// get x positioning based on horizontal alignment
 		switch (textFrame.textAlignHorizontal) {
 			case 'JUSTIFIED':
 			case 'LEFT':
-				x = (textFrame.x / artboard.width) * 100;
+				x = (getXPosition(textFrame, artboard) / artboard.width) * 100;
 				translateX = 0;
 				break;
 			case 'CENTER':
-				x = (textFrame.x / artboard.width + +(textFrame.width / artboard.width) / 2) * 100;
+				x =
+					(getXPosition(textFrame, artboard) / artboard.width +
+						+(textFrame.width / artboard.width) / 2) *
+					100;
 				translateX = -50;
 				break;
 			case 'RIGHT':
-				x = ((textFrame.x + textFrame.width) / artboard.width) * 100;
+				x = ((getXPosition(textFrame, artboard) + textFrame.width) / artboard.width) * 100;
 				translateX = -100;
 				break;
 		}
@@ -154,15 +194,15 @@ export default (textFrames: TextNode[], artboard: FrameNode) => {
 		// get y positioning based on vertical alignment
 		switch (textFrame.textAlignVertical) {
 			case 'TOP':
-				y = (textFrame.y / artboard.height) * 100;
+				y = (getYPosition(textFrame, artboard) / artboard.height) * 100;
 				translateY = 0;
 				break;
 			case 'CENTER':
-				y = ((textFrame.y + textFrame.height / 2) / artboard.height) * 100;
+				y = ((getYPosition(textFrame, artboard) + textFrame.height / 2) / artboard.height) * 100;
 				translateY = -50;
 				break;
 			case 'BOTTOM':
-				y = ((textFrame.y + textFrame.height) / artboard.height) * 100;
+				y = ((getYPosition(textFrame, artboard) + textFrame.height) / artboard.height) * 100;
 				translateY = -100;
 				break;
 		}
